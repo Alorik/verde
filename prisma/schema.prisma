@@ -12,3 +12,29 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+
+
+model Organization {
+  id            String        @id @default(cuid())
+  name          String        
+  industry      Industry
+  employeeCount Int
+  country       String
+  city          String?
+  foundedAt   DateTime?
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+enum Industry {
+  TECHNOLOGY
+  MANUFACTURING
+  HEALTHCARE
+  EDUCATION
+  CONSTRUCTION
+  ENERGY
+  FINANCE
+  OTHER
+}
