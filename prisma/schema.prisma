@@ -39,3 +39,22 @@ enum Industry {
   FINANCE
   OTHER
 }
+
+model Assessment{
+  id                  String       @id @default(cuid())
+  name                String
+  reportingYear       AssessmentStatus
+  status              String
+  description         String?
+
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+}
+
+enum AssessmentStatus {
+  DRAFT
+  IN_PROGRESS
+  UNDER_REVIEW
+  COMPLETED
+}
