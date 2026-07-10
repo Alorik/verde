@@ -20,6 +20,7 @@ model Organization {
   id            String        @id @default(cuid())
   name          String        
   industry      Industry
+  assessments   Assessment[]
   employeeCount Int
   country       String
   city          String?
@@ -43,9 +44,11 @@ enum Industry {
 model Assessment{
   id                  String       @id @default(cuid())
   name                String
-  reportingYear       AssessmentStatus
-  status              String
+  reportingYear       Int
+  status              AssessmentStatus
   description         String?
+  organizationId      String
+  organization        Organization @relation(fields: [organizationId],references: [id])
 
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
