@@ -5,28 +5,43 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
-  const validatedData = await organizationSchema.parse(body);
+  const result = organizationSchema.safeParse(body);
 
-  const { name, industry, country, employeeCount, city, foundedAt } = validatedData;
+  if (!result.success) {
+    return NextResponse.json(
+      {
+        message: "Validation failed",
+        errors: result.error.flatten(),
+      },
+      { status: 400 },
+    );
+  }
 
-  const organization = await prisma.organization.create({
-    data: {
-      name,
-      industry,
-      country,
-      employeeCount,
-      city,
-      foundedAt,
-    },
-  });
+  const validatedData = result.data;
 
-  return NextResponse.json(
-    {
-      message: "Organization created Successfully",
-      organization,
-    },
-    {
-      status: 201,
-    },
-  );
+  try {
+    const organization = await prisma.organization.create({
+      data: validatedData,
+    });
+
+    return NextResponse.json(
+      {
+        message: "Organization created successfully",
+        organization,
+      },
+      {
+        status: 201,
+      },
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      {
+        message: "Failed to create organization",
+      },
+      {
+        status: 500,
+      },
+    );
+  }
 }
