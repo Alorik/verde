@@ -1,9 +1,13 @@
 import { prisma } from "@/lib/prisma";
+import { organizationSchema } from "@/lib/validations/Organization";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { name, industry, country, employeeCount, city, foundedAt } = body;
+
+  const validatedData = await organizationSchema.parse(body);
+
+  const { name, industry, country, employeeCount, city, foundedAt } = validatedData;
 
   const organization = await prisma.organization.create({
     data: {
