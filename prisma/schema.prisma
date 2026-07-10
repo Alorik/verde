@@ -61,3 +61,14 @@ enum AssessmentStatus {
   UNDER_REVIEW
   COMPLETED
 }
+
+model Document {
+  id            String    @id @default(cuid())
+  fileName      String
+  documentType  String
+  fileSize      Int
+
+  assessmentId  String
+  assessement   Assessment @relation(fields: [assessmentId], references: [id])
+  uploadedAt    DateTime    @default(now())
+}
