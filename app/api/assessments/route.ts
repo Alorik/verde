@@ -48,3 +48,41 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function GET() {
+  try {
+    const assessments = await prisma.assessment.findMany({
+      select: {
+        id: true,
+        name: true,
+        reportingYear: true,
+        status: true,
+        createdAt: true,
+        organization: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return NextResponse.json(
+      {
+        assessments,
+      },
+      {
+        status: 200,
+      },
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Assessments were not found" },
+      { status: 500 },
+    );
+  }
+}
