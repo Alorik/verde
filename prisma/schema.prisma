@@ -67,7 +67,7 @@ model Document {
   fileName      String
   documentType  DocumentType
   fileSize      Int
-  fileUrl       String
+  fileUrl       String?
   mimeType      String
   assessmentId  String
   assessment   Assessment @relation(fields: [assessmentId], references: [id])
