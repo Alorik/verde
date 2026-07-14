@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { assessmentSchema } from "@/lib/validations/Assessments";
+import { assessmentSchema } from "@/lib/validations/assessment";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

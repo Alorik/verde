@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { organizationSchema } from "@/lib/validations/Organization";
+import { organizationSchema } from "@/lib/validations/organization";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
