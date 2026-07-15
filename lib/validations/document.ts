@@ -20,7 +20,6 @@ export const documentSchema = z.object({
     .trim()
     .min(1, "Assessment ID is required"),
   
-  
-  mimeType:
-    z.string().min(1, "MIME type is required")
+  mimeType: z
+    .string().min(1, "MIME type is required")
 });
