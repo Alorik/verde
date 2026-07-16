@@ -56,3 +56,50 @@ export async function POST(req: NextRequest) {
 }
 
 
+
+
+export async function GET() {
+
+  try {
+    const documents = await prisma.document.findMany({
+      where: {
+        id: assessmentId,
+      },
+      select: {
+        id: true,
+        name: true,
+        status: true,
+        createdAt: true,
+        organization: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return NextResponse.json(
+      {
+        message: "Documents retrieved successfully",
+        documents,
+      },
+      {
+        status: 200,
+      },
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      {
+        message: "Failed to retrieve documents",
+      },
+      {
+        status: 500,
+      },
+    );
+  }
+}
