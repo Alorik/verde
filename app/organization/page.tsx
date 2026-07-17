@@ -2,6 +2,15 @@
 
 import { useEffect, useState } from "react";
 
+type Organization = {
+  id: string;
+  name: string;
+  industry: string;
+  employeeCount: number;
+  country: string;
+  city: string | null;
+};
+
 export default function Organization() {
   const [organizations, setOrganizations] = useState<any[]>([]);
 
@@ -15,11 +24,20 @@ export default function Organization() {
       }
 
       const data = await response.json();
-      setOrganizations(data.organizations);
+      console.log(data);
+      setOrganizations(data);
     }
 
     loadOrganizations();
   }, []);
 
-  return <div>{/* Render organizations here */}</div>;
+  return (
+    <div>
+      {organizations.map((organization) => (
+        <div key={organization.id}>
+          <h2>{organization.name}</h2>
+        </div>
+      ))}
+    </div>
+  );
 }
