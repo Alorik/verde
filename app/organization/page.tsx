@@ -39,7 +39,10 @@ export default function Organization() {
       {organizations.map((organization) => (
         <div key={organization.id}>
           <h2>{organization.name}</h2>
-          <h3>{organization.employeeCount}</h3>
+          <p>{organization.industry}</p>
+          <p>{organization.employeeCount}</p>
+          <p>{organization.country}</p>
+          <p>{organization.city}</p>
         </div>
       ))}
     </div>
