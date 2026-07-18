@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -21,10 +21,6 @@
   <html> had no visible effect. Driving it off `.dark` instead means the
   class controls everything, with no OS fallback.
 */
-.dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-}
 
 body {
   background: var(--background);
