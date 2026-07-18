@@ -28,7 +28,7 @@ export default function Organization() {
   }, []);
 
   return (
-    <div>
+    <div className="bg-amber-50 min-h-screen">
       {organizations.map((organization) => (
         <div key={organization.id}>
           <h2>{organization.name}</h2>

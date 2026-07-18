@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -12,11 +14,16 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/*
+  Removed: @media (prefers-color-scheme: dark) { ... }
+  That block overrode these variables based on the OS setting directly,
+  bypassing the `dark` class entirely — which is why forcing `.dark` on
+  <html> had no visible effect. Driving it off `.dark` instead means the
+  class controls everything, with no OS fallback.
+*/
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 body {
