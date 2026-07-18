@@ -12,11 +12,13 @@ type Organization = {
 };
 
 export default function Organization() {
-  const [organizations, setOrganizations] = useState<any[]>([]);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
 
   useEffect(() => {
     async function loadOrganizations() {
       const response = await fetch("/api/organizations");
+
+      console.log("Response:", response);
 
       if (!response.ok) {
         console.error("Failed to load organizations");
@@ -24,8 +26,9 @@ export default function Organization() {
       }
 
       const data = await response.json();
-      console.log(data);
-      setOrganizations(data);
+      console.log("Data:", data);
+
+      setOrganizations(data.organizations);
     }
 
     loadOrganizations();
@@ -36,6 +39,7 @@ export default function Organization() {
       {organizations.map((organization) => (
         <div key={organization.id}>
           <h2>{organization.name}</h2>
+          <h3>{organization.employeeCount}</h3>
         </div>
       ))}
     </div>
