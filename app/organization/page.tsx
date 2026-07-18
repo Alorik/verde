@@ -2,14 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-type Organization = {
-  id: string;
-  name: string;
-  industry: string;
-  employeeCount: number;
-  country: string;
-  city: string | null;
-};
+
 
 export default function Organization() {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
