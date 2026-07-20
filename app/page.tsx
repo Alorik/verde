@@ -1,7 +1,10 @@
+import DashboardLayout from "@/(dashboard)/layout";
+
 export default function Home() {
   return (
-    <div className="bg-amber-50">
-      {/*  */}e
-   </div>
+    <DashboardLayout>
+      <div className="bg-amber-50">
+      </div>
+    </DashboardLayout>
   );
 }
