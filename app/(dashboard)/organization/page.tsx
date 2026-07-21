@@ -26,7 +26,8 @@ export default function Organization() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-transparent border-x border-gray-200 p-8 mx-12">
+    <div className="min-h-screen bg-transparent border-x  border-gray-200 p-8 mx-12">
+      <div className="p-6">Organizations</div>
       <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 xl:grid-cols-3">
         {organizations.map((organization) => (
           <div
