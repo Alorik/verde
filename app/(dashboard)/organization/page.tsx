@@ -78,7 +78,6 @@ export default function Organization() {
               </div>
             </div>
 
-            {/* Footer */}
             <div className="mt-6 flex justify-end">
               <button className="rounded-lg border border-zinc-200 px-4 py-2 text-sm font-medium transition hover:bg-zinc-100">
                 View Details <span className="hover:translate-x-4">→</span>
