@@ -73,7 +73,7 @@ export default function Organization() {
               <div className="flex justify-between text-sm">
                 <span className="text-zinc-500">City</span>
                 <span className="font-medium text-zinc-900">
-                  {organization.city ?? "—"}
+                  {organization.city ?? " — "}
                 </span>
               </div>
             </div>
