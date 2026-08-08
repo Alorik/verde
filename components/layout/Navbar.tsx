@@ -1,9 +1,13 @@
+import Link from "next/link"
+
 export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 h-16 border-b border-zinc-200 bg-white/80 backdrop-blur-md">
       <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-8">
         {/* Left */}
-        <div className="flex items-center gap-3">
+        <Link
+          href="/"
+          className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-black text-sm font-semibold text-white">
             E
           </div>
@@ -14,7 +18,7 @@ export default function Navbar() {
             </h1>
             <p className="text-xs text-zinc-500">Reporting Dashboard</p>
           </div>
-        </div>
+        </Link>
 
         {/* Center */}
         <div className="hidden md:block">
