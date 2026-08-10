@@ -82,7 +82,7 @@ export async function GET() {
     console.error(error);
     return NextResponse.json(
       { message: "Assessments were not found" },
-      { status: 500 },
+      { status: 404 },
     );
   }
 }
