@@ -26,6 +26,7 @@ export default function OrganizationDetail({
 
       if (!response.ok) {
         console.error("failed to load organization");
+        return;
       }
 
       const data = await response.json();

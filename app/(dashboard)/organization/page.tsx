@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Organization() {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -79,9 +80,11 @@ export default function Organization() {
             </div>
 
             <div className="mt-6 flex justify-end">
-              <button className="rounded-lg border border-zinc-200 px-4 py-2 text-sm font-medium transition hover:bg-zinc-100">
+              <Link
+              href={`/organization/${organization.id}`}
+                className="rounded-lg border border-zinc-200 px-4 py-2 text-sm font-medium transition hover:bg-zinc-100">
                 View  <span className="hover:translate-x-4">→</span>
-              </button>
+              </Link>
             </div>
           </div>
         ))}
