@@ -1,11 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET({
-  params,
-}: {
-  params: Promise<{ organizationId: string }>;
-}) {
+export async function GET(
+  request: Request,
+  { params }:
+    { params: Promise<{ organizationId: string }> },
+) {
   const { organizationId } = await params;
 
   try {
@@ -15,7 +15,7 @@ export async function GET({
       },
       include: {
         assessments: true,
-      }
+      },
     });
 
     if (!organization) {
