@@ -13,6 +13,9 @@ export async function GET({
       where: {
         id: organizationId,
       },
+      include: {
+        assessments: true,
+      }
     });
 
     if (!organization) {

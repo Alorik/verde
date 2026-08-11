@@ -25,8 +25,7 @@ export default function OrganizationDetail({
       const response = await fetch(`/api/organizations/${organizationId}`);
 
       if (!response.ok) {
-        console.error("Failed to load organization");
-        return;
+        console.error("failed to load organization");
       }
 
       const data = await response.json();
@@ -36,10 +35,9 @@ export default function OrganizationDetail({
 
     loadOrganization();
   }, [params]);
-
-  if (!organization) {
-    return <div>Loading...</div>;
-  }
+    if (!organization) {
+      return <div>Loading...</div>;
+    }
 
   return (
     <div className="min-h-screen border-x border-gray-200 bg-transparent p-8 mx-12">
@@ -49,7 +47,9 @@ export default function OrganizationDetail({
 
       <div className="mt-8">
         <p>Employees: {organization.employeeCount}</p>
+
         <p>Country: {organization.country}</p>
+
         <p>City: {organization.city ?? "—"}</p>
       </div>
     </div>
