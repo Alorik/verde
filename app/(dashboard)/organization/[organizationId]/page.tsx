@@ -178,6 +178,91 @@ export default function OrganizationDetail({
           ))}
         </motion.dl>
 
+        {/* Assessments */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1.2 }}
+          className="mt-16"
+        >
+          <div className="flex items-end justify-between border-b border-zinc-200 pb-4">
+            <div>
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-400">
+                Assessments
+              </p>
+
+              <h2 className="mt-2 font-serif text-2xl tracking-tight text-zinc-900">
+                ESG Assessments
+              </h2>
+            </div>
+
+            <span className="font-mono text-xs text-zinc-400">
+              {organization.assessments.length} total
+            </span>
+          </div>
+
+          <div className="divide-y divide-zinc-100">
+            {organization.assessments.length === 0 ? (
+              <div className="py-10 text-center">
+                <p className="text-sm text-zinc-400">
+                  No assessments created yet.
+                </p>
+              </div>
+            ) : (
+              organization.assessments.map((assessment) => (
+                <div
+                  key={assessment.id}
+                  className="group flex items-center justify-between py-6 transition-colors hover:bg-zinc-50"
+                >
+                  <div>
+                    <h3 className="text-lg font-medium text-zinc-900">
+                      {assessment.name}
+                    </h3>
+
+                    {assessment.description && (
+                      <p className="mt-1 text-sm text-zinc-500">
+                        {assessment.description}
+                      </p>
+                    )}
+
+                    <div className="mt-3 flex items-center gap-4 font-mono text-[11px] uppercase tracking-wider text-zinc-400">
+                      <span>
+                        Reporting year:{" "}
+                        {new Date(assessment.reportingYear).getFullYear()}
+                      </span>
+
+                      <span>·</span>
+
+                      <span>
+                        Created{" "}
+                        {new Date(assessment.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-5">
+                    <span
+                      className={`rounded-full px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-wider ${
+                        assessment.status === "DRAFT"
+                          ? "bg-amber-50 text-amber-700"
+                          : assessment.status === "COMPLETED"
+                            ? "bg-emerald-50 text-emerald-700"
+                            : "bg-zinc-100 text-zinc-600"
+                      }`}
+                    >
+                      {assessment.status}
+                    </span>
+
+                    <span className="text-zinc-300 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-zinc-600">
+                      →
+                    </span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </motion.section>
+
         {/* Filed footer */}
         <motion.div
           initial={{ opacity: 0 }}
