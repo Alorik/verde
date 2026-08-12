@@ -10,6 +10,7 @@ type Organization = {
   employeeCount: number;
   country: string;
   city: string | null;
+  assessments: Assessment[];
 };
 
 type Assessment = {
