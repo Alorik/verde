@@ -12,6 +12,17 @@ type Organization = {
   city: string | null;
 };
 
+type Assessment = {
+  id: string;
+  name: string;
+  reportingYear: string;
+  status: string;
+  description: string | null;
+  organizationId: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export default function OrganizationDetail({
   params,
 }: {
@@ -66,6 +77,10 @@ export default function OrganizationDetail({
     },
     { label: "Country", value: organization.country },
     { label: "City", value: organization.city ?? "Not on file" },
+    {
+      label: "Assessments",
+      value: organization.assessments.length.toString(),
+    },
   ];
 
   const listVariants = {
