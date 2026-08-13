@@ -12,8 +12,8 @@ export async function GET(
         id: assessmentId,
       },
       include: {
-        documents: true
-      }
+        documents: true,
+      },
     });
 
     if (!assessment) {
