@@ -7,7 +7,7 @@ import { motion, useReducedMotion } from "framer-motion";
 type Assessment = {
   id: string;
   name: string;
-  reportingYear: string;
+  reportingYear: number;
   status: string;
   description: string | null;
   organizationId: string;
@@ -49,9 +49,9 @@ export default function AssessmentDetail({
 
   useEffect(() => {
     async function loadAssessments() {
-      const { assessmentId } = await params;
+  const { assessmentId } = await params;
 
-      const response = await fetch(`/api/assessments/${assessmentId}`);
+  const response = await fetch(`/api/assessments/${assessmentId}`);
       if (!response.ok) {
         console.error("failed to load assessment");
         return;
@@ -84,7 +84,7 @@ export default function AssessmentDetail({
   const referenceNumber = `AST-${assessment.id.slice(-6).toUpperCase().padStart(6, "0")}`;
 
   const fields: { label: string; value: string }[] = [
-    { label: "Reporting year", value: assessment.reportingYear },
+    { label: "Reporting year", value: assessment.reportingYear.toString() },
   ];
 
   const listVariants = {
