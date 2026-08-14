@@ -17,7 +17,7 @@ type Organization = {
 type Assessment = {
   id: string;
   name: string;
-  reportingYear: string;
+  reportingYear: number;
   status: string;
   description: string | null;
   organizationId: string;
@@ -228,10 +228,7 @@ export default function OrganizationDetail({
                     )}
 
                     <div className="mt-3 flex items-center gap-4 font-mono text-[11px] uppercase tracking-wider text-zinc-400">
-                      <span>
-                        Reporting year:{" "}
-                        {new Date(assessment.reportingYear).getFullYear()}
-                      </span>
+                      <span>Reporting year: {assessment.reportingYear}</span>
 
                       <span>·</span>
 
