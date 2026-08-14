@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import Link from "next/link";
 
 type Organization = {
   id: string;
@@ -210,8 +211,9 @@ export default function OrganizationDetail({
               </div>
             ) : (
               organization.assessments.map((assessment) => (
-                <div
+                <Link
                   key={assessment.id}
+                  href={`/assessment/${assessment.id}`}
                   className="group flex items-center justify-between py-6 transition-colors hover:bg-zinc-50"
                 >
                   <div>
@@ -257,7 +259,7 @@ export default function OrganizationDetail({
                       →
                     </span>
                   </div>
-                </div>
+                </Link>
               ))
             )}
           </div>
