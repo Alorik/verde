@@ -63,6 +63,11 @@ export default function AssessmentDetail({
   params: Promise<{ assessmentId: string }>;
 }) {
   const [assessment, setAssessment] = useState<Assessment | null>(null);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [documentType, setDocumentType] = useState("");
+
+
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -134,7 +139,7 @@ export default function AssessmentDetail({
           transition={{ duration: 0.4 }}
         >
           <Link
-            href={`/organizations/${assessment.organizationId}`}
+            href={`/organization/${assessment.organizationId}`}
             className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-widest text-zinc-400 transition hover:text-emerald-600"
           >
             <svg
@@ -308,18 +313,19 @@ export default function AssessmentDetail({
             </span>
           </div>
 
+          <button
+            type="button"
+            onClick={() => setShowUploadModal(true)}
+            className="mt-5 rounded-lg border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50"
+          >
+            + Upload document
+          </button>
+          
           {assessment.documents.length === 0 ? (
             <div className="py-12 text-center">
               <p className="text-sm text-zinc-500">
                 No documents uploaded yet.
               </p>
-
-              <button
-                type="button"
-                className="mt-5 rounded-lg border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50"
-              >
-                + Upload document
-              </button>
             </div>
           ) : (
             <div className="divide-y divide-zinc-100">
@@ -350,6 +356,126 @@ export default function AssessmentDetail({
             </div>
           )}
         </motion.section>
+
+        {showUploadModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-6">
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              className="w-full max-w-lg rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl"
+            >
+              {/* Header */}
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-400">
+                    New document
+                  </p>
+
+                  <h2
+                    className="mt-2 font-serif text-2xl text-zinc-900"
+                    style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}
+                  >
+                    Upload document
+                  </h2>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setShowUploadModal(false)}
+                  className="text-xl text-zinc-400 transition hover:text-zinc-900"
+                >
+                  ×
+                </button>
+              </div>
+
+              {/* File input */}
+              <div className="mt-8">
+                <label className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+                  File
+                </label>
+
+                <label className="mt-2 flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-zinc-300 px-6 py-10 text-center transition hover:border-zinc-400 hover:bg-zinc-50">
+                  <input
+                    type="file"
+                    className="hidden"
+                    onChange={(event) => {
+                      const file = event.target.files?.[0] ?? null;
+                      setSelectedFile(file);
+                    }}
+                  />
+
+                  {selectedFile ? (
+                    <>
+                      <p className="text-sm font-medium text-zinc-900">
+                        {selectedFile.name}
+                      </p>
+
+                      <p className="mt-1 text-xs text-zinc-400">
+                        {(selectedFile.size / 1024).toFixed(1)} KB
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-sm font-medium text-zinc-700">
+                        Choose a file
+                      </p>
+
+                      <p className="mt-1 text-xs text-zinc-400">
+                        PDF, CSV, XLSX or other supported files
+                      </p>
+                    </>
+                  )}
+                </label>
+              </div>
+
+              {/* Document type */}
+              <div className="mt-6">
+                <label className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+                  Document type
+                </label>
+
+                <select
+                  value={documentType}
+                  onChange={(event) => setDocumentType(event.target.value)}
+                  className="mt-2 w-full rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400"
+                >
+                  <option value="">Select document type</option>
+                  <option value="ELECTRICITY_BILL">Electricity Bill</option>
+                  <option value="WATER_REPORT">Water Report</option>
+                  <option value="EMPLOYEE_DATA">Employee Data</option>
+                  <option value="CSR_REPORT">CSR Report</option>
+                  <option value="SUSTAINABILITY_REPORT">
+                    Sustainability Report
+                  </option>
+                  <option value="OTHER">Other</option>
+                </select>
+              </div>
+
+              {/* Actions */}
+              <div className="mt-8 flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowUploadModal(false);
+                    setSelectedFile(null);
+                    setDocumentType("");
+                  }}
+                  className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-500 transition hover:bg-zinc-100"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  disabled={!selectedFile || !documentType}
+                  className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Upload
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
       </div>
     </div>
   );
