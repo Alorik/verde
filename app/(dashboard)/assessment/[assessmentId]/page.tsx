@@ -4,6 +4,23 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
+type Document = {
+  id: string;
+  fileName: string;
+  documentType:
+    | "ELECTRICITY_BILL"
+    | "WATER_REPORT"
+    | "EMPLOYEE_DATA"
+    | "CSR_REPORT"
+    | "SUSTAINABILITY_REPORT"
+    | "OTHER";
+  fileSize: number;
+  fileUrl: string | null;
+  mimeType: string;
+  assessmentId: string;
+  uploadedAt: string;
+};
+
 type Assessment = {
   id: string;
   name: string;
@@ -13,6 +30,7 @@ type Assessment = {
   organizationId: string;
   createdAt: string;
   updatedAt: string;
+  documents: Document[];
 };
 
 const STATUS_STYLES: Record<string, string> = {
@@ -49,9 +67,9 @@ export default function AssessmentDetail({
 
   useEffect(() => {
     async function loadAssessments() {
-  const { assessmentId } = await params;
+      const { assessmentId } = await params;
 
-  const response = await fetch(`/api/assessments/${assessmentId}`);
+      const response = await fetch(`/api/assessments/${assessmentId}`);
       if (!response.ok) {
         console.error("failed to load assessment");
         return;
@@ -259,6 +277,78 @@ export default function AssessmentDetail({
           <span>updated {formatDate(assessment.updatedAt)}</span>
         </motion.div>
       </div>
+
+      {/* Documents */}
+      <motion.section
+        initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.5,
+          delay: 1.1,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        className="mt-14"
+      >
+        <div className="flex items-end justify-between border-b border-zinc-200 pb-4">
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-400">
+              Documents
+            </p>
+
+            <h2
+              className="mt-2 font-serif text-2xl tracking-tight text-zinc-900"
+              style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}
+            >
+              Assessment documents
+            </h2>
+          </div>
+
+          <span className="font-mono text-xs text-zinc-400">
+            {assessment.documents.length}{" "}
+            {assessment.documents.length === 1 ? "file" : "files"}
+          </span>
+        </div>
+
+        {assessment.documents.length === 0 ? (
+          <div className="py-12 text-center">
+            <p className="text-sm text-zinc-500">No documents uploaded yet.</p>
+
+            <button
+              type="button"
+              className="mt-5 rounded-lg border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50"
+            >
+              + Upload document
+            </button>
+          </div>
+        ) : (
+          <div className="divide-y divide-zinc-100">
+            {assessment.documents.map((document) => (
+              <div
+                key={document.id}
+                className="flex items-center justify-between py-5"
+              >
+                <div>
+                  <h3 className="text-sm font-medium text-zinc-900">
+                    {document.fileName}
+                  </h3>
+
+                  <div className="mt-2 flex items-center gap-3 font-mono text-[10px] uppercase tracking-wider text-zinc-400">
+                    <span>{document.documentType.replace(/_/g, " ")}</span>
+
+                    <span>·</span>
+
+                    <span>{formatDate(document.uploadedAt)}</span>
+                  </div>
+                </div>
+
+                <div className="text-xs text-zinc-400">
+                  {(document.fileSize / 1024).toFixed(1)} KB
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </motion.section>
     </div>
   );
 }
