@@ -57,6 +57,81 @@ function formatDate(value: string) {
   });
 }
 
+/* ---------- SVG bits ---------- */
+
+function StatusIcon({ status }: { status: string }) {
+  const s = status.toLowerCase();
+  const common = {
+    className: "h-3 w-3",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+
+  if (s === "complete" || s === "completed") {
+    return (
+      <svg {...common}>
+        <path d="M20 6 9 17l-5-5" />
+      </svg>
+    );
+  }
+  if (s === "submitted") {
+    return (
+      <svg {...common}>
+        <path d="M22 2 11 13" />
+        <path d="M22 2 15 22l-4-9-9-4 20-7Z" />
+      </svg>
+    );
+  }
+  if (s === "in_review") {
+    return (
+      <svg {...common}>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v5l3 3" />
+      </svg>
+    );
+  }
+  // draft
+  return (
+    <svg {...common}>
+      <circle cx="12" cy="12" r="9" strokeDasharray="3 3.5" />
+    </svg>
+  );
+}
+
+function SealIcon() {
+  return (
+    <svg
+      className="h-3 w-3"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="8" r="5" />
+      <path d="M8.5 12.5 7 21l5-2.5L17 21l-1.5-8.5" />
+    </svg>
+  );
+}
+
+function Divider() {
+  const prefersReducedMotion = useReducedMotion();
+  return (
+    <motion.span
+      initial={{ scaleY: 0 }}
+      animate={{ scaleY: 1 }}
+      transition={{ duration: 0.5, delay: 0.4, ease: [0.65, 0, 0.35, 1] }}
+      style={{ transformOrigin: "center" }}
+      className="hidden h-10 w-px flex-none bg-zinc-200 sm:block"
+    />
+  );
+}
+
 const rowVariants: Variants = {
   hidden: { opacity: 0, y: 10 },
   show: {
@@ -123,14 +198,14 @@ export default function AssessmentDetail({
     show: {
       transition: {
         staggerChildren: prefersReducedMotion ? 0 : 0.09,
-        delayChildren: 0.55,
+        delayChildren: 0.6,
       },
     },
   };
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-3xl px-8 py-20">
+      <div className="mx-auto max-w-6xl px-8 py-20 sm:px-12">
         {/* Breadcrumb */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -161,13 +236,13 @@ export default function AssessmentDetail({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.05 }}
-          className="mt-5 font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-400"
+          className="mt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-400"
         >
           Assessment record
         </motion.p>
 
-        {/* Header row: title (left) · status (center) · reference (right) */}
-        <div className="mt-3 grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+        {/* Header row: title (left) · divider · status (true center) · divider · reference (right) */}
+        <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto_auto_auto_minmax(0,1fr)] items-center gap-6">
           <motion.h1
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
@@ -176,43 +251,64 @@ export default function AssessmentDetail({
               delay: 0.05,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="justify-self-start truncate font-serif text-4xl tracking-tight text-zinc-900"
+            className="justify-self-start truncate font-serif text-4xl tracking-tight text-zinc-900 sm:text-5xl"
             style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}
             title={assessment.name}
           >
             {assessment.name}
           </motion.h1>
 
-          <motion.span
+          <Divider />
+
+          {/* Status stack — labeled, distinct from title and reference */}
+          <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
               duration: 0.55,
-              delay: 0.15,
+              delay: 0.2,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className={`justify-self-center inline-flex items-center whitespace-nowrap rounded-full border px-2.5 py-1 font-mono text-[11px] font-medium capitalize tracking-wide ${statusStyle(
-              assessment.status,
-            )}`}
+            className="flex flex-col items-center gap-1.5"
           >
-            {statusLabel(assessment.status)}
-          </motion.span>
+            <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-300">
+              Status
+            </span>
+            <motion.span
+              whileHover={{ y: -1 }}
+              className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1 font-mono text-[11px] font-medium capitalize tracking-wide ${statusStyle(
+                assessment.status,
+              )}`}
+            >
+              <StatusIcon status={assessment.status} />
+              {statusLabel(assessment.status)}
+            </motion.span>
+          </motion.div>
 
+          <Divider />
+
+          {/* Reference stack */}
           <motion.div
             initial={
               prefersReducedMotion
                 ? { opacity: 0 }
-                : { opacity: 0, scale: 1.5, rotate: -8 }
+                : { opacity: 0, scale: 1.3, rotate: -6 }
             }
-            animate={{ opacity: 1, scale: 1, rotate: -3 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
             transition={{
               duration: 0.5,
-              delay: 0.25,
+              delay: 0.3,
               ease: [0.34, 1.56, 0.64, 1],
             }}
-            className="justify-self-end whitespace-nowrap rounded-sm border border-emerald-200 bg-emerald-50 px-2.5 py-1 pr-2 font-mono text-[11px] font-medium tracking-wide text-emerald-700"
+            className="flex flex-col items-end gap-1.5 justify-self-end"
           >
-            {referenceNumber}
+            <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-300">
+              Reference
+            </span>
+            <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm border border-emerald-200 bg-emerald-50 py-1 pl-2.5 pr-3 font-mono text-[11px] font-medium tracking-wide text-emerald-700">
+              <SealIcon />
+              {referenceNumber}
+            </span>
           </motion.div>
         </div>
 
@@ -220,9 +316,9 @@ export default function AssessmentDetail({
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ duration: 0.7, delay: 0.35, ease: [0.65, 0, 0.35, 1] }}
+          transition={{ duration: 0.7, delay: 0.45, ease: [0.65, 0, 0.35, 1] }}
           style={{ transformOrigin: "left" }}
-          className="mt-8 h-px w-full bg-zinc-200"
+          className="mt-10 h-px w-full bg-zinc-200"
         />
 
         {/* Field list */}
@@ -253,7 +349,11 @@ export default function AssessmentDetail({
           <motion.div
             initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.5,
+              delay: 1.05,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="mt-8"
           >
             <p className="font-mono text-[11px] uppercase tracking-widest text-zinc-400">
@@ -269,7 +369,7 @@ export default function AssessmentDetail({
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 1.2 }}
+          transition={{ duration: 0.5, delay: 1.25 }}
           className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-1 font-mono text-[11px] text-zinc-400"
         >
           <span className="flex items-center gap-2">
@@ -284,11 +384,7 @@ export default function AssessmentDetail({
         <motion.section
           initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.5,
-            delay: 1.3,
-            ease: [0.22, 1, 0.36, 1],
-          }}
+          transition={{ duration: 0.5, delay: 1.35, ease: [0.22, 1, 0.36, 1] }}
           className="mt-14"
         >
           <div className="grid grid-cols-[1fr_auto] items-center gap-4 border-b border-zinc-200 pb-4">
@@ -476,4 +572,3 @@ export default function AssessmentDetail({
     </div>
   );
 }
-
