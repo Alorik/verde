@@ -120,7 +120,6 @@ function SealIcon() {
 }
 
 function Divider() {
-  const prefersReducedMotion = useReducedMotion();
   return (
     <motion.span
       initial={{ scaleY: 0 }}
