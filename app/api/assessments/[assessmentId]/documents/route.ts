@@ -1,14 +1,21 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { s3 } from "@/lib/s3";
+import { DocumentType } from "@prisma/client";
 
-const allowedDocumentTypes = [
-  "ELECTRICITY_BILL",
-  "WATER_REPORT",
-  "EMPLOYEE_DATA",
-  "CSR_REPORT",
-  "SUSTAINABILITY_REPORT",
-  "OTHER",
+const allowedDocumentTypes: DocumentType[] = [
+  DocumentType.ELECTRICITY_BILL,
+  DocumentType.WATER_REPORT,
+  DocumentType.EMPLOYEE_DATA,
+  DocumentType.CSR_REPORT,
+  DocumentType.SUSTAINABILITY_REPORT,
+  DocumentType.OTHER,
 ];
+
+function isDocumentType(value: string): value is DocumentType {
+  return Object.values(DocumentType).includes(value as DocumentType);
+}
 
 export async function POST(
   req: NextRequest,
@@ -45,19 +52,16 @@ export async function POST(
       );
     }
 
-    if (
-      typeof documentType !== "string" ||
-      !allowedDocumentTypes.includes(documentType)
-    ) {
-      return NextResponse.json(
-        {
-          message: "DocumentType is not valid",
-        },
-        {
-          status: 400,
-        },
-      );
-    }
+if (typeof documentType !== "string" || !isDocumentType(documentType)) {
+  return NextResponse.json(
+    {
+      message: "DocumentType is not valid",
+    },
+    {
+      status: 400,
+    },
+  );
+}
 
     const fileSize = file.size;
 
@@ -85,15 +89,34 @@ export async function POST(
       );
     }
 
-    const fileName = file.name;
     const buffer = Buffer.from(await file.arrayBuffer());
     const safeFileName = file.name
       .replace(/\s+/g, "-")
       .replace(/[^a-zA-Z0-9._-]/g, "");
 
-    const key = `assessments/${assessmentId}/${crypto.randomUUID()}-${file.name}`;
+    const key = `assessments/${assessmentId}/${crypto.randomUUID()}-${safeFileName}`;
     
+const command = new PutObjectCommand({
+  Bucket: process.env.AWS_S3_BUCKET_NAME,
+  Key: key,
+  Body: buffer,
+  ContentType: file.type,
+});
+    await s3.send(command);
 
+const document = await prisma.document.create({
+  data: {
+    fileName: file.name,
+    fileSize: file.size,
+    mimeType: file.type,
+    documentType: documentType,
+    assessmentId: assessmentId,
+    fileUrl: key,
+  },
+});
+    return NextResponse.json({
+      message: "File uploaded successfully",
+    });
   } catch (err) {
     console.error(err);
     return NextResponse.json(

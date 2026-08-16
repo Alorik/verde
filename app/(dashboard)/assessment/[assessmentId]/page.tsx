@@ -559,6 +559,19 @@ export default function AssessmentDetail({
                 <button
                   type="button"
                   disabled={!selectedFile || !documentType}
+                  onClick={async () => {
+                    const formData = new FormData();
+                    if (!selectedFile || !documentType) {
+                      return;
+                    }
+                    formData.append("file", selectedFile);
+                    formData.append("documentType", documentType);
+
+                    await fetch(`/api/assessments/${assessment.id}/documents`, {
+                      method: "POST",
+                      body: formData,
+                    });
+                  }}
                   className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Upload
