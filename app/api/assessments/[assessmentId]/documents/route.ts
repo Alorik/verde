@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-
 const allowedDocumentTypes = [
   "ELECTRICITY_BILL",
   "WATER_REPORT",
@@ -46,28 +45,55 @@ export async function POST(
       );
     }
 
+    if (
+      typeof documentType !== "string" ||
+      !allowedDocumentTypes.includes(documentType)
+    ) {
+      return NextResponse.json(
+        {
+          message: "DocumentType is not valid",
+        },
+        {
+          status: 400,
+        },
+      );
+    }
 
-if (
-  typeof documentType !== "string" ||
-  !allowedDocumentTypes.includes(documentType)
-) {
-  return NextResponse.json({
-    message: "DocumentType is not valid"
-  }, {
-    status: 400
-  });
-    };
-    
     const fileSize = file.size;
 
     const MAX_FILE_SIZE = 20 * 1024 * 1024;
     if (fileSize > MAX_FILE_SIZE) {
-      return NextResponse.json({
-        message: "Only file upto 20MB is allowed."
-      }, {
-        status: 400
-      });
+      return NextResponse.json(
+        {
+          message: "Only files upto 20 MB are allowed.",
+        },
+        {
+          status: 400,
+        },
+      );
     }
+
+    const fileType = file.type;
+    if (fileType !== "application/pdf") {
+      return NextResponse.json(
+        {
+          message: "Only .pdf files are allowed",
+        },
+        {
+          status: 400,
+        },
+      );
+    }
+
+    const fileName = file.name;
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const safeFileName = file.name
+      .replace(/\s+/g, "-")
+      .replace(/[^a-zA-Z0-9._-]/g, "");
+
+    const key = `assessments/${assessmentId}/${crypto.randomUUID()}-${file.name}`;
+    
+
   } catch (err) {
     console.error(err);
     return NextResponse.json(
@@ -76,8 +102,6 @@ if (
     );
   }
 }
-
-
 
 export async function GET(
   req: NextRequest,
