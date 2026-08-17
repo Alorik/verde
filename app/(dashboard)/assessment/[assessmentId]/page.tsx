@@ -151,12 +151,26 @@ export default function AssessmentDetail({
   const [documentType, setDocumentType] = useState("");
 
   const prefersReducedMotion = useReducedMotion();
+  async function loadAssessment() {
+    const { assessmentId } = await params;
+
+    const response = await fetch(`/api/assessments/${assessmentId}`);
+    if (!response.ok) {
+      console.error("failed to load assessment");
+      return;
+    }
+
+    const data = await response.json();
+
+    setAssessment(data.assessment);
+  }
 
   useEffect(() => {
-    async function loadAssessments() {
+    async function fetchAssessment() {
       const { assessmentId } = await params;
 
       const response = await fetch(`/api/assessments/${assessmentId}`);
+
       if (!response.ok) {
         console.error("failed to load assessment");
         return;
@@ -166,7 +180,8 @@ export default function AssessmentDetail({
 
       setAssessment(data.assessment);
     }
-    loadAssessments();
+
+    fetchAssessment();
   }, [params]);
 
   if (!assessment) {
@@ -560,17 +575,33 @@ export default function AssessmentDetail({
                   type="button"
                   disabled={!selectedFile || !documentType}
                   onClick={async () => {
-                    const formData = new FormData();
                     if (!selectedFile || !documentType) {
                       return;
                     }
+
+                    const formData = new FormData();
+
                     formData.append("file", selectedFile);
                     formData.append("documentType", documentType);
 
-                    await fetch(`/api/assessments/${assessment.id}/documents`, {
-                      method: "POST",
-                      body: formData,
-                    });
+                    const response = await fetch(
+                      `/api/assessments/${assessment.id}/documents`,
+                      {
+                        method: "POST",
+                        body: formData,
+                      },
+                    );
+
+                    if (!response.ok) {
+                      console.error("Failed to upload document");
+                      return;
+                    }
+
+                    await loadAssessment();
+
+                    setShowUploadModal(false);
+                    setSelectedFile(null);
+                    setDocumentType("");
                   }}
                   className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
                 >
