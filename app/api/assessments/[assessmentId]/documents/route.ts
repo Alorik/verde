@@ -52,16 +52,16 @@ export async function POST(
       );
     }
 
-if (typeof documentType !== "string" || !isDocumentType(documentType)) {
-  return NextResponse.json(
-    {
-      message: "DocumentType is not valid",
-    },
-    {
-      status: 400,
-    },
-  );
-}
+    if (typeof documentType !== "string" || !isDocumentType(documentType)) {
+      return NextResponse.json(
+        {
+          message: "DocumentType is not valid",
+        },
+        {
+          status: 400,
+        },
+      );
+    }
 
     const fileSize = file.size;
 
@@ -95,27 +95,29 @@ if (typeof documentType !== "string" || !isDocumentType(documentType)) {
       .replace(/[^a-zA-Z0-9._-]/g, "");
 
     const key = `assessments/${assessmentId}/${crypto.randomUUID()}-${safeFileName}`;
-    
-const command = new PutObjectCommand({
-  Bucket: process.env.AWS_S3_BUCKET_NAME,
-  Key: key,
-  Body: buffer,
-  ContentType: file.type,
-});
+
+    const command = new PutObjectCommand({
+      Bucket: process.env.AWS_S3_BUCKET_NAME,
+      Key: key,
+      Body: buffer,
+      ContentType: file.type,
+    });
     await s3.send(command);
 
-const document = await prisma.document.create({
-  data: {
-    fileName: file.name,
-    fileSize: file.size,
-    mimeType: file.type,
-    documentType: documentType,
-    assessmentId: assessmentId,
-    fileUrl: key,
-  },
-});
+    const document = await prisma.document.create({
+      data: {
+        fileName: file.name,
+        fileSize: file.size,
+        mimeType: file.type,
+        documentType: documentType,
+        assessmentId: assessmentId,
+        fileUrl: key,
+      },
+    });
+
     return NextResponse.json({
       message: "File uploaded successfully",
+      document,
     });
   } catch (err) {
     console.error(err);
