@@ -245,7 +245,7 @@ export default function AssessmentDetail({
           </Link>
         </motion.div>
 
-        {/* Section label */}
+
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -255,7 +255,7 @@ export default function AssessmentDetail({
           Assessment record
         </motion.p>
 
-        {/* Header row: title (left) · divider · status (true center) · divider · reference (right) */}
+
         <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto_auto_auto_minmax(0,1fr)] items-center gap-6">
           <motion.h1
             initial={{ opacity: 0, y: 14 }}
@@ -301,7 +301,7 @@ export default function AssessmentDetail({
 
           <Divider />
 
-          {/* Reference stack */}
+
           <motion.div
             initial={
               prefersReducedMotion
@@ -326,7 +326,7 @@ export default function AssessmentDetail({
           </motion.div>
         </div>
 
-        {/* Drawn rule */}
+
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
@@ -379,7 +379,7 @@ export default function AssessmentDetail({
           </motion.div>
         )}
 
-        {/* Filed footer */}
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
