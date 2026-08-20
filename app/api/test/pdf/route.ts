@@ -1,6 +1,6 @@
-import { gemini } from "@/lib/gemni";
 import { NextRequest, NextResponse } from "next/server";
-
+import { gemini } from "@/lib/gemni";
+import { electricityExtractionSchema } from "@/lib/validations/esgScore";
 
 export async function POST(req: NextRequest) {
   try {
@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
 
     const response = await gemini.models.generateContent({
       model: "gemini-3.6-flash",
+
       contents: [
         {
           inlineData: {
@@ -33,26 +34,40 @@ export async function POST(req: NextRequest) {
           text: `
 Extract the following information from this electricity bill:
 
-1. Electricity consumption
-2. Electricity consumption unit
-3. Total electricity cost
+- electricity cost
+- electricity consumption in units
 
-Return only JSON in this format:
+Return only JSON:
 
 {
-  "electricityConsumption": number,
-  "unit": string,
-  "electricityCost": number
+  "electricityCost": number,
+  "unitsConsumed": number
 }
 
-If you cannot find a value, return null for that field.
+Do not include any other fields.
           `,
         },
       ],
+      config: {
+        responseMimeType: "application/json",
+      },
     });
 
+    const rawResult = response.text;
+
+    if (!rawResult) {
+      return NextResponse.json(
+        { message: "Gemini returned no result" },
+        { status: 500 },
+      );
+    }
+
+    const parsedResult = JSON.parse(rawResult);
+
+    const validatedResult = electricityExtractionSchema.parse(parsedResult);
+
     return NextResponse.json({
-      result: response.text,
+      result: validatedResult,
     });
   } catch (error) {
     console.error(error);
