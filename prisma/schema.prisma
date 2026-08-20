@@ -70,6 +70,7 @@ model Document {
   fileUrl       String?
   mimeType      String
   assessmentId  String
+  electricity   Electricity?
   assessment   Assessment @relation(fields: [assessmentId], references: [id])
   uploadedAt    DateTime    @default(now())
 }
@@ -81,4 +82,12 @@ ELECTRICITY_BILL
   CSR_REPORT
   SUSTAINABILITY_REPORT
   OTHER
+}
+
+model Electricity {
+  id       String      @id @default(cuid())
+  documentId          String      @unique
+  electricityCost     Decimal
+  unitsConsumed       Decimal
+  document   Document @relation(fields: [documentId], references: [id])
 }
