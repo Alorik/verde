@@ -72,6 +72,7 @@ model Document {
   assessmentId  String
   electricity   Electricity?
   assessment   Assessment @relation(fields: [assessmentId], references: [id])
+  extractionStatus ExtractionStatus @default(PENDING)
   uploadedAt    DateTime    @default(now())
 }
 
@@ -91,3 +92,11 @@ model Electricity {
   unitsConsumed       Decimal
   document   Document @relation(fields: [documentId], references: [id])
 }
+
+enum ExtractionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
