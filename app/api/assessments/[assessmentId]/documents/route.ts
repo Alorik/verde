@@ -116,23 +116,58 @@ export async function POST(
       },
     });
 
+if (documentType === DocumentType.ELECTRICITY_BILL) {
+  try {
+    await prisma.document.update({
+      where: {
+        id: document.id,
+      },
+      data: {
+        extractionStatus: "PROCESSING",
+      },
+    });
 
-    if (documentType === DocumentType.ELECTRICITY_BILL) { 
-      try {
-        const extracted = await extractElectricityData(file);
-        
-        await prisma.electricity.create({
-          data: {
-            documentId: document.id,
-            electricityCost: extracted.electricityCost,
-            unitsConsumed: extracted.unitsConsumed,
-          },
-        });
-      } catch (err) {
-        console.error("Electricity extraction failed: ", err);
-        
-      }
-    }
+    const extracted = await extractElectricityData(file);
+
+    await prisma.electricity.create({
+      data: {
+        documentId: document.id,
+        electricityCost: extracted.electricityCost,
+        unitsConsumed: extracted.unitsConsumed,
+      },
+    });
+
+    await prisma.document.update({
+      where: {
+        id: document.id,
+      },
+      data: {
+        extractionStatus: "COMPLETED",
+      },
+    });
+  } catch (error) {
+    console.error("Electricity extraction failed:", error);
+
+    await prisma.document.update({
+      where: {
+        id: document.id,
+      },
+      data: {
+        extractionStatus: "FAILED",
+      },
+    });
+  }
+} else {
+  await prisma.document.update({
+    where: {
+      id: document.id,
+    },
+
+    data: {
+      extractionStatus: "COMPLETED",
+    },
+  });
+}
 
     return NextResponse.json({
       message: "File uploaded successfully",
