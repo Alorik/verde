@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3 } from "@/lib/s3";
 import { DocumentType } from "@prisma/client";
+import { extractElectricityData } from "@/lib/extraction/Electricity";
 
 const allowedDocumentTypes: DocumentType[] = [
   DocumentType.ELECTRICITY_BILL,
@@ -114,6 +115,24 @@ export async function POST(
         fileUrl: key,
       },
     });
+
+
+    if (documentType === DocumentType.ELECTRICITY_BILL) { 
+      try {
+        const extracted = await extractElectricityData(file);
+        
+        await prisma.electricity.create({
+          data: {
+            documentId: document.id,
+            electricityCost: extracted.electricityCost,
+            unitsConsumed: extracted.unitsConsumed,
+          },
+        });
+      } catch (err) {
+        console.error("Electricity extraction failed: ", err);
+        
+      }
+    }
 
     return NextResponse.json({
       message: "File uploaded successfully",
