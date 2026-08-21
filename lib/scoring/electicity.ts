@@ -1,3 +1,6 @@
+import { getPreviousElectricityConsumption } from "../extraction/previousElectrity";
+import { prisma } from "../prisma";
+
 export function calculateEnergyScore(
   currentMWh: number,
   previousMWh: number | null,
@@ -20,4 +23,45 @@ export function calculateEnergyScore(
   if (change >= -20) return 20;
 
   return 10;
+}
+
+export async function AssessmentEnergyScore(
+  assessmentId: string,
+): Promise<number | null> {
+  const currentDocument = await prisma.document.findFirst({
+    where: {
+      assessmentId,
+
+      documentType: "ELECTRICITY_BILL",
+
+      electricity: {
+        isNot: null,
+      },
+    },
+
+    orderBy: {
+      uploadedAt: "desc",
+    },
+
+    select: {
+      electricity: {
+        select: {
+          consumptionMWh: true,
+        },
+      },
+    },
+  });
+
+  const currentMWh = currentDocument?.electricity?.consumptionMWh;
+  if (!currentMWh) {
+    return null;
+  }
+
+  const previousMWh = await getPreviousElectricityConsumption(assessmentId);
+
+  return calculateEnergyScore(
+    Number(currentMWh),
+
+    previousMWh,
+  );
 }
