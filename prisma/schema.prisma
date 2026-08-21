@@ -47,6 +47,7 @@ model Assessment{
   status              AssessmentStatus
   documents            Document[]
   description         String?
+  esgScore            ESGScore?
   organizationId      String
   organization        Organization @relation(fields: [organizationId],references: [id])
 
@@ -71,6 +72,7 @@ model Document {
   mimeType      String
   assessmentId  String
   electricity   Electricity?
+  esgMetrics       ESGMetric[]
   assessment   Assessment @relation(fields: [assessmentId], references: [id])
   extractionStatus ExtractionStatus @default(PENDING)
   uploadedAt    DateTime    @default(now())
@@ -101,5 +103,63 @@ enum ExtractionStatus {
   PROCESSING
   COMPLETED
   FAILED
+}
+
+
+model ESGScore {
+  id                 String      @id @default(cuid())
+  assessmentId       String      @unique
+
+  environmentalScore Decimal?
+  socialScore        Decimal?
+  governanceScore    Decimal?
+  overallScore       Decimal?
+
+  calculatedAt       DateTime    @default(now())
+
+  assessment Assessment @relation(fields: [assessmentId], references: [id])
+  metrics   ESGMetric[]
+}
+
+model ESGMetric {
+  id                 String      @id @default(cuid())
+  esgScoreId         String
+
+  name               String
+  category           ESGCategory
+  description        String?
+
+  rawValue           Decimal?
+  rawUnit            MetricUnit?
+
+  normalizedValue    Decimal?
+  normalizedUnit     MetricUnit?
+
+  textValue          String?
+
+  score              Decimal?
+  weight             Decimal?
+
+  sourceDocumentId   String?
+
+  esgScore           ESGScore    @relation(fields: [esgScoreId], references: [id])
+  sourceDocument     Document?   @relation(fields: [sourceDocumentId], references: [id])
+}
+
+enum ESGCategory {
+  ENVIRONMENTAL
+  SOCIAL
+  GOVERNANCE
+}
+
+
+
+enum MetricUnit {
+  MWH
+  KWH
+  PERCENT
+  EMPLOYEES
+  CUBIC_METER
+  NONE
 }
 
