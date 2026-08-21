@@ -92,7 +92,7 @@ model Electricity {
   documentId        String   @unique
   electricityCost   Decimal
   unitsConsumed     Decimal
- unit             String?
+ unit             MetricUnit?
 consumptionMWh   Decimal?
 
   document Document @relation(fields: [documentId], references: [id])
