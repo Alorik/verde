@@ -86,11 +86,14 @@ ELECTRICITY_BILL
 }
 
 model Electricity {
-  id       String      @id @default(cuid())
-  documentId          String      @unique
-  electricityCost     Decimal
-  unitsConsumed       Decimal
-  document   Document @relation(fields: [documentId], references: [id])
+  id                String   @id @default(cuid())
+  documentId        String   @unique
+  electricityCost   Decimal
+  unitsConsumed     Decimal
+ unit             String?
+consumptionMWh   Decimal?
+
+  document Document @relation(fields: [documentId], references: [id])
 }
 
 enum ExtractionStatus {
