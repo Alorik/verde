@@ -4,6 +4,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3 } from "@/lib/s3";
 import { DocumentType } from "@prisma/client";
 import { extractElectricityData } from "@/lib/extraction/Electricity";
+import { normalizeToMWh } from "@/lib/extraction/normalizareElectricity";
 
 const allowedDocumentTypes: DocumentType[] = [
   DocumentType.ELECTRICITY_BILL,
@@ -129,11 +130,26 @@ export async function POST(
 
         const extracted = await extractElectricityData(file);
 
+        if (
+          extracted.electricityCost === null ||
+          extracted.unitsConsumed === null ||
+          extracted.unit === null
+        ) {
+          throw new Error("Required electricity data could not be extracted");
+        }
+
+        const consumptionMWh = normalizeToMWh(
+          extracted.unitsConsumed,
+          extracted.unit,
+        );
+
         await prisma.electricity.create({
           data: {
             documentId: document.id,
             electricityCost: extracted.electricityCost,
             unitsConsumed: extracted.unitsConsumed,
+            unit: extracted.unit,
+            consumptionMWh,
           },
         });
 
