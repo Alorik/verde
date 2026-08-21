@@ -8,6 +8,7 @@ import {
   useReducedMotion,
   type Variants,
 } from "framer-motion";
+import { calculateEnergyScore } from "@/lib/scoring/electicity";
 
 type DocumentType =
   | "ELECTRICITY_BILL"
@@ -440,7 +441,6 @@ export default function AssessmentDetail({
       console.error("failed to load assessment");
       return;
     }
-
     const data = await response.json();
 
     setAssessment(data.assessment);
@@ -463,6 +463,7 @@ export default function AssessmentDetail({
       if (!cancelled) {
         setAssessment(data.assessment);
       }
+
     }
 
     load();
@@ -474,6 +475,7 @@ export default function AssessmentDetail({
 
   // Poll while any document is still pending/processing extraction,
   // so status chips and the electricity panel update without a manual refresh.
+
   useEffect(() => {
     if (!assessment) return;
 
