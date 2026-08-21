@@ -62,7 +62,7 @@ const STATUS_STYLES: Record<string, string> = {
 const DOCUMENT_TYPE_META: Record<
   DocumentType,
   { label: string; chip: string }
->  = {
+> = {
   ELECTRICITY_BILL: {
     label: "Electricity bill",
     chip: "bg-amber-50 text-amber-700 border-amber-200",
@@ -93,7 +93,10 @@ const EXTRACTION_META: Record<
   ExtractionStatus,
   { label: string; chip: string }
 > = {
-  PENDING: { label: "Queued", chip: "bg-zinc-100 text-zinc-500 border-zinc-200" },
+  PENDING: {
+    label: "Queued",
+    chip: "bg-zinc-100 text-zinc-500 border-zinc-200",
+  },
   PROCESSING: {
     label: "Extracting",
     chip: "bg-blue-50 text-blue-700 border-blue-200",
@@ -102,7 +105,10 @@ const EXTRACTION_META: Record<
     label: "Extracted",
     chip: "bg-emerald-50 text-emerald-700 border-emerald-200",
   },
-  FAILED: { label: "Failed", chip: "bg-coral-50 text-coral-700 border-coral-200" },
+  FAILED: {
+    label: "Failed",
+    chip: "bg-coral-50 text-coral-700 border-coral-200",
+  },
 };
 
 function statusLabel(status: string) {
@@ -327,8 +333,8 @@ const docCardVariants: Variants = {
 
 function DocumentCard({ doc }: { doc: Document }) {
   const typeMeta = DOCUMENT_TYPE_META[doc.documentType];
-const extractionMeta =
-  EXTRACTION_META[doc.extractionStatus] ?? EXTRACTION_META.PENDING;
+  const extractionMeta =
+    EXTRACTION_META[doc.extractionStatus] ?? EXTRACTION_META.PENDING;
   const hasElectricityData =
     doc.documentType === "ELECTRICITY_BILL" &&
     doc.extractionStatus === "COMPLETED" &&
@@ -882,7 +888,6 @@ export default function AssessmentDetail({
                         return;
                       }
                       await loadAssessment(assessment.id);
-                      
 
                       setShowUploadModal(false);
                       setSelectedFile(null);
