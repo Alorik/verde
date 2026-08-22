@@ -1,13 +1,12 @@
 import { prisma } from "../prisma";
 
-
-
-
 type EnergyMetricResult = {
   value: number;
   unit: string;
   rating: string;
   score: number;
+  rawValue: number;
+  sourceDocumentId:string;
 };
 
 export async function calculateEnergyMetric(
@@ -26,6 +25,7 @@ export async function calculateEnergyMetric(
     },
 
     select: {
+      id: true,
       electricity: {
         select: {
           consumptionMWh: true,
@@ -38,6 +38,12 @@ export async function calculateEnergyMetric(
   if (currentMWh === null || currentMWh === undefined) {
     return null;
   }
+    if (!currentDocument) {
+      return null;
+    }
+
+    const sourceDocumentId = currentDocument.id;
+  
 
   const assessment = await prisma.assessment.findUnique({
     where: {
@@ -87,10 +93,15 @@ export async function calculateEnergyMetric(
     score = 25;
   }
 
+  const rawValue = Number(currentMWh);
+
+
   return {
     value: energyIntensity,
     unit: "MWH_PER_EMPLOYEE",
     rating,
     score,
+    rawValue,
+    sourceDocumentId,
   };
 }

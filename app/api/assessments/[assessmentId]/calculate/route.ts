@@ -48,6 +48,8 @@ export async function POST(
 
     const currentMWh = currentdocument?.electricity?.consumptionMWh;
 
+    
+
 if (currentMWh === null || currentMWh === undefined) {
   return NextResponse.json(
     { message: "Electricity data not found for this assessment" },

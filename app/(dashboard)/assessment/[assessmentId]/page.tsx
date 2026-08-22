@@ -8,7 +8,7 @@ import {
   useReducedMotion,
   type Variants,
 } from "framer-motion";
-import { calculateEnergyScore } from "@/lib/scoring/electicity";
+
 
 type DocumentType =
   | "ELECTRICITY_BILL"
