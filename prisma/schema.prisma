@@ -134,6 +134,7 @@ model ESGMetric {
 
   normalizedValue    Decimal?
   normalizedUnit     MetricUnit?
+      
 
   textValue          String?
 
@@ -141,6 +142,7 @@ model ESGMetric {
   weight             Decimal?
 
   sourceDocumentId   String?
+  
 
   esgScore           ESGScore    @relation(fields: [esgScoreId], references: [id])
   sourceDocument     Document?   @relation(fields: [sourceDocumentId], references: [id])
@@ -160,6 +162,7 @@ enum MetricUnit {
   PERCENT
   EMPLOYEES
   CUBIC_METER
+  MWH_PER_EMPLOYEE
   NONE
 }
 

@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "MetricUnit" ADD VALUE 'MWH_PER_EMPLOYEE';

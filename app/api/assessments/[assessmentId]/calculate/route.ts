@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { calculateEnergyMetric } from "@/lib/scoring/electicity";
 import { NextResponse } from "next/server";
 
 export async function POST(
@@ -56,10 +57,9 @@ if (currentMWh === null || currentMWh === undefined) {
 }
     
 
-
+const energy = await calculateEnergyMetric(assessmentId);
    return NextResponse.json({
-     message: "Current electricity data found",
-     currentMWh: Number(currentMWh),
+     energy,
    });
 
   } catch (err) {
