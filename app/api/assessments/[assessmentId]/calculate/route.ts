@@ -10,7 +10,6 @@ export async function POST(
   const { assessmentId } = await params;
 
   try {
-    
     const assessment = await prisma.assessment.findUnique({
       where: {
         id: assessmentId,
@@ -18,13 +17,12 @@ export async function POST(
     });
 
     if (!assessment) {
-       return NextResponse.json(
-         { message: "Assessment not found" },
+      return NextResponse.json(
+        { message: "Assessment not found" },
 
-         { status: 404 },
-       );
+        { status: 404 },
+      );
     }
-
 
     const currentdocument = await prisma.document.findFirst({
       where: {
@@ -35,7 +33,7 @@ export async function POST(
         },
       },
       orderBy: {
-        uploadedAt:"desc",
+        uploadedAt: "desc",
       },
       select: {
         electricity: {
@@ -48,28 +46,61 @@ export async function POST(
 
     const currentMWh = currentdocument?.electricity?.consumptionMWh;
 
-    
+    if (currentMWh === null || currentMWh === undefined) {
+      return NextResponse.json(
+        { message: "Electricity data not found for this assessment" },
 
-if (currentMWh === null || currentMWh === undefined) {
-  return NextResponse.json(
-    { message: "Electricity data not found for this assessment" },
+        { status: 400 },
+      );
+    }
 
-    { status: 400 },
-  );
-}
-    
+    const energy = await calculateEnergyMetric(assessmentId);
 
-const energy = await calculateEnergyMetric(assessmentId);
-   return NextResponse.json({
-     energy,
-   });
+    if (!energy) {
+      return null;
+    }
 
+    const result = await prisma.$transaction(async (tx) => {
+      const esgScore = await tx.eSGScore.create({
+        data: {
+          assessmentId,
+          environmentalScore: energy.score,
+          socialScore: null,
+          governanceScore: null,
+          overallScore: null,
+        },
+      });
+
+      const metric = await tx.eSGMetric.create({
+        data: {
+          esgScoreId: esgScore.id,
+          name: "Energy Consumption",
+          category: "ENVIRONMENTAL",
+          rawValue: energy.rawValue,
+          rawUnit: "MWH",
+          normalizedValue: energy.value,
+          normalizedUnit: "MWH_PER_EMPLOYEE",
+          score: energy.score,
+          sourceDocumentId: energy.sourceDocumentId,
+        },
+      });
+
+      return {
+        esgScore,
+        metric,
+      };
+    });
+    return NextResponse.json({
+      message: "ESG score calculated successfully",
+      score: result.esgScore,
+      metric: result.metric,
+    });
   } catch (err) {
     console.error("Assessment lookup failed:", err);
-      return NextResponse.json(
-        { message: "Failed to process assessment" },
+    return NextResponse.json(
+      { message: "Failed to process assessment" },
 
-        { status: 500 },
-      );
+      { status: 500 },
+    );
   }
 }
