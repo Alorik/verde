@@ -24,40 +24,13 @@ export async function POST(
       );
     }
 
-    const currentdocument = await prisma.document.findFirst({
-      where: {
-        assessmentId,
-        documentType: "ELECTRICITY_BILL",
-        electricity: {
-          isNot: null,
-        },
-      },
-      orderBy: {
-        uploadedAt: "desc",
-      },
-      select: {
-        electricity: {
-          select: {
-            consumptionMWh: true,
-          },
-        },
-      },
-    });
-
-    const currentMWh = currentdocument?.electricity?.consumptionMWh;
-
-    if (currentMWh === null || currentMWh === undefined) {
-      return NextResponse.json(
-        { message: "Electricity data not found for this assessment" },
-
-        { status: 400 },
-      );
-    }
-
     const energy = await calculateEnergyMetric(assessmentId);
 
     if (!energy) {
-      return null;
+      return NextResponse.json(
+        { message: "Energy data not available" },
+        { status: 400 },
+      );
     }
 
     const result = await prisma.$transaction(async (tx) => {
