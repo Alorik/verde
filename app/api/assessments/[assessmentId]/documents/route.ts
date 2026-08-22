@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3 } from "@/lib/s3";
-import { DocumentType } from "@prisma/client";
+import { DocumentType, MetricUnit } from "@prisma/client";
 import { extractElectricityData } from "@/lib/extraction/Electricity";
 import { normalizeToMWh } from "@/lib/extraction/normalizareElectricity";
 
@@ -17,6 +17,15 @@ const allowedDocumentTypes: DocumentType[] = [
 
 function isDocumentType(value: string): value is DocumentType {
   return Object.values(DocumentType).includes(value as DocumentType);
+}
+
+
+function toMetricUnit(value: string | null | undefined): MetricUnit | null {
+  if (!value) return null;
+  const normalized = value.toUpperCase().trim();
+  return (Object.values(MetricUnit) as string[]).includes(normalized)
+    ? (normalized as MetricUnit)
+    : null;
 }
 
 export async function POST(
@@ -148,7 +157,7 @@ export async function POST(
             documentId: document.id,
             electricityCost: extracted.electricityCost,
             unitsConsumed: extracted.unitsConsumed,
-            unit: extracted.unit,
+            unit: toMetricUnit(extracted.unit),
             consumptionMWh,
           },
         });
