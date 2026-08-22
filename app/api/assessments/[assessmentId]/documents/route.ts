@@ -19,7 +19,6 @@ function isDocumentType(value: string): value is DocumentType {
   return Object.values(DocumentType).includes(value as DocumentType);
 }
 
-
 function toMetricUnit(value: string | null | undefined): MetricUnit | null {
   if (!value) return null;
   const normalized = value.toUpperCase().trim();
