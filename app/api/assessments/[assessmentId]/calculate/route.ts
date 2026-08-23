@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { calculateEnergyMetric } from "@/lib/scoring/electicity";
-import { calculateEnvironmentalScore } from "@/lib/scoring/EnvironmentScore";
+import { calculateEnvironmentalScore } from "@/lib/scoring/Environment/EnvironmentScore";
 import { NextResponse } from "next/server";
 
 export async function POST(
