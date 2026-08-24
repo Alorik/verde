@@ -5,3 +5,11 @@ export const electricityExtractionSchema = z.object({
   unitsConsumed: z.number(),
   unit: z.string().nullable(),
 });
+
+
+
+export const waterExtractionSchema = z.object({
+  waterCost: z.number(),
+  unitsConsumed: z.number(),
+  unit: z.string().nullable(),
+});
