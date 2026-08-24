@@ -1,6 +1,7 @@
 import { prisma } from "../prisma";
 import { calculateEnergyMetric } from "./Environment/energy";
 import { calculateEnvironmentalScore } from "./Environment/EnvironmentScore";
+import { calculateWaterMetrics } from "./Environment/waterMetrics";
 
 export async function CalculateESG(assessmentId: string) {
   const assessment = await prisma.assessment.findUnique({
@@ -14,10 +15,7 @@ export async function CalculateESG(assessmentId: string) {
   }
 
   const energy = await calculateEnergyMetric(assessmentId);
-
-  if (!energy) {
-    throw new Error("Energy metric failed to calculate");
-  }
+  const waterResource = await calculateWaterMetrics(assessmentId);
 
   const result = await prisma.$transaction(async (tx) => {
     const esgScore = await tx.eSGScore.create({
@@ -30,19 +28,37 @@ export async function CalculateESG(assessmentId: string) {
       },
     });
 
-    const metric = await tx.eSGMetric.create({
-      data: {
-        esgScoreId: esgScore.id,
-        name: "Energy Consumption",
-        category: "ENVIRONMENTAL",
-        rawValue: energy.rawValue,
-        rawUnit: "MWH",
-        normalizedValue: energy.value,
-        normalizedUnit: "MWH_PER_EMPLOYEE",
-        score: energy.score,
-        sourceDocumentId: energy.sourceDocumentId,
-      },
-    });
+    if (energy) {
+      await tx.eSGMetric.create({
+        data: {
+          esgScoreId: esgScore.id,
+          name: "Energy Consumption",
+          category: "ENVIRONMENTAL",
+          rawValue: energy.rawValue,
+          rawUnit: "MWH",
+          normalizedValue: energy.value,
+          normalizedUnit: "MWH_PER_EMPLOYEE",
+          score: energy.score,
+          sourceDocumentId: energy.sourceDocumentId,
+        },
+      });
+    }
+
+    if (waterResource) {
+      await tx.eSGMetric.create({
+        data: {
+          esgScoreId: esgScore.id,
+          name: "Water Consumption",
+          category: "ENVIRONMENTAL",
+          rawValue: waterResource.rawValue,
+          rawUnit: "CUBIC_METER",
+          normalizedValue: waterResource.value,
+          normalizedUnit: "CUBIC_METER_PER_EMPLOYEE",
+          score: waterResource.score,
+          sourceDocumentId: waterResource.sourceDocumentId,
+        },
+      });
+    }
 
     const environmentalMetrics = await tx.eSGMetric.findMany({
       where: {
@@ -72,7 +88,7 @@ export async function CalculateESG(assessmentId: string) {
 
     return {
       esgScore: updatedESGScore,
-      metric,
+      metrics: environmentalMetrics,
     };
   });
 

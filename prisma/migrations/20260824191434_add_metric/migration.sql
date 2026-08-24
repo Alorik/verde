@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "MetricUnit" ADD VALUE 'CUBIC_METER_PER_EMPLOYEE';
