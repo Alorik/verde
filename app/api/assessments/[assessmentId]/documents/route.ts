@@ -4,7 +4,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3 } from "@/lib/s3";
 import { DocumentType, MetricUnit } from "@prisma/client";
 import { extractElectricityData } from "@/lib/extraction/Electricity";
-import { normalizeToMWh } from "@/lib/extraction/normalizareElectricity";
+import { normalizeToMWh } from "@/lib/extraction/normalize/normalizareElectricity";
 
 const allowedDocumentTypes: DocumentType[] = [
   DocumentType.ELECTRICITY_BILL,
