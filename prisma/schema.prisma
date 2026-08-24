@@ -72,6 +72,7 @@ model Document {
   mimeType      String
   assessmentId  String
   electricity   Electricity?
+  water         Water?
   esgMetrics       ESGMetric[]
   assessment   Assessment @relation(fields: [assessmentId], references: [id])
   extractionStatus ExtractionStatus @default(PENDING)
@@ -99,12 +100,12 @@ consumptionMWh   Decimal?
 }
 
 model Water{
-    id                String   @id @default(cuid())
+  id                String   @id @default(cuid())
   documentId        String   @unique
- WaterCost   Decimal
+  WaterCost         Decimal
   unitsConsumed     Decimal
- unit             MetricUnit?
-consumptionMWh   Decimal?
+  unit              MetricUnit?
+  consumptionCubicMeter   Decimal?
 
   document Document @relation(fields: [documentId], references: [id])
 }
