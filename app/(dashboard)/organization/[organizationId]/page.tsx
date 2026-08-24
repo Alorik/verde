@@ -1,7 +1,12 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  type Variants,
+} from "framer-motion";
 import Link from "next/link";
 
 type Organization = {
@@ -126,7 +131,7 @@ export default function OrganizationDetail({
     },
   ];
 
-  const listVariants = {
+  const listVariants: Variants = {
     hidden: {},
     show: {
       transition: {
@@ -136,7 +141,7 @@ export default function OrganizationDetail({
     },
   };
 
-  const rowVariants = {
+  const rowVariants: Variants = {
     hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 10 },
     show: {
       opacity: 1,
