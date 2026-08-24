@@ -5,6 +5,8 @@ import { s3 } from "@/lib/s3";
 import { DocumentType, MetricUnit } from "@prisma/client";
 import { extractElectricityData } from "@/lib/extraction/Electricity";
 import { normalizeToMWh } from "@/lib/extraction/normalize/normalizareElectricity";
+import { extractWaterData } from "@/lib/extraction/water";
+import { normalizeToCubicMeter } from "@/lib/extraction/normalize/normalizeWter";
 
 const allowedDocumentTypes: DocumentType[] = [
   DocumentType.ELECTRICITY_BILL,
@@ -158,6 +160,52 @@ export async function POST(
             unitsConsumed: extracted.unitsConsumed,
             unit: toMetricUnit(extracted.unit),
             consumptionMWh,
+          },
+        });
+
+        await prisma.document.update({
+          where: {
+            id: document.id,
+          },
+          data: {
+            extractionStatus: "COMPLETED",
+          },
+        });
+      } catch (error) {
+        console.error("Electricity extraction failed:", error);
+
+        await prisma.document.update({
+          where: {
+            id: document.id,
+          },
+          data: {
+            extractionStatus: "FAILED",
+          },
+        });
+      }
+    } else if (documentType === DocumentType.WATER_REPORT) {
+      try {
+        const extractedWater = await extractWaterData(file);
+
+        if (
+          extractedWater.waterCost === null ||
+          extractedWater.unitsConsumed === null ||
+          extractedWater.unit === null
+        ) {
+          throw new Error("Required water data could not be extracted");
+        }
+
+        const consumptionCubicMeter = normalizeToCubicMeter(
+          extractedWater.unitsConsumed,
+          extractedWater.unit,
+        );
+        await prisma.water.create({
+          data: {
+            documentId: document.id,
+            WaterCost: extractedWater.waterCost,
+            unitsConsumed: extractedWater.unitsConsumed,
+            unit: toMetricUnit(extractedWater.unit),
+            consumptionCubicMeter,
           },
         });
 
