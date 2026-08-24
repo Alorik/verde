@@ -1,5 +1,5 @@
 import { prisma } from "../prisma";
-import { calculateEnergyMetric } from "./electicity";
+import { calculateEnergyMetric } from "./Environment/energy";
 import { calculateEnvironmentalScore } from "./Environment/EnvironmentScore";
 
 export async function CalculateESG(assessmentId: string) {
