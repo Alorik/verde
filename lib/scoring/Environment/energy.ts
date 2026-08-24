@@ -98,7 +98,7 @@ export async function calculateEnergyMetric(
 
   return {
     value: energyIntensity,
-    unit: "MWH_PER_EMPLOYEE",
+    unit: "CUBIC_METER",
     rating,
     score,
     rawValue,

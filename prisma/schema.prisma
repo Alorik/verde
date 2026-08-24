@@ -98,6 +98,17 @@ consumptionMWh   Decimal?
   document Document @relation(fields: [documentId], references: [id])
 }
 
+model Water{
+    id                String   @id @default(cuid())
+  documentId        String   @unique
+ WaterCost   Decimal
+  unitsConsumed     Decimal
+ unit             MetricUnit?
+consumptionMWh   Decimal?
+
+  document Document @relation(fields: [documentId], references: [id])
+}
+
 enum ExtractionStatus {
   PENDING
   PROCESSING
