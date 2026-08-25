@@ -1,7 +1,7 @@
-import { gemini } from "../gemni";
-import { waterExtractionSchema } from "../validations/esgScore";
+import { gemini } from "@/lib/gemni";
 
-export async function extractWaterData(file: File) {
+
+export async function extractEmployeeData(file: File) {
   const buffer = Buffer.from(await file.arrayBuffer());
 
   const response = await gemini.models.generateContent({
@@ -16,23 +16,24 @@ export async function extractWaterData(file: File) {
       },
       {
         text: `
-        Extract the following information from this Water bill:
+Extract the following information from this electricity bill:
 
-- water cost
-- water consumption
-- the actual unit used for water consumption
+- electricity cost
+- electricity consumption
+- the actual unit used for electricity consumption
 
 Return only JSON in this exact structure:
 
 {
-  "waterCost": number | null,
+  "electricityCost": number | null,
   "unitsConsumed": number | null,
   "unit": string | null
 }
 
 If a value cannot be found, return null.
 
-Do not include any other fields.`,
+Do not include any other fields.
+        `,
       },
     ],
 
@@ -42,11 +43,12 @@ Do not include any other fields.`,
   });
 
   const rawResult = response.text;
+
   if (!rawResult) {
     throw new Error("Gemini returned no extraction result");
   }
 
   const parsedResult = JSON.parse(rawResult);
 
-  return waterExtractionSchema.parse(parsedResult);
+  return electricityExtractionSchema.parse(parsedResult);
 }

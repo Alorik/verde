@@ -1,5 +1,7 @@
-import { gemini } from "../gemni";
-import { electricityExtractionSchema } from "../validations/esgScore";
+
+import { gemini } from "@/lib/gemni";
+import { electricityExtractionSchema } from "@/lib/validations/extractionSchema";
+
 
 export async function extractElectricityData(file: File) {
   const buffer = Buffer.from(await file.arrayBuffer());
