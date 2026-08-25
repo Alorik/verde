@@ -17,14 +17,38 @@ export async function CalculateESG(assessmentId: string) {
   const energy = await calculateEnergyMetric(assessmentId);
   const waterResource = await calculateWaterMetrics(assessmentId);
 
+  if (!energy && !waterResource) {
+    throw new Error("No ESG metrics available to calculate");
+  }
+
   const result = await prisma.$transaction(async (tx) => {
-    const esgScore = await tx.eSGScore.create({
-      data: {
+    const esgScore = await tx.eSGScore.upsert({
+      where: {
+        assessmentId,
+      },
+
+      create: {
         assessmentId,
         environmentalScore: null,
         socialScore: null,
         governanceScore: null,
         overallScore: null,
+      },
+
+      update: {
+        environmentalScore: null,
+        socialScore: null,
+        governanceScore: null,
+        overallScore: null,
+      },
+    });
+
+    // Recalculation:
+    // Remove the previous metrics for this ESG score
+    // and rebuild them from the currently available documents.
+    await tx.eSGMetric.deleteMany({
+      where: {
+        esgScoreId: esgScore.id,
       },
     });
 
@@ -66,7 +90,15 @@ export async function CalculateESG(assessmentId: string) {
         category: "ENVIRONMENTAL",
       },
       select: {
+        id: true,
+        name: true,
+        category: true,
+        rawValue: true,
+        rawUnit: true,
+        normalizedValue: true,
+        normalizedUnit: true,
         score: true,
+        sourceDocumentId: true,
       },
     });
 
