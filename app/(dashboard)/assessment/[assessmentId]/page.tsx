@@ -428,9 +428,16 @@ export default function AssessmentDetail({
   params: Promise<{ assessmentId: string }>;
 }) {
   const [assessment, setAssessment] = useState<Assessment | null>(null);
-  const [showUploadModal, setShowUploadModal] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [documentType, setDocumentType] = useState("");
+  const [uploadingType, setUploadingType] = useState<DocumentType | null>(null);
+  const [calculating, setCalculating] = useState(false);
+  const [calculateError, setCalculateError] = useState<string | null>(null);
+const [esgScore, setEsgScore] = useState<number | null>(null);
+const [esgMetrics, setEsgMetrics] = useState<Record<string, unknown> | null>(
+  null,
+);
+
+
+  
 
   const prefersReducedMotion = useReducedMotion();
 
@@ -445,6 +452,60 @@ export default function AssessmentDetail({
 
     setAssessment(data.assessment);
   }
+
+  const UPLOAD_TYPES: { type: DocumentType; label: string }[] = [
+  { type: "ELECTRICITY_BILL", label: "Electricity bill" },
+  { type: "WATER_REPORT", label: "Water report" },
+  { type: "SUSTAINABILITY_REPORT", label: "Sustainability report" },
+  { type: "CSR_REPORT", label: "CSR report" },
+  { type: "EMPLOYEE_DATA", label: "Employee data" },
+];
+
+async function handleUpload(type: DocumentType, file: File) {
+  if (!assessment) return;
+  setUploadingType(type);
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("documentType", type);
+
+  const response = await fetch(
+    `/api/assessments/${assessment.id}/documents`,
+    { method: "POST", body: formData },
+  );
+
+  if (!response.ok) {
+    console.error("Failed to upload document");
+    setUploadingType(null);
+    return;
+  }
+
+  await loadAssessment(assessment.id);
+  setUploadingType(null);
+}
+  
+async function handleCalculateEsg() {
+  if (!assessment) return;
+  setCalculating(true);
+  setCalculateError(null);
+
+  const response = await fetch(`/api/assessments/${assessment.id}/calculate`, {
+    method: "POST",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    setCalculateError(data.message ?? "Failed to calculate ESG score");
+    setCalculating(false);
+    return;
+  }
+
+  setEsgScore(data.score.esgScore);
+  setEsgMetrics(data.score.metrics ?? null);
+  setCalculating(false);
+}
+  
   useEffect(() => {
     let cancelled = false;
 
@@ -724,24 +785,92 @@ export default function AssessmentDetail({
             </span>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setShowUploadModal(true)}
-            className="mt-5 inline-flex items-center gap-2 rounded-lg border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
-          >
-            <svg
-              className="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+          <div className="mt-5 divide-y divide-zinc-100 rounded-xl border border-zinc-200">
+            {UPLOAD_TYPES.map(({ type, label }) => {
+              const existing = assessment.documents.find(
+                (d) => d.documentType === type,
+              );
+              const isUploading = uploadingType === type;
+
+              return (
+                <div
+                  key={type}
+                  className="flex items-center justify-between gap-4 px-4 py-3.5"
+                >
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`flex h-9 w-9 flex-none items-center justify-center rounded-lg border ${DOCUMENT_TYPE_META[type].chip}`}
+                    >
+                      <DocumentTypeIcon type={type} />
+                    </span>
+                    <div>
+                      <p className="text-sm font-medium text-zinc-900">
+                        {label}
+                      </p>
+                      {existing && (
+                        <p className="mt-0.5 truncate font-mono text-[10px] uppercase tracking-wide text-zinc-400">
+                          {existing.fileName}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <label
+                    className={`inline-flex flex-none items-center gap-1.5 rounded-lg border px-3.5 py-1.5 text-xs font-medium transition ${
+                      isUploading
+                        ? "cursor-wait border-zinc-200 text-zinc-400"
+                        : "cursor-pointer border-zinc-200 text-zinc-700 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+                    }`}
+                  >
+                    <input
+                      type="file"
+                      className="hidden"
+                      disabled={isUploading}
+                      onChange={(event) => {
+                        const file = event.target.files?.[0];
+                        if (file) handleUpload(type, file);
+                        event.target.value = "";
+                      }}
+                    />
+                    {isUploading
+                      ? "Uploading…"
+                      : existing
+                        ? "Replace"
+                        : "Upload"}
+                  </label>
+                </div>
+              );
+            })}
+          </div>
+
+          {assessment.documents.length === 0 && (
+            <p className="mt-4 font-mono text-[11px] text-amber-600">
+              Please upload at least one document.
+            </p>
+          )}
+
+          <div className="mt-8 flex items-center justify-end gap-4">
+            {calculateError && (
+              <p className="font-mono text-[11px] text-red-600">
+                {calculateError}
+              </p>
+            )}
+
+            {esgScore !== null && !calculateError && (
+              <p className="font-mono text-[11px] uppercase tracking-widest text-emerald-700">
+                Score: {esgScore}
+              </p>
+            )}
+
+            <button
+              type="button"
+              disabled={assessment.documents.length === 0 || calculating}
+              onClick={handleCalculateEsg}
+              className="rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              <path d="M12 5v14M5 12h14" />
-            </svg>
-            Upload document
-          </button>
+              {calculating ? "Calculating…" : "Calculate ESG"}
+            </button>
+          </div>
 
           {assessment.documents.length === 0 ? (
             <div className="mt-6 rounded-xl border border-dashed border-zinc-200 py-12 text-center">
@@ -759,151 +888,6 @@ export default function AssessmentDetail({
             </motion.div>
           )}
         </motion.section>
-
-        <AnimatePresence>
-          {showUploadModal && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-6"
-            >
-              <motion.div
-                initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 6, scale: 0.98 }}
-                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                className="w-full max-w-lg rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl"
-              >
-                <div className="grid grid-cols-[1fr_auto] items-start gap-4">
-                  <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-400">
-                      New document
-                    </p>
-                    <h2
-                      className="mt-2 font-serif text-2xl text-zinc-900"
-                      style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}
-                    >
-                      Upload document
-                    </h2>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setShowUploadModal(false)}
-                    className="justify-self-end text-xl leading-none text-zinc-400 transition hover:text-zinc-900"
-                  >
-                    ×
-                  </button>
-                </div>
-
-                <div className="mt-8">
-                  <label className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
-                    File
-                  </label>
-
-                  <label className="mt-2 flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-zinc-300 px-6 py-10 text-center transition hover:border-emerald-300 hover:bg-emerald-50/40">
-                    <input
-                      type="file"
-                      className="hidden"
-                      onChange={(event) => {
-                        const file = event.target.files?.[0] ?? null;
-                        setSelectedFile(file);
-                      }}
-                    />
-
-                    {selectedFile ? (
-                      <>
-                        <p className="text-sm font-medium text-zinc-900">
-                          {selectedFile.name}
-                        </p>
-                        <p className="mt-1 text-xs text-zinc-400">
-                          {(selectedFile.size / 1024).toFixed(1)} KB
-                        </p>
-                      </>
-                    ) : (
-                      <>
-                        <p className="text-sm font-medium text-zinc-700">
-                          Choose a file
-                        </p>
-                        <p className="mt-1 text-xs text-zinc-400">
-                          PDF, CSV, XLSX or other supported files
-                        </p>
-                      </>
-                    )}
-                  </label>
-                </div>
-
-                <div className="mt-6">
-                  <label className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
-                    Document type
-                  </label>
-
-                  <select
-                    value={documentType}
-                    onChange={(event) => setDocumentType(event.target.value)}
-                    className="mt-2 w-full rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400"
-                  >
-                    <option value="">Select document type</option>
-                    <option value="ELECTRICITY_BILL">Electricity Bill</option>
-                    <option value="WATER_REPORT">Water Report</option>
-                    <option value="EMPLOYEE_DATA">Employee Data</option>
-                    <option value="CSR_REPORT">CSR Report</option>
-                    <option value="SUSTAINABILITY_REPORT">
-                      Sustainability Report
-                    </option>
-                    <option value="OTHER">Other</option>
-                  </select>
-                </div>
-
-                <div className="mt-8 flex justify-end gap-3">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowUploadModal(false);
-                      setSelectedFile(null);
-                      setDocumentType("");
-                    }}
-                    className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-500 transition hover:bg-zinc-100"
-                  >
-                    Cancel
-                  </button>
-
-                  <button
-                    type="button"
-                    disabled={!selectedFile || !documentType}
-                    onClick={async () => {
-                      if (!selectedFile || !documentType) return;
-
-                      const formData = new FormData();
-                      formData.append("file", selectedFile);
-                      formData.append("documentType", documentType);
-
-                      const response = await fetch(
-                        `/api/assessments/${assessment.id}/documents`,
-                        { method: "POST", body: formData },
-                      );
-
-                      if (!response.ok) {
-                        console.error("Failed to upload document");
-                        return;
-                      }
-                      await loadAssessment(assessment.id);
-
-                      setShowUploadModal(false);
-                      setSelectedFile(null);
-                      setDocumentType("");
-                    }}
-                    className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
-                  >
-                    Upload
-                  </button>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
     </div>
   );

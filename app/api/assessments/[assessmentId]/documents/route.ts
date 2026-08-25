@@ -199,6 +199,7 @@ export async function POST(
           extractedWater.unitsConsumed,
           extractedWater.unit,
         );
+        
         await prisma.water.create({
           data: {
             documentId: document.id,
