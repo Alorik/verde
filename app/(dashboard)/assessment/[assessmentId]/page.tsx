@@ -486,6 +486,7 @@ async function handleUpload(type: DocumentType, file: File) {
   
 async function handleCalculateEsg() {
   if (!assessment) return;
+
   setCalculating(true);
   setCalculateError(null);
 
@@ -501,8 +502,9 @@ async function handleCalculateEsg() {
     return;
   }
 
-  setEsgScore(data.score.esgScore);
+  setEsgScore(data.score.esgScore.environmentalScore);
   setEsgMetrics(data.score.metrics ?? null);
+
   setCalculating(false);
 }
   
@@ -855,7 +857,6 @@ async function handleCalculateEsg() {
                 {calculateError}
               </p>
             )}
-
             {esgScore !== null && !calculateError && (
               <p className="font-mono text-[11px] uppercase tracking-widest text-emerald-700">
                 Score: {esgScore}
