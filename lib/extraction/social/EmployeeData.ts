@@ -1,5 +1,5 @@
 import { gemini } from "@/lib/gemni";
-
+import { employeeExtractionSchema } from "@/lib/validations/extractionSchema";
 
 export async function extractEmployeeData(file: File) {
   const buffer = Buffer.from(await file.arrayBuffer());
@@ -18,16 +18,21 @@ export async function extractEmployeeData(file: File) {
         text: `
 Extract the following information from this electricity bill:
 
-- electricity cost
-- electricity consumption
-- the actual unit used for electricity consumption
+- number of employees
+- number of male
+- number of female
+- employee turnover
+- traininghours
 
 Return only JSON in this exact structure:
 
 {
-  "electricityCost": number | null,
-  "unitsConsumed": number | null,
-  "unit": string | null
+  "number of employees": number | null,
+  "number of male": number | null,
+  "number of female": number | null,
+  "employee turnover": number | null,
+  "traininghours": number | null,
+
 }
 
 If a value cannot be found, return null.
@@ -50,5 +55,5 @@ Do not include any other fields.
 
   const parsedResult = JSON.parse(rawResult);
 
-  return electricityExtractionSchema.parse(parsedResult);
+  return employeeExtractionSchema.parse(parsedResult);
 }
