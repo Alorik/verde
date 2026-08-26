@@ -9,7 +9,6 @@ import {
   type Variants,
 } from "framer-motion";
 
-
 type DocumentType =
   | "ELECTRICITY_BILL"
   | "WATER_REPORT"
@@ -431,13 +430,10 @@ export default function AssessmentDetail({
   const [uploadingType, setUploadingType] = useState<DocumentType | null>(null);
   const [calculating, setCalculating] = useState(false);
   const [calculateError, setCalculateError] = useState<string | null>(null);
-const [esgScore, setEsgScore] = useState<number | null>(null);
-const [esgMetrics, setEsgMetrics] = useState<Record<string, unknown> | null>(
-  null,
-);
-
-
-  
+  const [esgScore, setEsgScore] = useState<number | null>(null);
+  const [esgMetrics, setEsgMetrics] = useState<Record<string, unknown> | null>(
+    null,
+  );
 
   const prefersReducedMotion = useReducedMotion();
 
@@ -454,60 +450,63 @@ const [esgMetrics, setEsgMetrics] = useState<Record<string, unknown> | null>(
   }
 
   const UPLOAD_TYPES: { type: DocumentType; label: string }[] = [
-  { type: "ELECTRICITY_BILL", label: "Electricity bill" },
-  { type: "WATER_REPORT", label: "Water report" },
-  { type: "SUSTAINABILITY_REPORT", label: "Sustainability report" },
-  { type: "CSR_REPORT", label: "CSR report" },
-  { type: "EMPLOYEE_DATA", label: "Employee data" },
-];
+    { type: "ELECTRICITY_BILL", label: "Electricity bill" },
+    { type: "WATER_REPORT", label: "Water report" },
+    { type: "SUSTAINABILITY_REPORT", label: "Sustainability report" },
+    { type: "CSR_REPORT", label: "CSR report" },
+    { type: "EMPLOYEE_DATA", label: "Employee data" },
+  ];
 
-async function handleUpload(type: DocumentType, file: File) {
-  if (!assessment) return;
-  setUploadingType(type);
+  async function handleUpload(type: DocumentType, file: File) {
+    if (!assessment) return;
+    setUploadingType(type);
 
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("documentType", type);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("documentType", type);
 
-  const response = await fetch(
-    `/api/assessments/${assessment.id}/documents`,
-    { method: "POST", body: formData },
-  );
+    const response = await fetch(
+      `/api/assessments/${assessment.id}/documents`,
+      { method: "POST", body: formData },
+    );
 
-  if (!response.ok) {
-    console.error("Failed to upload document");
+    if (!response.ok) {
+      console.error("Failed to upload document");
+      setUploadingType(null);
+      return;
+    }
+
+    await loadAssessment(assessment.id);
     setUploadingType(null);
-    return;
   }
 
-  await loadAssessment(assessment.id);
-  setUploadingType(null);
-}
-  
-async function handleCalculateEsg() {
-  if (!assessment) return;
+  async function handleCalculateEsg() {
+    if (!assessment) return;
 
-  setCalculating(true);
-  setCalculateError(null);
+    setCalculating(true);
+    setCalculateError(null);
 
-  const response = await fetch(`/api/assessments/${assessment.id}/calculate`, {
-    method: "POST",
-  });
+    const response = await fetch(
+      `/api/assessments/${assessment.id}/calculate`,
+      {
+        method: "POST",
+      },
+    );
 
-  const data = await response.json();
+    const data = await response.json();
 
-  if (!response.ok) {
-    setCalculateError(data.message ?? "Failed to calculate ESG score");
+    if (!response.ok) {
+      setCalculateError(data.message ?? "Failed to calculate ESG score");
+      setCalculating(false);
+      return;
+    }
+
+    setEsgScore(data.score.esgScore.overallScore);
+    setEsgMetrics(data.score.metrics ?? null);
+
     setCalculating(false);
-    return;
   }
 
-  setEsgScore(data.score.esgScore.environmentalScore);
-  setEsgMetrics(data.score.metrics ?? null);
-
-  setCalculating(false);
-}
-  
   useEffect(() => {
     let cancelled = false;
 
@@ -526,7 +525,6 @@ async function handleCalculateEsg() {
       if (!cancelled) {
         setAssessment(data.assessment);
       }
-
     }
 
     load();

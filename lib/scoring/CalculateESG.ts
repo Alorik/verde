@@ -194,5 +194,7 @@ export async function CalculateESG(assessmentId: string) {
     };
   });
 
+  console.log(result);
   return result;
+
 }
