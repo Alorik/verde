@@ -16,28 +16,31 @@ export async function extractEmployeeData(file: File) {
       },
       {
         text: `
-Extract the following information from this electricity bill:
+Extract the following employee-related information from this document:
 
-- number of employees
-- number of male
-- number of female
+- total number of employees
+- number of male employees
+- number of female employees
 - employee turnover
-- traininghours
+- total training hours
 
 Return only JSON in this exact structure:
 
 {
-  "number of employees": number | null,
-  "number of male": number | null,
-  "number of female": number | null,
-  "employee turnover": number | null,
-  "traininghours": number | null,
-
+  "totalEmployees": number | null,
+  "male": number | null,
+  "female": number | null,
+  "employeeTurnover": number | null,
+  "trainingHours": number | null
 }
 
-If a value cannot be found, return null.
-
-Do not include any other fields.
+Rules:
+- Return numbers only, without units or symbols.
+- For percentages, return only the numeric value.
+  Example: "12.5%" → 12.5
+- If a value cannot be found, return null.
+- Do not estimate or infer values that are not present in the document.
+- Do not include any other fields.
         `,
       },
     ],
