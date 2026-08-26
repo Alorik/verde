@@ -19,3 +19,4 @@ export const employeeExtractionSchema = z.object({
   employeeTurnover: z.number(),
   trainingHours: z.number(),
 });
+
