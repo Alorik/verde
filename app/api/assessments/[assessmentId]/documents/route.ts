@@ -3,10 +3,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3 } from "@/lib/s3";
 import { DocumentType, MetricUnit } from "@prisma/client";
-import { extractElectricityData } from "@/lib/extraction/Electricity";
+
 import { normalizeToMWh } from "@/lib/extraction/normalize/normalizareElectricity";
-import { extractWaterData } from "@/lib/extraction/water";
+
 import { normalizeToCubicMeter } from "@/lib/extraction/normalize/normalizeWter";
+import { extractElectricityData } from "@/lib/extraction/Environment/Electricity";
+import { extractWaterData } from "@/lib/extraction/Environment/water";
+import { extractEmployeeData } from "@/lib/extraction/social/EmployeeData";
 
 const allowedDocumentTypes: DocumentType[] = [
   DocumentType.ELECTRICITY_BILL,
@@ -199,7 +202,7 @@ export async function POST(
           extractedWater.unitsConsumed,
           extractedWater.unit,
         );
-        
+
         await prisma.water.create({
           data: {
             documentId: document.id,
@@ -220,6 +223,60 @@ export async function POST(
         });
       } catch (error) {
         console.error("Electricity extraction failed:", error);
+
+        await prisma.document.update({
+          where: {
+            id: document.id,
+          },
+          data: {
+            extractionStatus: "FAILED",
+          },
+        });
+      }
+    } else if (documentType === DocumentType.EMPLOYEE_DATA) {
+      try {
+        await prisma.document.update({
+          where: {
+            id: document.id,
+          },
+          data: {
+            extractionStatus: "PROCESSING",
+          },
+        });
+
+        const extractedEmployee = await extractEmployeeData(file);
+
+        if (
+          extractedEmployee.totalEmployees === null ||
+          extractedEmployee.male === null ||
+          extractedEmployee.female === null ||
+          extractedEmployee.employeeTurnover === null ||
+          extractedEmployee.trainingHours === null
+        ) {
+          throw new Error("Required employee data could not be extracted");
+        }
+
+        await prisma.employeeData.create({
+          data: {
+            documentId: document.id,
+            totalEmployees: extractedEmployee.totalEmployees,
+            male: extractedEmployee.male,
+            female: extractedEmployee.female,
+            employeeTurnover: extractedEmployee.employeeTurnover,
+            trainingHours: extractedEmployee.trainingHours,
+          },
+        });
+
+        await prisma.document.update({
+          where: {
+            id: document.id,
+          },
+          data: {
+            extractionStatus: "COMPLETED",
+          },
+        });
+      } catch (error) {
+        console.error("Employee data extraction failed:", error);
 
         await prisma.document.update({
           where: {
