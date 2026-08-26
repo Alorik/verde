@@ -174,13 +174,17 @@ export async function CalculateESG(assessmentId: string) {
     // UPDATE ESG SCORE
     // -----------------------------
 
+    const overallScore =
+      environmentalScore !== null && socialScore !== null
+        ? (environmentalScore + socialScore) / 2
+        : (environmentalScore ?? socialScore ?? null);
+
     const updatedESGScore = await tx.eSGScore.update({
-      where: {
-        id: esgScore.id,
-      },
+      where: { id: esgScore.id },
       data: {
         environmentalScore,
         socialScore,
+        overallScore, // ← add this
       },
     });
 
