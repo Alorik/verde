@@ -111,6 +111,22 @@ model Water{
   document Document @relation(fields: [documentId], references: [id])
 }
 
+
+model EmployeeData {
+  id               String   @id @default(cuid())
+  totalEmployees   Int
+  male             Int
+  female           Int
+  employeeTurnover Decimal
+  trainingHours    Int
+
+  documentId       String   @unique
+  document         Document @relation(fields: [documentId], references: [id])
+}
+
+
+
+
 enum ExtractionStatus {
   PENDING
   PROCESSING
@@ -172,19 +188,8 @@ enum MetricUnit {
   EMPLOYEES
   CUBIC_METER
   MWH_PER_EMPLOYEE
+  EMPLOYEE_DATA
   CUBIC_METER_PER_EMPLOYEE
   NONE
 }
 
-
-model EmployeeData {
-  id               String   @id @default(cuid())
-  totalEmployees   Int
-  male             Int
-  female           Int
-  employeeTurnover Decimal
-  trainingHours    Int
-
-  documentId       String   @unique
-  document         Document @relation(fields: [documentId], references: [id])
-}
