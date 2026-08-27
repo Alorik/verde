@@ -74,6 +74,7 @@ model Document {
   electricity   Electricity?
   water         Water?
   employeeData  EmployeeData?
+  csrReport     CSRReport?
   esgMetrics       ESGMetric[]
   assessment   Assessment @relation(fields: [assessmentId], references: [id])
   extractionStatus ExtractionStatus @default(PENDING)
@@ -124,7 +125,21 @@ model EmployeeData {
   document         Document @relation(fields: [documentId], references: [id])
 }
 
+model CSRReport {
+  id                    String   @id @default(cuid())
 
+  boardIndependence     Int
+  ethicsPolicy          Boolean
+  antiCorruptionPolicy  Boolean
+  whistleblowerPolicy   Boolean
+  riskManagement       Boolean
+  regulatoryCompliance  Boolean
+  governanceTraining    Int
+  complianceIncidents   Int
+
+  documentId            String   @unique
+  document              Document @relation(fields: [documentId], references: [id])
+}
 
 
 enum ExtractionStatus {
