@@ -20,3 +20,13 @@ export const employeeExtractionSchema = z.object({
   trainingHours: z.number(),
 });
 
+export const csrExtractionSchema = z.object({
+  boardIndependence: z.number().nullable(),
+  ethicsPolicy: z.boolean().nullable(),
+  antiCorruptionPolicy: z.boolean().nullable(),
+  whistleblowerPolicy: z.boolean().nullable(),
+  riskManagement: z.boolean().nullable(),
+  regulatoryCompliance: z.boolean().nullable(),
+  governanceTraining: z.number().nullable(),
+  complianceIncidents: z.number().nullable(),
+});
