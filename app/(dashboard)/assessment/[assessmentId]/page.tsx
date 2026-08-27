@@ -14,7 +14,6 @@ type DocumentType =
   | "WATER_REPORT"
   | "EMPLOYEE_DATA"
   | "CSR_REPORT"
-  | "SUSTAINABILITY_REPORT"
   | "OTHER";
 
 type ExtractionStatus = "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED";
@@ -79,10 +78,6 @@ const DOCUMENT_TYPE_META: Record<
     label: "CSR report",
     chip: "bg-emerald-50 text-emerald-700 border-emerald-200",
   },
-  SUSTAINABILITY_REPORT: {
-    label: "Sustainability report",
-    chip: "bg-teal-50 text-teal-700 border-teal-200",
-  },
   OTHER: {
     label: "Other",
     chip: "bg-zinc-100 text-zinc-600 border-zinc-200",
@@ -142,6 +137,7 @@ function formatNumber(value: number | string) {
 
 function StatusIcon({ status }: { status: string }) {
   const s = status.toLowerCase();
+
   const common = {
     className: "h-3 w-3",
     viewBox: "0 0 24 24",
@@ -159,6 +155,7 @@ function StatusIcon({ status }: { status: string }) {
       </svg>
     );
   }
+
   if (s === "submitted") {
     return (
       <svg {...common}>
@@ -167,6 +164,7 @@ function StatusIcon({ status }: { status: string }) {
       </svg>
     );
   }
+
   if (s === "in_review") {
     return (
       <svg {...common}>
@@ -175,6 +173,7 @@ function StatusIcon({ status }: { status: string }) {
       </svg>
     );
   }
+
   return (
     <svg {...common}>
       <circle cx="12" cy="12" r="9" strokeDasharray="3 3.5" />
@@ -217,12 +216,14 @@ function DocumentTypeIcon({ type }: { type: DocumentType }) {
           <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" />
         </svg>
       );
+
     case "WATER_REPORT":
       return (
         <svg {...common}>
           <path d="M12 3s6 6.5 6 11a6 6 0 1 1-12 0c0-4.5 6-11 6-11Z" />
         </svg>
       );
+
     case "EMPLOYEE_DATA":
       return (
         <svg {...common}>
@@ -232,14 +233,15 @@ function DocumentTypeIcon({ type }: { type: DocumentType }) {
           <path d="M22 20c0-2.7-1.7-5-4-5.8" />
         </svg>
       );
+
     case "CSR_REPORT":
-    case "SUSTAINABILITY_REPORT":
       return (
         <svg {...common}>
           <path d="M5 21c0-6 4-14 14-16-1 8-6 14-14 16Z" />
           <path d="M5 21c2-2.5 4.5-4.5 7-6" />
         </svg>
       );
+
     default:
       return (
         <svg {...common}>
@@ -268,6 +270,7 @@ function ExtractionIcon({ status }: { status: ExtractionStatus }) {
       </svg>
     );
   }
+
   if (status === "FAILED") {
     return (
       <svg {...common}>
@@ -277,17 +280,23 @@ function ExtractionIcon({ status }: { status: ExtractionStatus }) {
       </svg>
     );
   }
+
   if (status === "PROCESSING") {
     return (
       <motion.svg
         {...common}
         animate={{ rotate: 360 }}
-        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+        transition={{
+          duration: 1,
+          repeat: Infinity,
+          ease: "linear",
+        }}
       >
         <path d="M21 12a9 9 0 1 1-3.5-7.1" />
       </motion.svg>
     );
   }
+
   return (
     <svg {...common}>
       <circle cx="12" cy="12" r="9" strokeDasharray="2.5 3" />
@@ -300,7 +309,11 @@ function Divider() {
     <motion.span
       initial={{ scaleY: 0 }}
       animate={{ scaleY: 1 }}
-      transition={{ duration: 0.5, delay: 0.4, ease: [0.65, 0, 0.35, 1] }}
+      transition={{
+        duration: 0.5,
+        delay: 0.4,
+        ease: [0.65, 0, 0.35, 1],
+      }}
       style={{ transformOrigin: "center" }}
       className="hidden h-10 w-px flex-none bg-zinc-200 sm:block"
     />
@@ -308,33 +321,51 @@ function Divider() {
 }
 
 const rowVariants: Variants = {
-  hidden: { opacity: 0, y: 10 },
+  hidden: {
+    opacity: 0,
+    y: 10,
+  },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+    transition: {
+      duration: 0.45,
+      ease: [0.22, 1, 0.36, 1],
+    },
   },
 };
 
 const docCardVariants: Variants = {
-  hidden: { opacity: 0, y: 10, scale: 0.98 },
+  hidden: {
+    opacity: 0,
+    y: 10,
+    scale: 0.98,
+  },
   show: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+    transition: {
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1],
+    },
   },
   exit: {
     opacity: 0,
     scale: 0.96,
-    transition: { duration: 0.2, ease: [0.4, 0, 1, 1] },
+    transition: {
+      duration: 0.2,
+      ease: [0.4, 0, 1, 1],
+    },
   },
 };
 
 function DocumentCard({ doc }: { doc: Document }) {
   const typeMeta = DOCUMENT_TYPE_META[doc.documentType];
+
   const extractionMeta =
     EXTRACTION_META[doc.extractionStatus] ?? EXTRACTION_META.PENDING;
+
   const hasElectricityData =
     doc.documentType === "ELECTRICITY_BILL" &&
     doc.extractionStatus === "COMPLETED" &&
@@ -361,11 +392,13 @@ function DocumentCard({ doc }: { doc: Document }) {
             <span className="truncate text-sm font-medium text-zinc-900">
               {doc.fileName}
             </span>
+
             <span
               className={`inline-flex flex-none items-center rounded-full border px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wide ${typeMeta.chip}`}
             >
               {typeMeta.label}
             </span>
+
             <span
               className={`inline-flex flex-none items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wide ${extractionMeta.chip}`}
             >
@@ -391,24 +424,39 @@ function DocumentCard({ doc }: { doc: Document }) {
       <AnimatePresence initial={false}>
         {hasElectricityData && doc.electricity && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            initial={{
+              height: 0,
+              opacity: 0,
+            }}
+            animate={{
+              height: "auto",
+              opacity: 1,
+            }}
+            exit={{
+              height: 0,
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.3,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           >
             <div className="grid grid-cols-2 gap-4 border-t border-zinc-100 bg-zinc-50/60 px-3.5 py-3">
               <div>
                 <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
                   Electricity cost
                 </p>
+
                 <p className="mt-0.5 text-sm font-medium text-zinc-900">
                   ${formatNumber(doc.electricity.electricityCost)}
                 </p>
               </div>
+
               <div>
                 <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
                   Units consumed
                 </p>
+
                 <p className="mt-0.5 text-sm font-medium text-zinc-900">
                   {formatNumber(doc.electricity.unitsConsumed)} kWh
                 </p>
@@ -444,30 +492,50 @@ export default function AssessmentDetail({
       console.error("failed to load assessment");
       return;
     }
+
     const data = await response.json();
 
     setAssessment(data.assessment);
   }
 
-  const UPLOAD_TYPES: { type: DocumentType; label: string }[] = [
-    { type: "ELECTRICITY_BILL", label: "Electricity bill" },
-    { type: "WATER_REPORT", label: "Water report" },
-    { type: "SUSTAINABILITY_REPORT", label: "Sustainability report" },
-    { type: "CSR_REPORT", label: "CSR report" },
-    { type: "EMPLOYEE_DATA", label: "Employee data" },
+  const UPLOAD_TYPES: {
+    type: DocumentType;
+    label: string;
+  }[] = [
+    {
+      type: "ELECTRICITY_BILL",
+      label: "Electricity bill",
+    },
+    {
+      type: "WATER_REPORT",
+      label: "Water report",
+    },
+    {
+      type: "CSR_REPORT",
+      label: "CSR report",
+    },
+    {
+      type: "EMPLOYEE_DATA",
+      label: "Employee data",
+    },
   ];
 
   async function handleUpload(type: DocumentType, file: File) {
     if (!assessment) return;
+
     setUploadingType(type);
 
     const formData = new FormData();
+
     formData.append("file", file);
     formData.append("documentType", type);
 
     const response = await fetch(
       `/api/assessments/${assessment.id}/documents`,
-      { method: "POST", body: formData },
+      {
+        method: "POST",
+        body: formData,
+      },
     );
 
     if (!response.ok) {
@@ -497,6 +565,7 @@ export default function AssessmentDetail({
 
     if (!response.ok) {
       setCalculateError(data.message ?? "Failed to calculate ESG score");
+
       setCalculating(false);
       return;
     }
@@ -534,9 +603,6 @@ export default function AssessmentDetail({
     };
   }, [params]);
 
-  // Poll while any document is still pending/processing extraction,
-  // so status chips and the electricity panel update without a manual refresh.
-
   useEffect(() => {
     if (!assessment) return;
 
@@ -559,9 +625,17 @@ export default function AssessmentDetail({
       <div className="flex min-h-screen items-center justify-center bg-white">
         <motion.div
           animate={
-            prefersReducedMotion ? undefined : { opacity: [0.3, 0.7, 0.3] }
+            prefersReducedMotion
+              ? undefined
+              : {
+                  opacity: [0.3, 0.7, 0.3],
+                }
           }
-          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+          transition={{
+            duration: 1.6,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
           className="flex items-center gap-3 font-mono text-xs tracking-wide text-zinc-400"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
@@ -571,10 +645,19 @@ export default function AssessmentDetail({
     );
   }
 
-  const referenceNumber = `AST-${assessment.id.slice(-6).toUpperCase().padStart(6, "0")}`;
+  const referenceNumber = `AST-${assessment.id
+    .slice(-6)
+    .toUpperCase()
+    .padStart(6, "0")}`;
 
-  const fields: { label: string; value: string }[] = [
-    { label: "Reporting year", value: assessment.reportingYear.toString() },
+  const fields: {
+    label: string;
+    value: string;
+  }[] = [
+    {
+      label: "Reporting year",
+      value: assessment.reportingYear.toString(),
+    },
   ];
 
   const listVariants: Variants = {
@@ -591,6 +674,7 @@ export default function AssessmentDetail({
     <div className="min-h-screen bg-white">
       <div className="mx-auto max-w-6xl px-8 py-20 sm:px-12">
         {/* Breadcrumb */}
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -618,7 +702,10 @@ export default function AssessmentDetail({
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.05 }}
+          transition={{
+            duration: 0.4,
+            delay: 0.05,
+          }}
           className="mt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-400"
         >
           Assessment record
@@ -626,15 +713,23 @@ export default function AssessmentDetail({
 
         <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto_auto_auto_minmax(0,1fr)] items-center gap-6">
           <motion.h1
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{
+              opacity: 0,
+              y: 14,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
             transition={{
               duration: 0.55,
               delay: 0.05,
               ease: [0.22, 1, 0.36, 1],
             }}
             className="justify-self-start truncate font-serif text-4xl tracking-tight text-zinc-900 sm:text-5xl"
-            style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}
+            style={{
+              fontFamily: "'Source Serif 4', Georgia, serif",
+            }}
             title={assessment.name}
           >
             {assessment.name}
@@ -643,8 +738,14 @@ export default function AssessmentDetail({
           <Divider />
 
           <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{
+              opacity: 0,
+              y: 14,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
             transition={{
               duration: 0.55,
               delay: 0.2,
@@ -655,6 +756,7 @@ export default function AssessmentDetail({
             <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-300">
               Status
             </span>
+
             <motion.span
               whileHover={{ y: -1 }}
               className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1 font-mono text-[11px] font-medium capitalize tracking-wide ${statusStyle(
@@ -672,9 +774,17 @@ export default function AssessmentDetail({
             initial={
               prefersReducedMotion
                 ? { opacity: 0 }
-                : { opacity: 0, scale: 1.3, rotate: -6 }
+                : {
+                    opacity: 0,
+                    scale: 1.3,
+                    rotate: -6,
+                  }
             }
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              rotate: 0,
+            }}
             transition={{
               duration: 0.5,
               delay: 0.3,
@@ -685,6 +795,7 @@ export default function AssessmentDetail({
             <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-300">
               Reference
             </span>
+
             <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm border border-emerald-200 bg-emerald-50 py-1 pl-2.5 pr-3 font-mono text-[11px] font-medium tracking-wide text-emerald-700">
               <SealIcon />
               {referenceNumber}
@@ -695,12 +806,19 @@ export default function AssessmentDetail({
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ duration: 0.7, delay: 0.45, ease: [0.65, 0, 0.35, 1] }}
-          style={{ transformOrigin: "left" }}
+          transition={{
+            duration: 0.7,
+            delay: 0.45,
+            ease: [0.65, 0, 0.35, 1],
+          }}
+          style={{
+            transformOrigin: "left",
+          }}
           className="mt-10 h-px w-full bg-zinc-200"
         />
 
         {/* Field list */}
+
         <motion.dl
           variants={listVariants}
           initial="hidden"
@@ -716,6 +834,7 @@ export default function AssessmentDetail({
               <dt className="font-mono text-[11px] uppercase tracking-widest text-zinc-400">
                 {field.label}
               </dt>
+
               <dd className="justify-self-end text-base text-zinc-900">
                 {field.value}
               </dd>
@@ -724,10 +843,17 @@ export default function AssessmentDetail({
         </motion.dl>
 
         {/* Description */}
+
         {assessment.description && (
           <motion.div
-            initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 10 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{
+              opacity: 0,
+              y: prefersReducedMotion ? 0 : 10,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
             transition={{
               duration: 0.5,
               delay: 1.05,
@@ -738,6 +864,7 @@ export default function AssessmentDetail({
             <p className="font-mono text-[11px] uppercase tracking-widest text-zinc-400">
               Description
             </p>
+
             <p className="mt-3 text-sm leading-relaxed text-zinc-600">
               {assessment.description}
             </p>
@@ -745,25 +872,42 @@ export default function AssessmentDetail({
         )}
 
         {/* Filed footer */}
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 1.25 }}
+          transition={{
+            duration: 0.5,
+            delay: 1.25,
+          }}
           className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-1 font-mono text-[11px] text-zinc-400"
         >
           <span className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
             on file · {assessment.id}
           </span>
+
           <span>filed {formatDate(assessment.createdAt)}</span>
+
           <span>updated {formatDate(assessment.updatedAt)}</span>
         </motion.div>
 
         {/* Documents */}
+
         <motion.section
-          initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.35, ease: [0.22, 1, 0.36, 1] }}
+          initial={{
+            opacity: 0,
+            y: prefersReducedMotion ? 0 : 16,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: 0.5,
+            delay: 1.35,
+            ease: [0.22, 1, 0.36, 1],
+          }}
           className="mt-14"
         >
           <div className="grid grid-cols-[1fr_auto] items-center gap-4 border-b border-zinc-200 pb-4">
@@ -771,9 +915,12 @@ export default function AssessmentDetail({
               <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-400">
                 Documents
               </p>
+
               <h2
                 className="mt-2 font-serif text-2xl tracking-tight text-zinc-900"
-                style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}
+                style={{
+                  fontFamily: "'Source Serif 4', Georgia, serif",
+                }}
               >
                 Assessment documents
               </h2>
@@ -790,6 +937,7 @@ export default function AssessmentDetail({
               const existing = assessment.documents.find(
                 (d) => d.documentType === type,
               );
+
               const isUploading = uploadingType === type;
 
               return (
@@ -803,10 +951,12 @@ export default function AssessmentDetail({
                     >
                       <DocumentTypeIcon type={type} />
                     </span>
+
                     <div>
                       <p className="text-sm font-medium text-zinc-900">
                         {label}
                       </p>
+
                       {existing && (
                         <p className="mt-0.5 truncate font-mono text-[10px] uppercase tracking-wide text-zinc-400">
                           {existing.fileName}
@@ -828,10 +978,15 @@ export default function AssessmentDetail({
                       disabled={isUploading}
                       onChange={(event) => {
                         const file = event.target.files?.[0];
-                        if (file) handleUpload(type, file);
+
+                        if (file) {
+                          handleUpload(type, file);
+                        }
+
                         event.target.value = "";
                       }}
                     />
+
                     {isUploading
                       ? "Uploading…"
                       : existing
@@ -855,6 +1010,7 @@ export default function AssessmentDetail({
                 {calculateError}
               </p>
             )}
+
             {esgScore !== null && !calculateError && (
               <p className="font-mono text-[11px] uppercase tracking-widest text-emerald-700">
                 Score: {esgScore}
