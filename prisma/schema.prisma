@@ -17,13 +17,16 @@ datasource db {
 
 model Organization {
   id            String        @id @default(cuid())
-  name          String        
+  name          String
+  email         String        @unique
+  passwordHash  String
+
   industry      Industry
   assessments   Assessment[]
   employeeCount Int
   country       String
   city          String?
-  foundedAt   DateTime?
+  foundedAt     DateTime?
 
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
