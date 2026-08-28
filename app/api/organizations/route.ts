@@ -43,7 +43,6 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
 export async function GET() {
   const session = await auth();
 
@@ -55,6 +54,17 @@ export async function GET() {
     const organization = await prisma.organization.findUnique({
       where: {
         id: session.user.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        industry: true,
+        employeeCount: true,
+        country: true,
+        city: true,
+        foundedAt: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
 
