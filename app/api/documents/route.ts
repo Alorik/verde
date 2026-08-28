@@ -1,10 +1,18 @@
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { documentSchema } from "@/lib/validations/document";
+import { assessmentSchema } from "@/lib/validations/assessment";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
   const body = await req.json();
-  const result = documentSchema.safeParse(body);
+
+  const result = assessmentSchema.safeParse(body);
 
   if (!result.success) {
     return NextResponse.json(
@@ -17,40 +25,85 @@ export async function POST(req: NextRequest) {
   }
 
   const validatedData = result.data;
+
   try {
-    const assessment = await prisma.assessment.findUnique({
+    const organization = await prisma.organization.findUnique({
       where: {
-        id: validatedData.assessmentId,
+        id: session.user.id,
       },
     });
-    if (!assessment) {
+
+    if (!organization) {
       return NextResponse.json(
-        { message: "Assessment not found" },
+        { message: "Organization not found" },
         { status: 404 },
       );
     }
-    const document = await prisma.document.create({
-      data: validatedData,
+
+    const assessment = await prisma.assessment.create({
+      data: {
+        name: validatedData.name,
+        reportingYear: validatedData.reportingYear,
+        status: validatedData.status,
+        description: validatedData.description,
+        organizationId: session.user.id,
+      },
     });
 
     return NextResponse.json(
       {
-        message: "Document uploaded successfully",
-        document,
+        message: "Assessment created successfully",
+        assessment,
       },
-      {
-        status: 201,
-      },
+      { status: 201 },
     );
   } catch (error) {
     console.error(error);
+
     return NextResponse.json(
-      {
-        message: "Document upload failed",
+      { message: "Failed to create assessment" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function GET() {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const assessments = await prisma.assessment.findMany({
+      where: {
+        organizationId: session.user.id,
       },
-      {
-        status: 500,
+      select: {
+        id: true,
+        name: true,
+        reportingYear: true,
+        status: true,
+        createdAt: true,
+        organization: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return NextResponse.json({ assessments }, { status: 200 });
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      { message: "Assessments were not found" },
+      { status: 500 },
     );
   }
 }

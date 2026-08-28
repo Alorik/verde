@@ -1,3 +1,4 @@
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { organizationSchema } from "@/lib/validations/organization";
 import { NextRequest, NextResponse } from "next/server";
@@ -29,36 +30,47 @@ export async function POST(req: NextRequest) {
         message: "Organization created successfully",
         organization,
       },
-      {
-        status: 201,
-      },
+      { status: 201 },
     );
   } catch (error) {
     console.error(error);
+
     return NextResponse.json(
       {
         message: "Failed to create organization",
       },
-      {
-        status: 500,
-      },
+      { status: 500 },
     );
   }
 }
 
 export async function GET() {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
   try {
-    const organizations = await prisma.organization.findMany({
-      orderBy: {
-        createdAt: "desc",
+    const organization = await prisma.organization.findUnique({
+      where: {
+        id: session.user.id,
       },
     });
 
-    return NextResponse.json({ organizations }, { status: 200 });
+    if (!organization) {
+      return NextResponse.json(
+        { message: "Organization not found" },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json({ organization }, { status: 200 });
   } catch (error) {
     console.error(error);
+
     return NextResponse.json(
-      { message: "Organizations failed to load" },
+      { message: "Organization failed to load" },
       { status: 500 },
     );
   }

@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
 export async function DELETE({
@@ -7,24 +8,57 @@ export async function DELETE({
   params: Promise<{ documentId: string }>;
 }) {
   try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const organizationId = session.user.id;
+
     const { documentId } = await params;
+
+    // Find document
 
     const document = await prisma.document.findUnique({
       where: {
         id: documentId,
+      },
+      select: {
+        id: true,
+        assessment: {
+          select: {
+            organizationId: true,
+          },
+        },
       },
     });
 
     if (!document) {
       return NextResponse.json(
         {
-          message: " Document not found",
+          message: "Document not found",
         },
         {
           status: 404,
         },
       );
     }
+
+    // Ownership check
+
+    if (document.assessment.organizationId !== organizationId) {
+      return NextResponse.json(
+        {
+          message: "Forbidden",
+        },
+        {
+          status: 403,
+        },
+      );
+    }
+
+    // Delete document
 
     await prisma.document.delete({
       where: {
@@ -42,6 +76,7 @@ export async function DELETE({
     );
   } catch (error) {
     console.error(error);
+
     return NextResponse.json(
       {
         message: "Failed to delete document",

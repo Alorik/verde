@@ -1,12 +1,13 @@
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3 } from "@/lib/s3";
 import { DocumentType, MetricUnit } from "@prisma/client";
 
 import { normalizeToMWh } from "@/lib/extraction/normalize/normalizareElectricity";
-
 import { normalizeToCubicMeter } from "@/lib/extraction/normalize/normalizeWter";
+
 import { extractElectricityData } from "@/lib/extraction/Environment/Electricity";
 import { extractWaterData } from "@/lib/extraction/Environment/water";
 import { extractEmployeeData } from "@/lib/extraction/social/EmployeeData";
@@ -16,17 +17,18 @@ const allowedDocumentTypes: DocumentType[] = [
   DocumentType.WATER_REPORT,
   DocumentType.EMPLOYEE_DATA,
   DocumentType.CSR_REPORT,
-  DocumentType.SUSTAINABILITY_REPORT,
   DocumentType.OTHER,
 ];
 
 function isDocumentType(value: string): value is DocumentType {
-  return Object.values(DocumentType).includes(value as DocumentType);
+  return allowedDocumentTypes.includes(value as DocumentType);
 }
 
 function toMetricUnit(value: string | null | undefined): MetricUnit | null {
   if (!value) return null;
+
   const normalized = value.toUpperCase().trim();
+
   return (Object.values(MetricUnit) as string[]).includes(normalized)
     ? (normalized as MetricUnit)
     : null;
@@ -36,27 +38,55 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ assessmentId: string }> },
 ) {
-  const { assessmentId } = await params;
-
   try {
+    // Authentication
+
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const organizationId = session.user.id;
+
+    const { assessmentId } = await params;
+
+    // Find assessment
+
     const assessment = await prisma.assessment.findUnique({
       where: {
         id: assessmentId,
+      },
+      select: {
+        id: true,
+        organizationId: true,
       },
     });
 
     if (!assessment) {
       return NextResponse.json(
         {
-          message: "assessment Not found",
+          message: "Assessment not found",
         },
-        {
-          status: 404,
-        },
+        { status: 404 },
       );
     }
 
+    // Ownership check
+
+    if (assessment.organizationId !== organizationId) {
+      return NextResponse.json(
+        {
+          message: "Forbidden",
+        },
+        { status: 403 },
+      );
+    }
+
+    // Form data
+
     const formData = await req.formData();
+
     const file = formData.get("file");
     const documentType = formData.get("documentType");
 
@@ -72,39 +102,36 @@ export async function POST(
         {
           message: "DocumentType is not valid",
         },
-        {
-          status: 400,
-        },
+        { status: 400 },
       );
     }
 
-    const fileSize = file.size;
+    // File validation
 
     const MAX_FILE_SIZE = 20 * 1024 * 1024;
-    if (fileSize > MAX_FILE_SIZE) {
+
+    if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
         {
-          message: "Only files upto 20 MB are allowed.",
+          message: "Only files up to 20 MB are allowed.",
         },
-        {
-          status: 400,
-        },
+        { status: 400 },
       );
     }
 
-    const fileType = file.type;
-    if (fileType !== "application/pdf") {
+    if (file.type !== "application/pdf") {
       return NextResponse.json(
         {
           message: "Only .pdf files are allowed",
         },
-        {
-          status: 400,
-        },
+        { status: 400 },
       );
     }
 
+    // Upload to S3
+
     const buffer = Buffer.from(await file.arrayBuffer());
+
     const safeFileName = file.name
       .replace(/\s+/g, "-")
       .replace(/[^a-zA-Z0-9._-]/g, "");
@@ -117,25 +144,28 @@ export async function POST(
       Body: buffer,
       ContentType: file.type,
     });
+
     await s3.send(command);
+
+    // Create document
 
     const document = await prisma.document.create({
       data: {
         fileName: file.name,
         fileSize: file.size,
         mimeType: file.type,
-        documentType: documentType,
-        assessmentId: assessmentId,
+        documentType,
+        assessmentId,
         fileUrl: key,
       },
     });
 
+    // ELECTRICITY
+
     if (documentType === DocumentType.ELECTRICITY_BILL) {
       try {
         await prisma.document.update({
-          where: {
-            id: document.id,
-          },
+          where: { id: document.id },
           data: {
             extractionStatus: "PROCESSING",
           },
@@ -167,9 +197,7 @@ export async function POST(
         });
 
         await prisma.document.update({
-          where: {
-            id: document.id,
-          },
+          where: { id: document.id },
           data: {
             extractionStatus: "COMPLETED",
           },
@@ -178,16 +206,24 @@ export async function POST(
         console.error("Electricity extraction failed:", error);
 
         await prisma.document.update({
-          where: {
-            id: document.id,
-          },
+          where: { id: document.id },
           data: {
             extractionStatus: "FAILED",
           },
         });
       }
-    } else if (documentType === DocumentType.WATER_REPORT) {
+    }
+
+    // WATER
+    else if (documentType === DocumentType.WATER_REPORT) {
       try {
+        await prisma.document.update({
+          where: { id: document.id },
+          data: {
+            extractionStatus: "PROCESSING",
+          },
+        });
+
         const extractedWater = await extractWaterData(file);
 
         if (
@@ -214,31 +250,28 @@ export async function POST(
         });
 
         await prisma.document.update({
-          where: {
-            id: document.id,
-          },
+          where: { id: document.id },
           data: {
             extractionStatus: "COMPLETED",
           },
         });
       } catch (error) {
-        console.error("Electricity extraction failed:", error);
+        console.error("Water extraction failed:", error);
 
         await prisma.document.update({
-          where: {
-            id: document.id,
-          },
+          where: { id: document.id },
           data: {
             extractionStatus: "FAILED",
           },
         });
       }
-    } else if (documentType === DocumentType.EMPLOYEE_DATA) {
+    }
+
+    // EMPLOYEE DATA
+    else if (documentType === DocumentType.EMPLOYEE_DATA) {
       try {
         await prisma.document.update({
-          where: {
-            id: document.id,
-          },
+          where: { id: document.id },
           data: {
             extractionStatus: "PROCESSING",
           },
@@ -268,9 +301,7 @@ export async function POST(
         });
 
         await prisma.document.update({
-          where: {
-            id: document.id,
-          },
+          where: { id: document.id },
           data: {
             extractionStatus: "COMPLETED",
           },
@@ -279,34 +310,38 @@ export async function POST(
         console.error("Employee data extraction failed:", error);
 
         await prisma.document.update({
-          where: {
-            id: document.id,
-          },
+          where: { id: document.id },
           data: {
             extractionStatus: "FAILED",
           },
         });
       }
-    } else {
-      await prisma.document.update({
-        where: {
-          id: document.id,
-        },
+    }
 
+    // CSR / OTHER
+    else {
+      await prisma.document.update({
+        where: { id: document.id },
         data: {
           extractionStatus: "COMPLETED",
         },
       });
     }
 
-    return NextResponse.json({
-      message: "File uploaded successfully",
-      document,
-    });
-  } catch (err) {
-    console.error(err);
     return NextResponse.json(
-      { message: "failed to upload document" },
+      {
+        message: "File uploaded successfully",
+        document,
+      },
+      { status: 201 },
+    );
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      {
+        message: "Failed to upload document",
+      },
       { status: 500 },
     );
   }
@@ -317,11 +352,27 @@ export async function GET(
   { params }: { params: Promise<{ assessmentId: string }> },
 ) {
   try {
+    // Authentication
+
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const organizationId = session.user.id;
+
     const { assessmentId } = await params;
+
+    // Find assessment
 
     const assessment = await prisma.assessment.findUnique({
       where: {
         id: assessmentId,
+      },
+      select: {
+        id: true,
+        organizationId: true,
       },
     });
 
@@ -330,11 +381,23 @@ export async function GET(
         {
           message: "Assessment not found",
         },
-        {
-          status: 404,
-        },
+        { status: 404 },
       );
     }
+
+    // Ownership check
+
+    if (assessment.organizationId !== organizationId) {
+      return NextResponse.json(
+        {
+          message: "Forbidden",
+        },
+        { status: 403 },
+      );
+    }
+
+    // Get documents
+
     const documents = await prisma.document.findMany({
       where: {
         assessmentId,
@@ -347,6 +410,10 @@ export async function GET(
         mimeType: true,
         uploadedAt: true,
         fileUrl: true,
+        extractionStatus: true,
+      },
+      orderBy: {
+        uploadedAt: "desc",
       },
     });
 
@@ -354,19 +421,16 @@ export async function GET(
       {
         documents,
       },
-      {
-        status: 200,
-      },
+      { status: 200 },
     );
   } catch (error) {
     console.error(error);
+
     return NextResponse.json(
       {
         message: "Failed to retrieve documents",
       },
-      {
-        status: 500,
-      },
+      { status: 500 },
     );
   }
 }
