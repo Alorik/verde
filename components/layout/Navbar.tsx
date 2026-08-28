@@ -3,10 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export default function Navbar() {
+  const { data: session } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -20,6 +21,9 @@ export default function Navbar() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const orgName = session?.user?.name ?? "";
+  const initial = orgName.trim().charAt(0).toUpperCase() || "?";
 
   return (
     <header className="sticky top-0 z-50 h-16 border-b border-zinc-200 bg-white">
@@ -42,7 +46,7 @@ export default function Navbar() {
             onClick={() => setMenuOpen((open) => !open)}
             className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-zinc-900 text-sm font-semibold text-white ring-2 ring-transparent transition hover:ring-emerald-200"
           >
-            NK
+            {initial}
           </button>
 
           <AnimatePresence>
