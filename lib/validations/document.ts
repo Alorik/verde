@@ -10,16 +10,7 @@ export const documentSchema = z.object({
 
   documentType: z.nativeEnum(DocumentType),
 
-  fileSize: z
-    .number()
-    .int()
-    .positive("file size must be greater than 0"),
-  
-  assessmentId: z
-    .string()
-    .trim()
-    .min(1, "Assessment ID is required"),
-  
-  mimeType: z
-    .string().min(1, "MIME type is required")
+  fileSize: z.number().int().positive("File size must be greater than 0"),
+
+  mimeType: z.string().min(1, "MIME type is required"),
 });

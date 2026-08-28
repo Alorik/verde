@@ -11,10 +11,10 @@ export const assessmentSchema = z.object({
   reportingYear: z
     .number()
     .int()
-    .min(2000, "Assessment name is required")
-    .max(2100, "Assessment name cannot exceed 100 characters"),
+    .min(2000, "Reporting year must be at least 2000")
+    .max(2100, "Reporting year cannot exceed 2100"),
 
   status: z.nativeEnum(AssessmentStatus),
+
   description: z.string().trim().optional(),
-  organizationId: z.string().trim().min(2, "id is required").max(100),
 });
