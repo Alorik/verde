@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 const industries = [
@@ -84,17 +85,23 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-zinc-50 px-6 py-12">
+    <main className="flex min-h-screen items-center justify-center bg-white px-6 py-12">
       <div className="w-full max-w-xl">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-600 text-lg font-semibold text-white">
-            E
+          <div className="mb-4 flex items-center justify-center gap-2">
+            <div className="flex flex-none items-center justify-center overflow-hidden bg-emerald-600">
+              <Image
+                src="/verde.jpg"
+                alt="Verde logo"
+                width={64}
+                height={64}
+                className="h-full w-full object-cover"
+              />
+            </div>
           </div>
-
           <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
             Create your organization
           </h1>
-
           <p className="mt-2 text-sm text-zinc-500">
             Set up your ESG reporting workspace.
           </p>

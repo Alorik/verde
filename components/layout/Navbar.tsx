@@ -1,58 +1,69 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { signOut } from "next-auth/react";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function Navbar() {
-  return (
-    <header className="sticky top-0 z-50 h-16 border-b border-zinc-200 bg-white/80 backdrop-blur-md">
-      <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-8">
-        {/* Left */}
-        <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-600 text-sm font-semibold text-white ring-4 ring-emerald-50">
-            E
-          </div>
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-          <div>
-            <h1 className="text-sm font-semibold leading-tight text-zinc-900">
-              ESG Platform
-            </h1>
-            <p className="text-xs leading-tight text-zinc-500">
-              Reporting dashboard
-            </p>
-          </div>
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <header className="sticky top-0 z-50 h-16 border-b border-zinc-200 bg-white">
+      <div className="mx-auto flex h-full max-w-full items-center justify-between px-8">
+        {/* Left */}
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/verde.jpg"
+            alt="Verde logo"
+            width={36}
+            height={36}
+            className="h-9 w-9 rounded-lg object-cover"
+          />
         </Link>
 
-        {/* Center */}
-        <div className="hidden md:block">
-          <div className="relative w-80">
-            <svg
-              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="11" cy="11" r="7" />
-              <path d="m21 21-4.3-4.3" />
-            </svg>
-
-            <input
-              type="text"
-              placeholder="Search organizations…"
-              className="w-full rounded-lg border border-zinc-200 bg-zinc-50 py-2 pl-9 pr-4 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-emerald-300 focus:bg-white focus:ring-4 focus:ring-emerald-50"
-            />
-          </div>
-        </div>
-
         {/* Right */}
-        <div className="flex items-center gap-3">
-          <button className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-700 active:scale-[0.98]">
-            New assessment
-          </button>
-
-          <button className="group flex h-10 w-10 items-center justify-center rounded-full bg-zinc-900 text-sm font-semibold text-white ring-2 ring-transparent transition hover:ring-emerald-200">
+        <div className="relative z-10" ref={menuRef}>
+          <button
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-zinc-900 text-sm font-semibold text-white ring-2 ring-transparent transition hover:ring-emerald-200"
+          >
             NK
           </button>
+
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                initial={{ opacity: 0, x: 24 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 24 }}
+                transition={{ type: "spring", stiffness: 320, damping: 24 }}
+                className="absolute right-0 top-12 w-32 origin-top-right overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-lg"
+              >
+                <button
+                  type="button"
+                  onClick={() => signOut()}
+                  className="block w-full cursor-pointer px-4 py-2.5 text-left text-sm text-zinc-700 transition-colors hover:bg-emerald-50 hover:text-emerald-700"
+                >
+                  Log out
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </header>
