@@ -394,27 +394,27 @@ function DocumentCard({ doc }: { doc: Document }) {
             </span>
 
             <span
-              className={`inline-flex flex-none items-center rounded-full border px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wide ${typeMeta.chip}`}
+              className={`inline-flex flex-none items-center rounded-full border px-2 py-0.5  text-[10px] font-medium uppercase tracking-wide ${typeMeta.chip}`}
             >
               {typeMeta.label}
             </span>
 
             <span
-              className={`inline-flex flex-none items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wide ${extractionMeta.chip}`}
+              className={`inline-flex flex-none items-center gap-1 rounded-full border px-2 py-0.5  text-[10px] font-medium uppercase tracking-wide ${extractionMeta.chip}`}
             >
               <ExtractionIcon status={doc.extractionStatus} />
               {extractionMeta.label}
             </span>
           </div>
 
-          <div className="mt-1.5 flex flex-wrap items-center gap-x-2 font-mono text-[10px] uppercase tracking-wider text-zinc-400">
+          <div className="mt-1.5 flex flex-wrap items-center gap-x-2  text-[10px] uppercase tracking-wider text-zinc-400">
             <span>{formatFileSize(doc.fileSize)}</span>
             <span aria-hidden="true">·</span>
             <span>Uploaded {formatDate(doc.uploadedAt)}</span>
           </div>
 
           {doc.extractionStatus === "FAILED" && (
-            <p className="mt-2 font-mono text-[10px] uppercase tracking-wide text-coral-600">
+            <p className="mt-2  text-[10px] uppercase tracking-wide text-coral-600">
               Extraction failed — data not available
             </p>
           )}
@@ -443,7 +443,7 @@ function DocumentCard({ doc }: { doc: Document }) {
           >
             <div className="grid grid-cols-2 gap-4 border-t border-zinc-100 bg-zinc-50/60 px-3.5 py-3">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+                <p className=" text-[10px] uppercase tracking-widest text-zinc-400">
                   Electricity cost
                 </p>
 
@@ -453,7 +453,7 @@ function DocumentCard({ doc }: { doc: Document }) {
               </div>
 
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+                <p className=" text-[10px] uppercase tracking-widest text-zinc-400">
                   Units consumed
                 </p>
 
@@ -636,7 +636,7 @@ export default function AssessmentDetail({
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="flex items-center gap-3 font-mono text-xs tracking-wide text-zinc-400"
+          className="flex items-center gap-3  text-xs tracking-wide text-zinc-400"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
           retrieving record…
@@ -682,7 +682,7 @@ export default function AssessmentDetail({
         >
           <Link
             href={`/organization/${assessment.organizationId}`}
-            className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-widest text-zinc-400 transition hover:text-emerald-600"
+            className="inline-flex items-center gap-1.5  text-[11px] uppercase tracking-widest text-zinc-400 transition hover:text-emerald-600"
           >
             <svg
               className="h-3 w-3"
@@ -706,7 +706,7 @@ export default function AssessmentDetail({
             duration: 0.4,
             delay: 0.05,
           }}
-          className="mt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-400"
+          className="mt-6  text-[11px] uppercase tracking-[0.2em] text-zinc-400"
         >
           Assessment record
         </motion.p>
@@ -726,10 +726,7 @@ export default function AssessmentDetail({
               delay: 0.05,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="justify-self-start truncate font-serif text-4xl tracking-tight text-zinc-900 sm:text-5xl"
-            style={{
-              fontFamily: "'Source Serif 4', Georgia, serif",
-            }}
+            className="justify-self-start truncate  text-4xl tracking-tight text-zinc-900 sm:text-5xl"
             title={assessment.name}
           >
             {assessment.name}
@@ -753,13 +750,13 @@ export default function AssessmentDetail({
             }}
             className="flex flex-col items-center gap-1.5"
           >
-            <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-300">
+            <span className=" text-[10px] uppercase tracking-widest text-zinc-300">
               Status
             </span>
 
             <motion.span
               whileHover={{ y: -1 }}
-              className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1 font-mono text-[11px] font-medium capitalize tracking-wide ${statusStyle(
+              className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1  text-[11px] font-medium capitalize tracking-wide ${statusStyle(
                 assessment.status,
               )}`}
             >
@@ -792,11 +789,11 @@ export default function AssessmentDetail({
             }}
             className="flex flex-col items-end gap-1.5 justify-self-end"
           >
-            <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-300">
+            <span className=" text-[10px] uppercase tracking-widest text-zinc-300">
               Reference
             </span>
 
-            <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm border border-emerald-200 bg-emerald-50 py-1 pl-2.5 pr-3 font-mono text-[11px] font-medium tracking-wide text-emerald-700">
+            <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm border border-emerald-200 bg-emerald-50 py-1 pl-2.5 pr-3  text-[11px] font-medium tracking-wide text-emerald-700">
               <SealIcon />
               {referenceNumber}
             </span>
@@ -831,7 +828,7 @@ export default function AssessmentDetail({
               variants={rowVariants}
               className="grid grid-cols-[1fr_auto] items-baseline gap-4 border-b border-zinc-100 py-4"
             >
-              <dt className="font-mono text-[11px] uppercase tracking-widest text-zinc-400">
+              <dt className=" text-[11px] uppercase tracking-widest text-zinc-400">
                 {field.label}
               </dt>
 
@@ -861,7 +858,7 @@ export default function AssessmentDetail({
             }}
             className="mt-8"
           >
-            <p className="font-mono text-[11px] uppercase tracking-widest text-zinc-400">
+            <p className=" text-[11px] uppercase tracking-widest text-zinc-400">
               Description
             </p>
 
@@ -880,7 +877,7 @@ export default function AssessmentDetail({
             duration: 0.5,
             delay: 1.25,
           }}
-          className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-1 font-mono text-[11px] text-zinc-400"
+          className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-1  text-[11px] text-zinc-400"
         >
           <span className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
@@ -912,21 +909,18 @@ export default function AssessmentDetail({
         >
           <div className="grid grid-cols-[1fr_auto] items-center gap-4 border-b border-zinc-200 pb-4">
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-400">
+              <p className=" text-[11px] uppercase tracking-[0.2em] text-zinc-400">
                 Documents
               </p>
 
               <h2
-                className="mt-2 font-serif text-2xl tracking-tight text-zinc-900"
-                style={{
-                  fontFamily: "'Source Serif 4', Georgia, serif",
-                }}
+                className="mt-2  text-2xl tracking-tight text-zinc-900"
               >
                 Assessment documents
               </h2>
             </div>
 
-            <span className="justify-self-end font-mono text-xs text-zinc-400">
+            <span className="justify-self-end  text-xs text-zinc-400">
               {assessment.documents.length}{" "}
               {assessment.documents.length === 1 ? "file" : "files"}
             </span>
@@ -958,7 +952,7 @@ export default function AssessmentDetail({
                       </p>
 
                       {existing && (
-                        <p className="mt-0.5 truncate font-mono text-[10px] uppercase tracking-wide text-zinc-400">
+                        <p className="mt-0.5 truncate  text-[10px] uppercase tracking-wide text-zinc-400">
                           {existing.fileName}
                         </p>
                       )}
@@ -999,20 +993,18 @@ export default function AssessmentDetail({
           </div>
 
           {assessment.documents.length === 0 && (
-            <p className="mt-4 font-mono text-[11px] text-amber-600">
+            <p className="mt-4  text-[11px] text-amber-600">
               Please upload at least one document.
             </p>
           )}
 
           <div className="mt-8 flex items-center justify-end gap-4">
             {calculateError && (
-              <p className="font-mono text-[11px] text-red-600">
-                {calculateError}
-              </p>
+              <p className=" text-[11px] text-red-600">{calculateError}</p>
             )}
 
             {esgScore !== null && !calculateError && (
-              <p className="font-mono text-[11px] uppercase tracking-widest text-emerald-700">
+              <p className=" text-[11px] uppercase tracking-widest text-emerald-700">
                 Score: {esgScore}
               </p>
             )}

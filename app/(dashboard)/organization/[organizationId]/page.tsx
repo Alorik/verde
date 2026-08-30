@@ -106,7 +106,7 @@ export default function OrganizationDetail({
             prefersReducedMotion ? undefined : { opacity: [0.3, 0.7, 0.3] }
           }
           transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-          className="flex items-center gap-3 font-mono text-xs tracking-wide text-zinc-400"
+          className="flex items-center gap-3  text-xs tracking-wide text-zinc-400"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
           retrieving record…
@@ -159,7 +159,7 @@ export default function OrganizationDetail({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
-            className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-400"
+            className=" text-[11px] uppercase tracking-[0.2em] text-zinc-400"
           >
             Organization record
           </motion.p>
@@ -176,7 +176,7 @@ export default function OrganizationDetail({
               delay: 0.15,
               ease: [0.34, 1.56, 0.64, 1],
             }}
-            className="rounded-sm border border-emerald-200 bg-emerald-50 px-2.5 py-1 font-mono text-[11px] font-medium tracking-wide text-emerald-700"
+            className="rounded-sm border border-emerald-200 bg-emerald-50 px-2.5 py-1  text-[11px] font-medium tracking-wide text-emerald-700"
           >
             {referenceNumber}
           </motion.div>
@@ -187,8 +187,7 @@ export default function OrganizationDetail({
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-4 font-serif text-4xl tracking-tight text-zinc-900"
-          style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}
+          className="mt-4  text-4xl tracking-tight text-zinc-900 "
         >
           {organization.name}
         </motion.h1>
@@ -215,7 +214,7 @@ export default function OrganizationDetail({
               variants={rowVariants}
               className="flex items-baseline justify-between border-b border-zinc-100 py-4"
             >
-              <dt className="font-mono text-[11px] uppercase tracking-widest text-zinc-400">
+              <dt className=" text-[11px] uppercase tracking-widest text-zinc-400">
                 {field.label}
               </dt>
               <dd className="text-right text-base text-zinc-900">
@@ -234,16 +233,16 @@ export default function OrganizationDetail({
         >
           <div className="flex items-end justify-between border-b border-zinc-200 pb-4">
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-400">
+              <p className=" text-[11px] uppercase tracking-[0.2em] text-zinc-400">
                 Assessments
               </p>
-              <h2 className="mt-2 font-serif text-2xl tracking-tight text-zinc-900">
+              <h2 className="mt-2  text-2xl tracking-tight text-zinc-900">
                 ESG Assessments
               </h2>
             </div>
 
             <div className="flex items-center gap-4">
-              <span className="font-mono text-xs text-zinc-400">
+              <span className=" text-xs text-zinc-400">
                 {organization.assessments.length} total
               </span>
 
@@ -293,7 +292,7 @@ export default function OrganizationDetail({
                       </p>
                     )}
 
-                    <div className="mt-3 flex items-center gap-4 font-mono text-[11px] uppercase tracking-wider text-zinc-400">
+                    <div className="mt-3 flex items-center gap-4  text-[11px] uppercase tracking-wider text-zinc-400">
                       <span>Reporting year: {assessment.reportingYear}</span>
 
                       <span>·</span>
@@ -307,7 +306,7 @@ export default function OrganizationDetail({
 
                   <div className="flex items-center gap-5">
                     <span
-                      className={`rounded-full px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-wider ${
+                      className={`rounded-full px-3 py-1  text-[10px] font-medium uppercase tracking-wider ${
                         assessment.status === "DRAFT"
                           ? "bg-amber-50 text-amber-700"
                           : assessment.status === "COMPLETED"
@@ -333,7 +332,7 @@ export default function OrganizationDetail({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 1.1 }}
-          className="mt-10 flex items-center gap-2 font-mono text-[11px] text-zinc-400"
+          className="mt-10 flex items-center gap-2  text-[11px] text-zinc-400"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
           on file · {organization.id}
@@ -357,12 +356,11 @@ export default function OrganizationDetail({
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-400">
+                    <p className=" text-[10px] uppercase tracking-[0.2em] text-zinc-400">
                       New record
                     </p>
                     <h2
-                      className="mt-2 font-serif text-2xl text-zinc-900"
-                      style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}
+                      className="mt-2  text-2xl text-zinc-900"
                     >
                       Create assessment
                     </h2>
@@ -378,7 +376,7 @@ export default function OrganizationDetail({
                 </div>
 
                 <div className="mt-8">
-                  <label className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+                  <label className=" text-[10px] uppercase tracking-widest text-zinc-400">
                     Name
                   </label>
                   <input
@@ -392,7 +390,7 @@ export default function OrganizationDetail({
 
                 <div className="mt-5 grid grid-cols-2 gap-4">
                   <div>
-                    <label className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+                    <label className=" text-[10px] uppercase tracking-widest text-zinc-400">
                       Reporting year
                     </label>
                     <input
@@ -406,7 +404,7 @@ export default function OrganizationDetail({
                   </div>
 
                   <div>
-                    <label className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+                    <label className=" text-[10px] uppercase tracking-widest text-zinc-400">
                       Status
                     </label>
                     <select
@@ -424,7 +422,7 @@ export default function OrganizationDetail({
                 </div>
 
                 <div className="mt-5">
-                  <label className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+                  <label className=" text-[10px] uppercase tracking-widest text-zinc-400">
                     Description{" "}
                     <span className="normal-case text-zinc-300">
                       (optional)
@@ -439,7 +437,7 @@ export default function OrganizationDetail({
                 </div>
 
                 {createError && (
-                  <p className="mt-4 font-mono text-[11px] text-red-600">
+                  <p className="mt-4  text-[11px] text-red-600">
                     {createError}
                   </p>
                 )}
