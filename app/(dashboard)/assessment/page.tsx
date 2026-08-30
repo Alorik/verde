@@ -399,7 +399,7 @@ export default function AssessmentsPage() {
                         New record
                       </p>
 
-                      <h2 className="mt-2  text-2xl tracking-tight text-zinc-900">
+                      <h2 className="mt-2 text-2xl tracking-tight text-zinc-900">
                         Create assessment
                       </h2>
                     </div>
