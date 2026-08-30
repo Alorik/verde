@@ -87,3 +87,63 @@ export async function DELETE({
     );
   }
 }
+
+
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ documentId: string }> },
+) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  const { documentId } = await params;
+
+  try {
+    const document = await prisma.document.findFirst({
+      where: {
+        id: documentId,
+        assessment: {
+          organizationId: session.user.id,
+        },
+      },
+
+      select: {
+        id: true,
+        fileName: true,
+        documentType: true,
+        fileSize: true,
+        mimeType: true,
+        fileUrl: true,
+        uploadedAt: true,
+        extractionStatus: true,
+
+        assessment: {
+          select: {
+            id: true,
+            name: true,
+            reportingYear: true,
+          },
+        },
+      },
+    });
+
+    if (!document) {
+      return NextResponse.json(
+        { message: "Document not found" },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json({ document }, { status: 200 });
+  } catch (error) {
+    console.error("Failed to load document:", error);
+
+    return NextResponse.json(
+      { message: "Failed to load document" },
+      { status: 500 },
+    );
+  }
+}

@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { assessmentSchema } from "@/lib/validations/assessment";
+import { documentSchema } from "@/lib/validations/document";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -10,58 +10,61 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await req.json();
-
-  const result = assessmentSchema.safeParse(body);
-
-  if (!result.success) {
-    return NextResponse.json(
-      {
-        message: "Validation failed",
-        errors: result.error.flatten(),
-      },
-      { status: 400 },
-    );
-  }
-
-  const validatedData = result.data;
-
   try {
-    const organization = await prisma.organization.findUnique({
-      where: {
-        id: session.user.id,
-      },
-    });
+    const body = await req.json();
 
-    if (!organization) {
+    const result = documentSchema.safeParse(body);
+
+    if (!result.success) {
       return NextResponse.json(
-        { message: "Organization not found" },
-        { status: 404 },
+        {
+          message: "Validation failed",
+          errors: result.error.flatten(),
+        },
+        { status: 400 },
       );
     }
 
-    const assessment = await prisma.assessment.create({
-      data: {
-        name: validatedData.name,
-        reportingYear: validatedData.reportingYear,
-        status: validatedData.status,
-        description: validatedData.description,
+    const validatedData = result.data;
+
+    // Make sure the assessment belongs to
+    // the currently logged-in organization.
+    const assessment = await prisma.assessment.findFirst({
+      where: {
+        id: validatedData.assessmentId,
         organizationId: session.user.id,
       },
     });
 
+    if (!assessment) {
+      return NextResponse.json(
+        { message: "Assessment not found" },
+        { status: 404 },
+      );
+    }
+
+    const document = await prisma.document.create({
+      data: {
+        fileName: validatedData.fileName,
+        documentType: validatedData.documentType,
+        fileSize: validatedData.fileSize,
+        mimeType: validatedData.mimeType,
+        assessmentId: validatedData.assessmentId,
+      },
+    });
+
     return NextResponse.json(
       {
-        message: "Assessment created successfully",
-        assessment,
+        message: "Document added successfully",
+        document,
       },
       { status: 201 },
     );
   } catch (error) {
-    console.error(error);
+    console.error("Failed to create document:", error);
 
     return NextResponse.json(
-      { message: "Failed to create assessment" },
+      { message: "Failed to add document" },
       { status: 500 },
     );
   }
@@ -75,34 +78,43 @@ export async function GET() {
   }
 
   try {
-    const assessments = await prisma.assessment.findMany({
+    const documents = await prisma.document.findMany({
       where: {
-        organizationId: session.user.id,
+        assessment: {
+          organizationId: session.user.id,
+        },
       },
+
       select: {
         id: true,
-        name: true,
-        reportingYear: true,
-        status: true,
-        createdAt: true,
-        organization: {
+        fileName: true,
+        documentType: true,
+        fileSize: true,
+        mimeType: true,
+        uploadedAt: true,
+        fileUrl: true,
+        extractionStatus: true,
+
+        assessment: {
           select: {
             id: true,
             name: true,
+            reportingYear: true,
           },
         },
       },
+
       orderBy: {
-        createdAt: "desc",
+        uploadedAt: "desc",
       },
     });
 
-    return NextResponse.json({ assessments }, { status: 200 });
+    return NextResponse.json({ documents }, { status: 200 });
   } catch (error) {
-    console.error(error);
+    console.error("Failed to load documents:", error);
 
     return NextResponse.json(
-      { message: "Assessments were not found" },
+      { message: "Failed to load documents" },
       { status: 500 },
     );
   }
