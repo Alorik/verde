@@ -1,7 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  type Variants,
+} from "framer-motion";
+
+type Assessment = {
+  id: string;
+  name: string;
+  reportingYear: number;
+  status: string;
+  description: string | null;
+  organizationId: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 type Organization = {
   id: string;
@@ -10,12 +28,28 @@ type Organization = {
   employeeCount: number;
   country: string;
   city: string | null;
+  assessments: Assessment[];
 };
 
-export default function Organization() {
+const STATUS_OPTIONS = ["DRAFT", "IN_REVIEW", "SUBMITTED", "COMPLETED"]; // verify against your Prisma enum
+
+export default function OrganizationDashboard() {
+  const router = useRouter();
+  const prefersReducedMotion = useReducedMotion();
+
   const [organization, setOrganization] = useState<Organization | null>(null);
 
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newYear, setNewYear] = useState(new Date().getFullYear().toString());
+  const [newStatus, setNewStatus] = useState("DRAFT");
+  const [newDescription, setNewDescription] = useState("");
+  const [creating, setCreating] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
+
   useEffect(() => {
+    let cancelled = false;
+
     async function loadOrganization() {
       try {
         const response = await fetch("/api/organizations");
@@ -27,86 +61,421 @@ export default function Organization() {
 
         const data = await response.json();
 
-        console.log("Organization:", data.organization);
-
-        setOrganization(data.organization);
+        if (!cancelled) {
+          setOrganization(data.organization);
+        }
       } catch (error) {
         console.error("Failed to load organization:", error);
       }
     }
 
     loadOrganization();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  async function handleCreateAssessment() {
+    if (!organization) return;
+    setCreating(true);
+    setCreateError(null);
+
+    const response = await fetch("/api/assessments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: newName,
+        reportingYear: Number(newYear),
+        status: newStatus,
+        description: newDescription.trim() || undefined,
+        organizationId: organization.id,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setCreateError(data.message ?? "Failed to create assessment");
+      setCreating(false);
+      return;
+    }
+
+    router.push(`/assessment/${data.assessment.id}`);
+  }
 
   if (!organization) {
     return (
-      <div className="min-h-screen border-x border-gray-200 mx-12 p-8">
-        <div className="p-6">Loading organization...</div>
+      <div className="flex min-h-screen items-center justify-center bg-white ">
+        <motion.div
+          animate={
+            prefersReducedMotion ? undefined : { opacity: [0.3, 0.7, 0.3] }
+          }
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+          className="flex items-center gap-3 font-mono text-xs tracking-wide text-zinc-400"
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+          retrieving record…
+        </motion.div>
       </div>
     );
   }
 
+  const referenceNumber = `ORG-${organization.id.slice(-6).toUpperCase().padStart(6, "0")}`;
+
+  const fields: { label: string; value: string }[] = [
+    { label: "Industry", value: organization.industry },
+    {
+      label: "Employees",
+      value: organization.employeeCount.toLocaleString(),
+    },
+    { label: "Country", value: organization.country },
+    { label: "City", value: organization.city ?? "Not on file" },
+    {
+      label: "Assessments",
+      value: organization.assessments.length.toString(),
+    },
+  ];
+
+  const listVariants: Variants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: prefersReducedMotion ? 0 : 0.09,
+        delayChildren: 0.55,
+      },
+    },
+  };
+
+  const rowVariants: Variants = {
+    hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 10 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+    },
+  };
+
   return (
-    <div className="min-h-screen border-x border-gray-200 mx-12 p-8">
-      <div className="p-6">Organization</div>
+    <div className="min-h-screen bg-white border-x-1 border-zinc-200 mx-24">
+      <div className="mx-auto max-w-3xl px-8 py-20">
+        {/* Eyebrow + stamp row */}
+        <div className="flex items-start justify-between">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
+            className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-400"
+          >
+            Organization record
+          </motion.p>
 
-      <div className="mx-auto max-w-7xl">
-        <div className="rounded-2xl border border-zinc-200 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-lg">
-          {/* Header */}
-          <div className="flex items-start justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-zinc-900">
-                {organization.name}
-              </h2>
-
-              <p className="mt-1 text-sm text-zinc-500">
-                {organization.industry}
-              </p>
-            </div>
-
-            <div className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-zinc-600">
-              Active
-            </div>
-          </div>
-
-          <div className="my-5 h-px bg-zinc-200" />
-
-          {/* Details */}
-          <div className="space-y-4">
-            <div className="flex justify-between text-sm">
-              <span className="text-zinc-500">Employees</span>
-
-              <span className="font-medium text-zinc-900">
-                {organization.employeeCount.toLocaleString()}
-              </span>
-            </div>
-
-            <div className="flex justify-between text-sm">
-              <span className="text-zinc-500">Country</span>
-
-              <span className="font-medium text-zinc-900">
-                {organization.country}
-              </span>
-            </div>
-
-            <div className="flex justify-between text-sm">
-              <span className="text-zinc-500">City</span>
-
-              <span className="font-medium text-zinc-900">
-                {organization.city ?? "—"}
-              </span>
-            </div>
-          </div>
-
-          <div className="mt-6 flex justify-end">
-            <Link
-              href={`/organization/${organization.id}`}
-              className="rounded-lg border border-zinc-200 px-4 py-2 text-sm font-medium transition hover:bg-zinc-100"
-            >
-              View →
-            </Link>
-          </div>
+          <motion.div
+            initial={
+              prefersReducedMotion
+                ? { opacity: 0 }
+                : { opacity: 0, scale: 1.5, rotate: -8 }
+            }
+            animate={{ opacity: 1, scale: 1, rotate: -3 }}
+            transition={{
+              duration: 0.5,
+              delay: 0.15,
+              ease: [0.34, 1.56, 0.64, 1],
+            }}
+            className="rounded-sm border border-emerald-200 bg-emerald-50 px-2.5 py-1 font-mono text-[11px] font-medium tracking-wide text-emerald-700"
+          >
+            {referenceNumber}
+          </motion.div>
         </div>
+
+        {/* Title */}
+        <motion.h1
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-4 font-serif text-4xl tracking-tight text-zinc-900"
+          style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}
+        >
+          {organization.name}
+        </motion.h1>
+
+        {/* Drawn rule */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.7, delay: 0.3, ease: [0.65, 0, 0.35, 1] }}
+          style={{ transformOrigin: "left" }}
+          className="mt-8 h-px w-full bg-zinc-200"
+        />
+
+        {/* Field list */}
+        <motion.dl
+          variants={listVariants}
+          initial="hidden"
+          animate="show"
+          className="mt-2"
+        >
+          {fields.map((field) => (
+            <motion.div
+              key={field.label}
+              variants={rowVariants}
+              className="flex items-baseline justify-between border-b border-zinc-100 py-4"
+            >
+              <dt className="font-mono text-[11px] uppercase tracking-widest text-zinc-400">
+                {field.label}
+              </dt>
+              <dd className="text-right text-base text-zinc-900">
+                {field.value}
+              </dd>
+            </motion.div>
+          ))}
+        </motion.dl>
+
+        {/* Assessments */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1.2 }}
+          className="mt-16"
+        >
+          <div className="flex items-end justify-between border-b border-zinc-200 pb-4">
+            <div>
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-400">
+                Assessments
+              </p>
+              <h2 className="mt-2 font-serif text-2xl tracking-tight text-zinc-900">
+                ESG Assessments
+              </h2>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <span className="font-mono text-xs text-zinc-400">
+                {organization.assessments.length} total
+              </span>
+
+              <button
+                type="button"
+                onClick={() => setShowCreateModal(true)}
+                className="inline-flex items-center gap-1.5 rounded-sm border border-zinc-200 bg-white px-4 py-2 text-xs font-medium text-zinc-800 transition hover:border-zinc-300"
+              >
+                <svg
+                  className="h-3.5 w-3.5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+                New assessment
+              </button>
+            </div>
+          </div>
+
+          <div className="divide-y divide-zinc-100">
+            {organization.assessments.length === 0 ? (
+              <div className="py-10 text-center">
+                <p className="text-sm text-zinc-400">
+                  No assessments created yet.
+                </p>
+              </div>
+            ) : (
+              organization.assessments.map((assessment) => (
+                <Link
+                  key={assessment.id}
+                  href={`/assessment/${assessment.id}`}
+                  className="group flex items-center justify-between py-6 transition-colors hover:bg-zinc-50"
+                >
+                  <div>
+                    <h3 className="text-lg font-medium text-zinc-900">
+                      {assessment.name}
+                    </h3>
+
+                    {assessment.description && (
+                      <p className="mt-1 text-sm text-zinc-500">
+                        {assessment.description}
+                      </p>
+                    )}
+
+                    <div className="mt-3 flex items-center gap-4 font-mono text-[11px] uppercase tracking-wider text-zinc-400">
+                      <span>Reporting year: {assessment.reportingYear}</span>
+                      <span>·</span>
+                      <span>
+                        Created{" "}
+                        {new Date(assessment.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-5">
+                    <span
+                      className={`rounded-full px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-wider ${
+                        assessment.status === "DRAFT"
+                          ? "bg-amber-50 text-amber-700"
+                          : assessment.status === "COMPLETED"
+                            ? "bg-emerald-50 text-emerald-700"
+                            : "bg-zinc-100 text-zinc-600"
+                      }`}
+                    >
+                      {assessment.status}
+                    </span>
+
+                    <span className="text-zinc-300 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-zinc-600">
+                      →
+                    </span>
+                  </div>
+                </Link>
+              ))
+            )}
+          </div>
+        </motion.section>
+
+        {/* Filed footer */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 1.1 }}
+          className="mt-10 flex items-center gap-2 font-mono text-[11px] text-zinc-400"
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+          on file · {organization.id}
+        </motion.div>
+
+        <AnimatePresence>
+          {showCreateModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-6"
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                className="w-full max-w-lg rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl"
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-400">
+                      New record
+                    </p>
+                    <h2
+                      className="mt-2 font-serif text-2xl text-zinc-900"
+                      style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}
+                    >
+                      Create assessment
+                    </h2>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowCreateModal(false)}
+                    className="text-xl leading-none text-zinc-400 transition hover:text-zinc-900"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                <div className="mt-8">
+                  <label className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    placeholder={`e.g. ${organization.name} FY2026 Assessment`}
+                    className="mt-2 w-full rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400"
+                  />
+                </div>
+
+                <div className="mt-5 grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+                      Reporting year
+                    </label>
+                    <input
+                      type="number"
+                      value={newYear}
+                      onChange={(e) => setNewYear(e.target.value)}
+                      min={2000}
+                      max={2100}
+                      className="mt-2 w-full rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+                      Status
+                    </label>
+                    <select
+                      value={newStatus}
+                      onChange={(e) => setNewStatus(e.target.value)}
+                      className="mt-2 w-full rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400"
+                    >
+                      {STATUS_OPTIONS.map((s) => (
+                        <option key={s} value={s}>
+                          {s.replace(/_/g, " ")}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="mt-5">
+                  <label className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+                    Description{" "}
+                    <span className="normal-case text-zinc-300">
+                      (optional)
+                    </span>
+                  </label>
+                  <textarea
+                    value={newDescription}
+                    onChange={(e) => setNewDescription(e.target.value)}
+                    rows={3}
+                    className="mt-2 w-full resize-none rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400"
+                  />
+                </div>
+
+                {createError && (
+                  <p className="mt-4 font-mono text-[11px] text-red-600">
+                    {createError}
+                  </p>
+                )}
+
+                <div className="mt-8 flex justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowCreateModal(false);
+                      setNewName("");
+                      setNewDescription("");
+                      setCreateError(null);
+                    }}
+                    className="rounded-sm border border-zinc-200 bg-white px-5 py-2.5 text-sm font-medium text-zinc-800 transition hover:border-zinc-300"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={!newName.trim() || !newYear || creating}
+                    onClick={handleCreateAssessment}
+                    className="inline-flex items-center gap-1.5 rounded-sm bg-emerald-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    {creating ? "Creating…" : "Create"}
+                    {!creating && <span aria-hidden="true">→</span>}
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
