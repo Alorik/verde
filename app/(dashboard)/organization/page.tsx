@@ -31,7 +31,7 @@ type Organization = {
   assessments: Assessment[];
 };
 
-const STATUS_OPTIONS = ["DRAFT", "IN_REVIEW", "SUBMITTED", "COMPLETED"]; // verify against your Prisma enum
+const STATUS_OPTIONS = ["DRAFT", "IN_PROGRESS", "UNDER_REVIEW", "COMPLETED"];// verify against your Prisma enum
 
 export default function OrganizationDashboard() {
   const router = useRouter();

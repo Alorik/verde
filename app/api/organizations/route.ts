@@ -150,7 +150,6 @@ export async function GET() {
     return NextResponse.json({ organization }, { status: 200 });
   } catch (error) {
     console.error(error);
-
     return NextResponse.json(
       { message: "Organization failed to load" },
       { status: 500 },

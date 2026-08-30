@@ -488,7 +488,6 @@ export default function BubblePage() {
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
 
       <div className="relative z-10">
-        <h1 className="p-10 text-4xl font-semibold text-black">Random</h1>
       </div>
     </main>
   );

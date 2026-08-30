@@ -14,40 +14,28 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "ESG",
-  description: "ESG Reporting Platform",
-};
-
 const montserrat = localFont({
   src: [
     {
       path: "./fonts/Montserrat-Regular.ttf",
-
       weight: "400",
     },
-
     {
       path: "./fonts/Montserrat-Medium.ttf",
-
       weight: "500",
     },
-
-    {
-      path: "./fonts/Montserrat-SemiBold.ttf",
-
-      weight: "600",
-    },
-
     {
       path: "./fonts/Montserrat-Bold.ttf",
-
       weight: "700",
     },
   ],
+  variable: "--font-montserrat",
 });
 
-
+export const metadata: Metadata = {
+  title: "ESG",
+  description: "ESG Reporting Platform",
+};
 
 export default function RootLayout({
   children,
@@ -57,11 +45,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} light h-full antialiased `}
+      className={`${montserrat.variable} light h-full antialiased`}
       style={{ colorScheme: "light" }}
     >
-      <body className="min-h-full flex flex-col">
-        {" "}
+      <body className="min-h-full flex flex-col font-sans">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
