@@ -486,9 +486,6 @@ export default function BubblePage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-white">
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
-
-      <div className="relative z-10">
-      </div>
     </main>
   );
 }

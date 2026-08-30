@@ -1,7 +1,7 @@
 
 export default function HeroSection() {
   return (
-    <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center pt-28">
+    <div className="pointer-events-none absolute inset-x-0 top-20 z-10 flex justify-center pt-28">
       <div className="max-w-4xl px-6 text-center">
         <h1 className="pointer-events-auto inline-block mt-5 text-2xl tracking-tight text-zinc-900 md:text-6xl font-medium leading-[1.1] bg-white">
           Turn your sustainability <br /> data into a clear <br /> ESG report.
