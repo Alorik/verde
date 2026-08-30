@@ -172,14 +172,14 @@ export default function DocumentsPage() {
                 {/* Actions */}
                 <div className="flex shrink-0 items-center gap-3">
                   {document.fileUrl && (
-                    <a
-                      href={document.fileUrl}
+                    <Link
+                      href={`/api/documents/${document.id}/view`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="rounded-sm border border-zinc-200 bg-white px-4 py-2 text-xs font-medium text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50"
                     >
                       View document
-                    </a>
+                    </Link>
                   )}
 
                   <Link

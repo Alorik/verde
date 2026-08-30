@@ -1,13 +1,16 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { s3 } from "@/lib/s3";
+import { GetObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { NextResponse } from "next/server";
 
-export async function DELETE({
-  params,
-}: {
-  params: Promise<{ documentId: string }>;
-}) {
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ documentId: string }> },
+) {
   try {
+    // Authentication
     const session = await auth();
 
     if (!session?.user?.id) {
@@ -15,118 +18,21 @@ export async function DELETE({
     }
 
     const organizationId = session.user.id;
-
     const { documentId } = await params;
 
-    // Find document
-
-    const document = await prisma.document.findUnique({
-      where: {
-        id: documentId,
-      },
-      select: {
-        id: true,
-        assessment: {
-          select: {
-            organizationId: true,
-          },
-        },
-      },
-    });
-
-    if (!document) {
-      return NextResponse.json(
-        {
-          message: "Document not found",
-        },
-        {
-          status: 404,
-        },
-      );
-    }
-
-    // Ownership check
-
-    if (document.assessment.organizationId !== organizationId) {
-      return NextResponse.json(
-        {
-          message: "Forbidden",
-        },
-        {
-          status: 403,
-        },
-      );
-    }
-
-    // Delete document
-
-    await prisma.document.delete({
-      where: {
-        id: documentId,
-      },
-    });
-
-    return NextResponse.json(
-      {
-        message: "Document deleted successfully",
-      },
-      {
-        status: 200,
-      },
-    );
-  } catch (error) {
-    console.error(error);
-
-    return NextResponse.json(
-      {
-        message: "Failed to delete document",
-      },
-      {
-        status: 500,
-      },
-    );
-  }
-}
-
-
-export async function GET(
-  req: Request,
-  { params }: { params: Promise<{ documentId: string }> },
-) {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
-
-  const { documentId } = await params;
-
-  try {
+    // Find document and verify ownership
     const document = await prisma.document.findFirst({
       where: {
         id: documentId,
         assessment: {
-          organizationId: session.user.id,
+          organizationId,
         },
       },
-
       select: {
         id: true,
         fileName: true,
-        documentType: true,
-        fileSize: true,
-        mimeType: true,
         fileUrl: true,
-        uploadedAt: true,
-        extractionStatus: true,
-
-        assessment: {
-          select: {
-            id: true,
-            name: true,
-            reportingYear: true,
-          },
-        },
+        mimeType: true,
       },
     });
 
@@ -137,12 +43,32 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({ document }, { status: 200 });
+    if (!document.fileUrl) {
+      return NextResponse.json(
+        { message: "Document file is not available" },
+        { status: 404 },
+      );
+    }
+
+    // Generate temporary S3 URL
+    const command = new GetObjectCommand({
+      Bucket: process.env.AWS_S3_BUCKET_NAME,
+      Key: document.fileUrl,
+      ResponseContentType: document.mimeType,
+      ResponseContentDisposition: `inline; filename="${document.fileName}"`,
+    });
+
+    const signedUrl = await getSignedUrl(s3, command, {
+      expiresIn: 300,
+    });
+
+    // Send user to the actual S3 document
+    return NextResponse.redirect(signedUrl);
   } catch (error) {
-    console.error("Failed to load document:", error);
+    console.error("Failed to generate document URL:", error);
 
     return NextResponse.json(
-      { message: "Failed to load document" },
+      { message: "Failed to open document" },
       { status: 500 },
     );
   }
