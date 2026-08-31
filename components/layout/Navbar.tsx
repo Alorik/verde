@@ -39,7 +39,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 h-16 border-b border-zinc-300 bg-white">
-      <div className="mx-auto flex h-full max-w-full items-center justify-between px-20">
+      <div className="mx-auto flex h-full max-w-full items-center justify-between px-12">
         {/* Left */}
         <Link href="/dashboard" className="flex flex-none items-center">
           <Image

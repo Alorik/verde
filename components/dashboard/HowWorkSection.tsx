@@ -32,6 +32,7 @@ export default function HowWeWorkSection() {
       <p className="sticky top-16 z-10 border-b border-emerald-700/30 bg-white px-8 py-3 text-xs uppercase tracking-[0.2em] text-zinc-900 font-medium">
         How we work
       </p>
+     
 
       <div className="mx-auto px-8 py-16">
         {/* Header — normal flow, scrolls away like the rest of the content */}
