@@ -27,9 +27,9 @@ export default function HowWeWorkSection() {
   ];
 
   return (
-    <section className="border-t min-h-screen border-zinc-300 border-x bg-white">
+    <section className="min-h-screen border-zinc-300 border-x bg-white">
       {/* Sticky label bar — the only sticky element in this section */}
-      <p className="sticky top-16 z-10 border-b border-zinc-200 bg-white px-8 py-3 text-xs uppercase tracking-[0.2em] text-zinc-400">
+      <p className="sticky top-16 z-10 border-b border-emerald-700/30 bg-white px-8 py-3 text-xs uppercase tracking-[0.2em] text-zinc-900 font-medium">
         How we work
       </p>
 

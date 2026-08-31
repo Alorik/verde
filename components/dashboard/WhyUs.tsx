@@ -27,8 +27,8 @@ export default function WhyUsSection() {
   ];
 
   return (
-    <section className="border-t border-zinc-300 border-x bg-white">
-      <p className="sticky top-16 z-10 border-b border-zinc-200 bg-white px-8 py-3 text-xs uppercase tracking-[0.2em] text-zinc-400">
+    <section className=" border-zinc-300 border-x bg-white">
+      <p className="sticky top-16 z-10 border-b border-emerald-700/30 bg-white px-8 py-3 text-xs uppercase tracking-[0.2em] text-zinc-900 font-medium">
         Why Us?
       </p>
 
@@ -52,7 +52,7 @@ export default function WhyUsSection() {
           {reasons.map((reason) => (
             <div
               key={reason.number}
-              className="border-b border-zinc-200 py-8 md:border-b-0 md:border-r md:px-8 md:first:pl-0 md:last:border-r-0"
+              className=" border-zinc-200 py-8  md:border-r md:px-8 md:first:pl-0 md:last:border-r-0"
             >
               <p className="text-xs text-zinc-400">{reason.number}</p>
 
