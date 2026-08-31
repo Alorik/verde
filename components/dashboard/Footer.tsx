@@ -1,5 +1,6 @@
 "use client"
 import {ChevronRight } from "lucide-react"
+import Link from "next/link";
 
 export default function FooterSection() {
   return (
@@ -12,7 +13,7 @@ export default function FooterSection() {
             <h2 className="max-w-xl text-5xl font-medium leading-[1.05] tracking-tight">
               Make your ESG data
               <br />
-              <span className="text-lime-300">work for you.</span>
+              <span className="text-lime-500">work for you.</span>
             </h2>
 
             <button className="mt-10 bg-emerald-800 px-7 py-4 flex text-sm transition-colors duration-200 hover:bg-emerald-700">
@@ -28,33 +29,33 @@ export default function FooterSection() {
               </p>
 
               <div className="mt-7 flex flex-col gap-5 text-sm text-white/70">
-                <a
+                <Link
                   href="/dashboard"
                   className="transition-colors hover:text-white"
                 >
                   Overview
-                </a>
+                </Link>
 
-                <a
+                <Link
                   href="/assessments"
                   className="transition-colors hover:text-white"
                 >
                   Assessments
-                </a>
+                </Link>
 
-                <a
+                <Link
                   href="/documents"
                   className="transition-colors hover:text-white"
                 >
                   Documents
-                </a>
+                </Link>
 
-                <a
+                <Link
                   href="/metrics"
                   className="transition-colors hover:text-white"
                 >
                   ESG Metrics
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -64,26 +65,26 @@ export default function FooterSection() {
               </p>
 
               <div className="mt-7 flex flex-col gap-5 text-sm text-white/70">
-                <a
+                <Link
                   href="/reports"
                   className="transition-colors hover:text-white"
                 >
                   Reports
-                </a>
+                </Link>
 
-                <a
+                <Link
                   href="/recommendations"
                   className="transition-colors hover:text-white"
                 >
                   Recommendations
-                </a>
+                </Link>
 
-                <a
+                <Link
                   href="/settings"
                   className="transition-colors hover:text-white"
                 >
                   Settings
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -91,7 +92,7 @@ export default function FooterSection() {
 
         {/* Large brand */}
         <div className="mt-28 overflow-hidden">
-          <p className="text-[24vw] font-medium text-center leading-[0.75] tracking-[-0.07em] text-emerald-800 md:text-[21vw]">
+          <p className="text-[24vw] font-medium text-center leading-[0.75] tracking-[-0.07em] text-emerald-900 md:text-[21vw]">
             Verde
           </p>
         </div>
