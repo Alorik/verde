@@ -13,7 +13,7 @@ export default function HeroSection() {
         </p>
 
         <div className="pointer-events-auto flex justify-center items-center gap-12">
-          <button className="border-2 px-8 py-3 text-white bg-emerald-700 hover:bg-emerald-600 transition-all duration-200">
+          <button className="border-2 px-8 py-3 text-white bg-emerald-800 hover:bg-emerald-600 transition-all duration-200">
             Overview
           </button>
 

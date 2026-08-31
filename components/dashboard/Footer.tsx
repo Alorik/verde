@@ -1,63 +1,87 @@
+"use client"
+import {ChevronRight } from "lucide-react"
 
 export default function FooterSection() {
   return (
-    <footer className="border-t border-zinc-200 bg-white">
-      <div className="mx-auto max-w-6xl px-8 py-12">
-        <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
-          {/* Brand */}
-          <div className="max-w-sm">
-            <p className="text-lg font-medium tracking-tight text-zinc-900">
-              ESG Reporting Platform
-            </p>
+    <footer className="bg-emerald-950 text-white">
+      <div className="mx-auto max-w-[1720px] px-12 pt-16">
+        {/* Top */}
+        <div className="flex flex-col justify-between gap-16 md:flex-row">
+          {/* CTA */}
+          <div>
+            <h2 className="max-w-xl text-5xl font-medium leading-[1.05] tracking-tight">
+              Make your ESG data
+              <br />
+              <span className="text-lime-300">work for you.</span>
+            </h2>
 
-            <p className="mt-3 text-sm leading-6 text-zinc-500">
-              Turn your sustainability data into clear ESG insights and
-              actionable recommendations.
-            </p>
+            <button className="mt-10 bg-emerald-800 px-7 py-4 flex text-sm transition-colors duration-200 hover:bg-emerald-700">
+              Know the metrics <ChevronRight />
+            </button>
           </div>
 
           {/* Navigation */}
-          <div className="flex gap-16">
+          <div className="flex gap-24 pr-8">
             <div>
-              <p className="text-xs font-medium uppercase tracking-wider text-zinc-400">
-                Platform
+              <p className="text-[11px] uppercase tracking-[0.2em] text-emerald-300/60">
+                Explore
               </p>
 
-              <div className="mt-4 flex flex-col gap-3 text-sm text-zinc-600">
-                <a href="/dashboard" className="hover:text-zinc-900 transition">
+              <div className="mt-7 flex flex-col gap-5 text-sm text-white/70">
+                <a
+                  href="/dashboard"
+                  className="transition-colors hover:text-white"
+                >
                   Overview
                 </a>
+
                 <a
                   href="/assessments"
-                  className="hover:text-zinc-900 transition"
+                  className="transition-colors hover:text-white"
                 >
                   Assessments
                 </a>
-                <a href="/documents" className="hover:text-zinc-900 transition">
+
+                <a
+                  href="/documents"
+                  className="transition-colors hover:text-white"
+                >
                   Documents
                 </a>
-                <a href="/metrics" className="hover:text-zinc-900 transition">
+
+                <a
+                  href="/metrics"
+                  className="transition-colors hover:text-white"
+                >
                   ESG Metrics
                 </a>
               </div>
             </div>
 
             <div>
-              <p className="text-xs font-medium uppercase tracking-wider text-zinc-400">
-                Insights
+              <p className="text-[11px] uppercase tracking-[0.2em] text-emerald-300/60">
+                Platform
               </p>
 
-              <div className="mt-4 flex flex-col gap-3 text-sm text-zinc-600">
-                <a href="/reports" className="hover:text-zinc-900 transition">
+              <div className="mt-7 flex flex-col gap-5 text-sm text-white/70">
+                <a
+                  href="/reports"
+                  className="transition-colors hover:text-white"
+                >
                   Reports
                 </a>
+
                 <a
                   href="/recommendations"
-                  className="hover:text-zinc-900 transition"
+                  className="transition-colors hover:text-white"
                 >
                   Recommendations
                 </a>
-                <a href="/settings" className="hover:text-zinc-900 transition">
+
+                <a
+                  href="/settings"
+                  className="transition-colors hover:text-white"
+                >
                   Settings
                 </a>
               </div>
@@ -65,11 +89,18 @@ export default function FooterSection() {
           </div>
         </div>
 
-        {/* Bottom */}
-        <div className="mt-12 flex flex-col gap-3 border-t border-zinc-100 pt-6 text-xs text-zinc-400 md:flex-row md:items-center md:justify-between">
-          <p>© {new Date().getFullYear()} ESG Reporting Platform</p>
+        {/* Large brand */}
+        <div className="mt-28 overflow-hidden">
+          <p className="text-[24vw] font-medium text-center leading-[0.75] tracking-[-0.07em] text-emerald-800 md:text-[21vw]">
+            Verde
+          </p>
+        </div>
 
-          <p>Measure. Understand. Improve.</p>
+        {/* Bottom */}
+        <div className="flex flex-col justify-between gap-4 border-t border-emerald-800/70 py-6 text-[11px] uppercase tracking-[0.18em] text-emerald-300/60 md:flex-row">
+          <p>© {new Date().getFullYear()} VERDE</p>
+
+          <p>ESG REPORTING, BY DESIGN</p>
         </div>
       </div>
     </footer>
