@@ -38,10 +38,10 @@ export default function Navbar() {
   const initial = orgName.trim().charAt(0).toUpperCase() || "?";
 
   return (
-    <header className="sticky top-0 z-50 h-16 border-b border-zinc-200 bg-white">
+    <header className="sticky top-0 z-50 h-16 border-b border-zinc-300 bg-white">
       <div className="mx-auto flex h-full max-w-full items-center justify-between px-20">
         {/* Left */}
-        <Link href="/" className="flex flex-none items-center">
+        <Link href="/dashboard" className="flex flex-none items-center">
           <Image
             src="/verde.jpg"
             alt="Verde logo"
@@ -97,7 +97,7 @@ export default function Navbar() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 24 }}
                 transition={{ type: "spring", stiffness: 320, damping: 24 }}
-                className="absolute right-0 top-12 w-32 origin-top-right overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-lg"
+                className="absolute right-0 top-12 w-32 origin-top-right overflow-hidden rounded-lg border border-zinc-300 bg-white shadow-lg"
               >
                 <button
                   type="button"

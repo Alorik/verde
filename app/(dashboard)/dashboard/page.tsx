@@ -1,5 +1,7 @@
 import HeroSection from "@/components/dashboard/Hero";
 import BubblePage from "../../../components/buble/bublePage";
+import FooterSection from "@/components/dashboard/Footer";
+
 
 export default function Dashboard() {
   return (
@@ -10,6 +12,8 @@ export default function Dashboard() {
         {/* Hero content */}
         <HeroSection />
       </div>
+      {/* footer */}
+      <FooterSection />
     </div>
   );
 }
