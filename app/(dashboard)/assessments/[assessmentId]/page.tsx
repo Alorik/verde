@@ -344,7 +344,7 @@ function DocumentCard({ doc }: { doc: Document }) {
       initial="hidden"
       animate="show"
       exit="exit"
-      className="overflow-hidden border border-zinc-300 bg-white transition hover:border-emerald-500"
+      className="overflow-hidden border border-emerald-700/30 bg-white transition hover:border-emerald-500"
     >
       <div className="flex items-start gap-3 p-3.5">
         <span
@@ -407,7 +407,7 @@ function DocumentCard({ doc }: { doc: Document }) {
               ease: [0.22, 1, 0.36, 1],
             }}
           >
-            <div className="grid grid-cols-2 gap-4 border-t border-zinc-300 bg-zinc-50 px-3.5 py-3">
+            <div className="grid grid-cols-2 gap-4 border-t border-emerald-700/30 bg-zinc-50 px-3.5 py-3">
               <div>
                 <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
                   Electricity cost
@@ -788,13 +788,13 @@ export default function AssessmentDetail({
           variants={listVariants}
           initial="hidden"
           animate="show"
-          className="mt-8 grid border-l border-t border-zinc-300 sm:max-w-sm"
+          className="mt-8 grid border-l border-t border-emerald-700/30 sm:max-w-sm"
         >
           {fields.map((field) => (
             <motion.div
               key={field.label}
               variants={rowVariants}
-              className="flex min-h-28 flex-col justify-between border-b border-r border-zinc-300 bg-zinc-50 p-5"
+              className="flex min-h-28 flex-col justify-between border-b border-r border-emerald-700/30 bg-zinc-50 p-5"
             >
               <dt className="text-[11px] font-medium uppercase tracking-widest text-zinc-600">
                 {field.label}
@@ -892,7 +892,7 @@ export default function AssessmentDetail({
             </span>
           </div>
 
-          <div className="mt-5 divide-y divide-zinc-300 border border-zinc-300">
+          <div className="mt-5 divide-y divide-zinc-300 border border-emerald-700/30">
             {UPLOAD_TYPES.map(({ type, label }) => {
               const existing = assessment.documents.find(
                 (d) => d.documentType === type,
@@ -928,7 +928,7 @@ export default function AssessmentDetail({
                   <label
                     className={`inline-flex flex-none items-center gap-1.5 border px-3.5 py-1.5 text-xs font-medium transition ${
                       isUploading
-                        ? "cursor-wait border-zinc-300 text-zinc-500"
+                        ? "cursor-wait border-emerald-700/30 text-zinc-500"
                         : "cursor-pointer border-zinc-500 text-zinc-800 hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
                     }`}
                   >

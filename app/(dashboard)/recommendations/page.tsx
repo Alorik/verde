@@ -78,7 +78,7 @@ export default function RecommendationsPage() {
   if (loading) {
     return (
       <main className="bg-zinc-100 px-12">
-        <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10">
+        <div className="mx-12 border-x border-emerald-700/30 bg-white py-10 sm:px-10">
           <p className="text-xs font-medium text-zinc-600">retrieving recommendations…</p>
         </div>
       </main>
@@ -116,8 +116,8 @@ export default function RecommendationsPage() {
         </div>
 
         {/* Summary */}
-        <div className="mt-10 grid grid-cols-3 border-l border-t border-zinc-300">
-          <div className="border-b border-r border-zinc-300 bg-zinc-50 p-5">
+        <div className="mt-10 grid grid-cols-3 border-l border-t border-emerald-700/30">
+          <div className="border-b border-r border-emerald-700/30 bg-zinc-50 p-5">
             <p className="text-xs font-medium text-zinc-600">High priority</p>
 
             <p className="mt-2 text-3xl font-medium text-zinc-950">
@@ -125,7 +125,7 @@ export default function RecommendationsPage() {
             </p>
           </div>
 
-          <div className="border-b border-r border-zinc-300 bg-zinc-50 p-5">
+          <div className="border-b border-r border-emerald-700/30 bg-zinc-50 p-5">
             <p className="text-xs font-medium text-zinc-600">Medium priority</p>
 
             <p className="mt-2 text-3xl font-medium text-zinc-950">
@@ -133,7 +133,7 @@ export default function RecommendationsPage() {
             </p>
           </div>
 
-          <div className="border-b border-r border-zinc-300 bg-zinc-50 p-5">
+          <div className="border-b border-r border-emerald-700/30 bg-zinc-50 p-5">
             <p className="text-xs font-medium text-zinc-600">Low priority</p>
 
             <p className="mt-2 text-3xl font-medium text-zinc-950">
@@ -144,7 +144,7 @@ export default function RecommendationsPage() {
 
         {/* Empty state */}
         {recommendations.length === 0 ? (
-          <div className="border border-dashed border-zinc-400 bg-zinc-50 py-24 text-center">
+          <div className="border border-dashed border-emerald-700/40 bg-zinc-50 py-24 text-center">
             <div className="mx-auto flex h-12 w-12 items-center justify-center border border-zinc-400 text-xl font-medium text-zinc-600">
               ✓
             </div>
@@ -188,7 +188,7 @@ export default function RecommendationsPage() {
                     duration: 0.4,
                     delay: index * 0.06,
                   }}
-                  className="border border-zinc-300 bg-white p-6 transition hover:border-emerald-500 hover:bg-emerald-50/30"
+                  className="border border-emerald-700/30 bg-white p-6 transition hover:border-emerald-500 hover:bg-emerald-50/30"
                 >
                   {/* Top */}
                   <div className="flex items-start justify-between gap-6">
@@ -232,7 +232,7 @@ export default function RecommendationsPage() {
                   </div>
 
                   {/* Reason */}
-                  <div className="mt-6 border border-zinc-300 bg-zinc-50 p-4">
+                  <div className="mt-6 border border-emerald-700/30 bg-zinc-50 p-4">
                     <p className="text-[10px] font-medium uppercase tracking-wider text-zinc-600">
                       Why this matters
                     </p>
@@ -244,7 +244,7 @@ export default function RecommendationsPage() {
                     {(recommendation.metric ||
                       recommendation.currentValue ||
                       recommendation.targetValue) && (
-                      <div className="mt-4 flex flex-wrap gap-6 border-t border-zinc-300 pt-4">
+                      <div className="mt-4 flex flex-wrap gap-6 border-t border-emerald-700/30 pt-4">
                         {recommendation.metric && (
                           <div>
                             <p className="text-[10px] font-medium text-zinc-600">
@@ -302,7 +302,7 @@ export default function RecommendationsPage() {
                   </div>
 
                   {/* Footer */}
-                  <div className="mt-6 flex items-center justify-between border-t border-zinc-300 pt-5">
+                  <div className="mt-6 flex items-center justify-between border-t border-emerald-700/30 pt-5">
                     <div className="text-xs font-medium text-zinc-600">
                       Assessment:{" "}
                       <span className="font-medium text-zinc-950">

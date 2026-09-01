@@ -105,7 +105,7 @@ export default function MetricsPage() {
                 duration: 0.4,
                 delay: categoryIndex * 0.1,
               }}
-              className="relative border-b border-zinc-300 pb-10 last:border-b-0"
+              className="pb-10 "
             >
               {/* Category */}
               <h2 className="sticky top-16 z-10 border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)] -mx-10 bg-white py-3 text-xs font-medium uppercase tracking-[0.2em] text-zinc-900">
@@ -131,7 +131,7 @@ export default function MetricsPage() {
                   {category.areas.map((area) => (
                     <div
                       key={area.name}
-                      className="border border-zinc-300 bg-zinc-50 p-6 transition-colors hover:border-emerald-500 hover:bg-emerald-50/40"
+                      className="border border-emerald-700/30 bg-zinc-50 p-6 transition-colors hover:border-emerald-500 hover:bg-emerald-50/40"
                     >
                       <div className="flex items-center justify-between">
                         <h3 className="text-base font-medium text-zinc-950">
@@ -167,7 +167,7 @@ export default function MetricsPage() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.35 }}
-          className="mt-4 border border-zinc-300 bg-zinc-950 p-6 text-white"
+          className="mt-4 border border-emerald-700/30 bg-zinc-950 p-6 text-white"
         >
           <h2 className="text-lg font-medium text-white">ESG Score</h2>
 

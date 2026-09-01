@@ -63,7 +63,7 @@ export default function DocumentsPage() {
   if (loading) {
     return (
       <main className="bg-zinc-100 px-12">
-        <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10">
+        <div className="mx-12 border-x border-emerald-700/30 bg-white py-10 sm:px-10">
           <p className="text-xs font-medium text-zinc-600">retrieving documents…</p>
         </div>
       </main>
@@ -97,8 +97,8 @@ export default function DocumentsPage() {
 
         {/* Empty state */}
         {documents.length === 0 ? (
-          <div className="border border-dashed border-zinc-400 bg-zinc-50 py-24 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center border border-zinc-400 text-xl font-medium text-zinc-600">
+          <div className="border border-dashed border-emerald-700/30 bg-zinc-50 py-24 text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center border border-emerald-700/30 text-xl font-medium text-zinc-600">
               +
             </div>
 
@@ -119,16 +119,16 @@ export default function DocumentsPage() {
           </div>
         ) : (
           /* Document list */
-          <div className="border border-zinc-300 bg-white">
+          <div className="border border-emerald-700/30 bg-white">
             {documents.map((document) => (
               <div
                 key={document.id}
-                className="group flex items-center justify-between gap-6 border-b border-zinc-300 p-5 transition last:border-b-0 hover:bg-emerald-50"
+                className="group flex items-center justify-between gap-6 border-b border-emerald-700/30 p-5 transition last:border-b-0 hover:bg-emerald-50"
               >
                 {/* File information */}
                 <div className="flex min-w-0 items-center gap-4">
                   {/* PDF icon */}
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-zinc-400 bg-zinc-50">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-emerald-700/30 bg-zinc-50">
                     <svg
                       className="h-5 w-5 text-zinc-700"
                       viewBox="0 0 24 24"

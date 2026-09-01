@@ -47,7 +47,7 @@ export default function Navbar() {
             alt="Verde logo"
             width={36}
             height={36}
-            className="h-9 w-9 rounded-lg object-cover"
+            className="h-9 w-12"
           />
         </Link>
 
@@ -85,7 +85,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
-            className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-zinc-900 text-sm font-semibold text-white ring-2 ring-transparent transition hover:ring-emerald-200"
+            className="relative z-10 flex h-10 w-10 items-center justify-center border border-zinc-950 bg-emerald-800 text-sm font-medium text-white transition hover:border-emerald-700 hover:bg-emerald-900"
           >
             {initial}
           </button>
@@ -97,12 +97,12 @@ export default function Navbar() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 24 }}
                 transition={{ type: "spring", stiffness: 320, damping: 24 }}
-                className="absolute right-0 top-12 w-32 origin-top-right overflow-hidden rounded-lg border border-zinc-300 bg-white shadow-lg"
+                className="absolute right-0 top-12 w-36 origin-top-right overflow-hidden border border-zinc-400 bg-white shadow-xl"
               >
                 <button
                   type="button"
                   onClick={() => signOut()}
-                  className="block w-full cursor-pointer px-4 py-2.5 text-left text-sm text-zinc-700 transition-colors hover:bg-emerald-50 hover:text-emerald-700"
+                  className="block w-full cursor-pointer border-b-2 border-transparent px-4 py-3 text-left text-sm font-medium text-zinc-800 transition-colors hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
                 >
                   Log out
                 </button>

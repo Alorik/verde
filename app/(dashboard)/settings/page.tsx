@@ -145,7 +145,7 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <main className="bg-zinc-100 px-12">
-        <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10">
+        <div className="mx-12 border-x border-emerald-700/30 bg-white py-10 sm:px-10">
           <p className="text-xs font-medium text-zinc-600">retrieving settings…</p>
         </div>
       </main>
@@ -186,7 +186,7 @@ export default function SettingsPage() {
 
         {/* Organization */}
         <section className="mt-12">
-          <div className="flex items-end justify-between border-b border-zinc-300 pb-5">
+          <div className="flex items-end justify-between border-b border-emerald-700/30 pb-5">
             <div>
               <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
                 Organization
@@ -213,7 +213,7 @@ export default function SettingsPage() {
           </div>
 
           {editing ? (
-            <div className="mt-6 border border-zinc-300 bg-zinc-50 p-5 space-y-5">
+            <div className="mt-6 border border-emerald-700/30 bg-zinc-50 p-5 space-y-5">
               <div>
                 <label className="text-xs font-medium text-zinc-600">
                   Organization name
@@ -322,7 +322,7 @@ export default function SettingsPage() {
               </div>
             </div>
           ) : (
-            <div className="border border-zinc-300 bg-white">
+            <div className="border border-emerald-700/30 bg-white">
               <SettingRow label="Organization name" value={organization.name} />
 
               <SettingRow label="Email" value={organization.email} />
@@ -355,7 +355,7 @@ export default function SettingsPage() {
 
         {/* Account */}
         <section className="mt-16">
-          <div className="border-b border-zinc-300 pb-5">
+          <div className="border-b border-emerald-700/30 pb-5">
             <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
               Account
             </p>
@@ -365,8 +365,8 @@ export default function SettingsPage() {
             </h2>
           </div>
 
-          <div className="border border-zinc-300 bg-white">
-            <div className="flex items-center justify-between gap-6 border-b border-zinc-300 p-5">
+          <div className="border border-emerald-700/30 bg-white">
+            <div className="flex items-center justify-between gap-6 border-b border-emerald-700/30 p-5">
               <div>
                 <p className="text-sm font-medium text-zinc-950">
                   Account email
@@ -401,7 +401,7 @@ export default function SettingsPage() {
 
         {/* Data */}
         <section className="mt-16">
-          <div className="border-b border-zinc-300 pb-5">
+          <div className="border-b border-emerald-700/30 pb-5">
             <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
               Data
             </p>
@@ -411,8 +411,8 @@ export default function SettingsPage() {
             </h2>
           </div>
 
-          <div className="border border-zinc-300 bg-white">
-            <div className="flex items-center justify-between gap-6 border-b border-zinc-300 p-5">
+          <div className="border border-emerald-700/30 bg-white">
+            <div className="flex items-center justify-between gap-6 border-b border-emerald-700/30 p-5">
               <div>
                 <p className="text-sm font-medium text-zinc-950">
                   Document archive
@@ -499,7 +499,7 @@ export default function SettingsPage() {
 
 function SettingRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-8 border-b border-zinc-300 p-5 last:border-b-0">
+    <div className="flex items-center justify-between gap-8 border-b border-emerald-700/30 hover:bg-emerald-50 p-5 last:border-b-0">
       <span className="text-sm font-medium text-zinc-700">{label}</span>
 
       <span className="text-right text-sm font-medium text-zinc-950">{value}</span>

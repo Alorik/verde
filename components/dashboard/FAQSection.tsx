@@ -41,7 +41,7 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className=" border-zinc-300 border-x bg-white">
+    <section className=" border-x border-emerald-700/30 bg-white">
       {/* Sticky Section Label */}
       <p className="sticky top-16 z-10 border-b border-emerald-700/30 bg-white px-8 py-3 text-xs uppercase tracking-[0.2em] text-zinc-900 font-medium">
         FAQ
@@ -58,14 +58,14 @@ export default function FAQSection() {
         {/* Header — centered */}
 
         {/* FAQ — centered as a block */}
-        <div className="mt-24 w-full max-w-3xl border border-zinc-200">
+        <div className="mt-24 w-full max-w-3xl border  border-emerald-700/30">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
 
             return (
               <div
                 key={faq.question}
-                className="border-b border-zinc-200 last:border-b-0"
+                className="border-b  border-emerald-700/30 last:border-b-0"
               >
                 <button
                   type="button"

@@ -142,7 +142,7 @@ export default function AssessmentsPage() {
   if (loading) {
     return (
       <main className="bg-zinc-100 px-12">
-        <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10">
+        <div className="mx-12 border-x border-emerald-700/30 bg-white py-10 sm:px-10">
           <motion.div
             animate={
               prefersReducedMotion ? undefined : { opacity: [0.3, 0.7, 0.3] }
@@ -165,7 +165,7 @@ export default function AssessmentsPage() {
   if (!organization) {
     return (
       <main className="bg-zinc-100 px-12">
-        <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10">
+        <div className="mx-12 border-x border-emerald-700/30 bg-white py-10 sm:px-10">
           <p className="text-xs font-semimedium text-red-700">
             Failed to load assessments.
           </p>
@@ -207,16 +207,17 @@ export default function AssessmentsPage() {
           <button
             type="button"
             onClick={() => setShowCreateModal(true)}
-            className="inline-flex mx-12 items-center gap-2 border border-zinc-950 bg-zinc-950 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900"
+            className="inline-flex mx-12 items-center gap-2 border border-emerald-700/30 bg-zinc-950 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900"
           >
+
             <span className="text-base leading-none">+</span>
             New assessment
           </button>
         </div>
 
         {/* Summary */}
-        <div className="mt-10 grid grid-cols-3 border-l border-t border-zinc-300">
-          <div className="border-b border-r border-zinc-300 bg-zinc-50 px-5 py-5">
+        <div className="mt-10 grid grid-cols-3 border-l border-t border-emerald-700/30">
+          <div className="border-b border-r border-emerald-700/30 bg-zinc-50 px-5 py-5">
             <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
               Total
             </p>
@@ -226,7 +227,7 @@ export default function AssessmentsPage() {
             </p>
           </div>
 
-          <div className="border-b border-r border-zinc-300 bg-zinc-50 px-5 py-5">
+          <div className="border-b border-r border-emerald-700/30 bg-zinc-50 px-5 py-5">
             <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
               In progress
             </p>
@@ -236,7 +237,7 @@ export default function AssessmentsPage() {
             </p>
           </div>
 
-          <div className="border-b border-r border-zinc-300 bg-zinc-50 px-5 py-5">
+          <div className="border-b border-r border-emerald-700/30 bg-zinc-50 px-5 py-5">
             <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
               Completed
             </p>
@@ -276,18 +277,18 @@ export default function AssessmentsPage() {
               <button
                 type="button"
                 onClick={() => setShowCreateModal(true)}
-                className="mt-6 border border-zinc-950 bg-zinc-950 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900"
+                className="mt-6 border border-emerald-700/30 bg-zinc-950 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900"
               >
                 Create assessment →
               </button>
             </div>
           ) : (
-            <div className="border border-zinc-300 bg-white">
+            <div className="border border-emerald-700/30 bg-white">
               {assessments.map((assessment) => (
                 <Link
                   key={assessment.id}
                   href={`/assessments/${assessment.id}`}
-                  className="group block border-b border-zinc-300 px-5 py-6 transition-colors last:border-b-0 hover:bg-emerald-50"
+                  className="group block border-b border-emerald-700/30 px-5 py-6 transition-colors last:border-b-0 hover:bg-emerald-50"
                 >
                   <div className="flex items-start justify-between gap-8">
                     <div className="min-w-0">
@@ -421,7 +422,7 @@ export default function AssessmentsPage() {
                     value={newName}
                     onChange={(event) => setNewName(event.target.value)}
                     placeholder={`e.g. ${organization.name} FY2026 Assessment`}
-                    className="mt-2 w-full border border-zinc-400 bg-white px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
+                    className="mt-2 w-full border border-zinc-400 bg-white px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-emerald-700/30"
                   />
                 </div>
 
@@ -441,7 +442,7 @@ export default function AssessmentsPage() {
                     onChange={(event) => setNewYear(event.target.value)}
                     min={2000}
                     max={2100}
-                    className="mt-2 w-full border border-zinc-400 bg-white px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
+                    className="mt-2 w-full border border-zinc-400 bg-white px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-emerald-700/30"
                   />
                 </div>
 
@@ -463,7 +464,7 @@ export default function AssessmentsPage() {
                     onChange={(event) => setNewDescription(event.target.value)}
                     rows={3}
                     placeholder="Briefly describe this reporting period..."
-                    className="mt-2 w-full resize-none border border-zinc-400 bg-white px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
+                    className="mt-2 w-full resize-none border border-zinc-400 bg-white px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-emerald-700/30"
                   />
                 </div>
 
