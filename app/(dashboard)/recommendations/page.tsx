@@ -87,12 +87,12 @@ export default function RecommendationsPage() {
 
   return (
     <main className="bg-zinc-100 px-12">
-      <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10">
+      <div className="mx-12 border-x  bg-white py-10 sm:px-10 border-emerald-800/30 ">
         {/* Header */}
-        <div className="border-b-4 border-zinc-950 pb-8">
+        <div className="border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)] pb-8 -mx-10">
           <div className="flex items-end justify-between gap-8">
-            <div>
-              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
+            <div className="mx-10">
+              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600 px-1">
                 Sustainability actions
               </p>
 
@@ -106,7 +106,7 @@ export default function RecommendationsPage() {
               </p>
             </div>
 
-            <div className="text-xs font-medium text-zinc-600">
+            <div className="text-xs font-medium text-zinc-600 mx-10">
               {recommendations.length}{" "}
               {recommendations.length === 1
                 ? "recommendation"
@@ -195,7 +195,7 @@ export default function RecommendationsPage() {
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <span
-                            className={`border px-3 py-1 text-[10px] font-medium uppercase tracking-wider ${
+                          className={`border px-3 py-1 text-[10px] font-medium uppercase tracking-wider ${
                             priorityStyles[recommendation.priority]
                           }`}
                         >
@@ -203,7 +203,7 @@ export default function RecommendationsPage() {
                         </span>
 
                         <span
-                            className={`border px-3 py-1 text-[10px] font-medium uppercase tracking-wider ${
+                          className={`border px-3 py-1 text-[10px] font-medium uppercase tracking-wider ${
                             categoryStyles[recommendation.category]
                           }`}
                         >
@@ -244,10 +244,12 @@ export default function RecommendationsPage() {
                     {(recommendation.metric ||
                       recommendation.currentValue ||
                       recommendation.targetValue) && (
-                        <div className="mt-4 flex flex-wrap gap-6 border-t border-zinc-300 pt-4">
+                      <div className="mt-4 flex flex-wrap gap-6 border-t border-zinc-300 pt-4">
                         {recommendation.metric && (
                           <div>
-                            <p className="text-[10px] font-medium text-zinc-600">Metric</p>
+                            <p className="text-[10px] font-medium text-zinc-600">
+                              Metric
+                            </p>
                             <p className="mt-1 text-sm font-medium text-zinc-950">
                               {recommendation.metric}
                             </p>
@@ -256,7 +258,9 @@ export default function RecommendationsPage() {
 
                         {recommendation.currentValue && (
                           <div>
-                            <p className="text-[10px] font-medium text-zinc-600">Current</p>
+                            <p className="text-[10px] font-medium text-zinc-600">
+                              Current
+                            </p>
                             <p className="mt-1 text-sm font-medium text-zinc-950">
                               {recommendation.currentValue}
                             </p>
@@ -265,7 +269,9 @@ export default function RecommendationsPage() {
 
                         {recommendation.targetValue && (
                           <div>
-                            <p className="text-[10px] font-medium text-zinc-600">Target</p>
+                            <p className="text-[10px] font-medium text-zinc-600">
+                              Target
+                            </p>
                             <p className="mt-1 text-sm font-medium text-zinc-950">
                               {recommendation.targetValue}
                             </p>

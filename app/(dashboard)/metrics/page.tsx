@@ -75,7 +75,7 @@ const metrics = [
 export default function MetricsPage() {
   return (
     <main className="bg-zinc-100 px-12">
-      <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10">
+      <div className="mx-12 border-x border-emerald-800/30 bg-white py-10 sm:px-10">
         {/* Header */}
         <div className="border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)]  z-20 pb-8 -mx-10">
           <div className="mx-10">
@@ -109,10 +109,7 @@ export default function MetricsPage() {
             >
               {/* Category */}
               <h2 className="sticky top-16 z-10 border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)] -mx-10 bg-white py-3 text-xs font-medium uppercase tracking-[0.2em] text-zinc-900">
-                <div className="mx-10">
-                        {category.category} 
-                </div>
-         
+                <div className="mx-10">{category.category}</div>
               </h2>
 
               {/* EVERYTHING BELOW BELONGS TO THIS CATEGORY */}

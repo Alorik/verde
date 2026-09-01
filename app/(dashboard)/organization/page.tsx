@@ -158,7 +158,7 @@ export default function OrganizationDashboard() {
 
   return (
     <div className=" bg-zinc-100 px-12">
-      <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10 ">
+      <div className="mx-12 border-x border-emerald-800/30  bg-white py-10 sm:px-10 ">
         {/* Eyebrow + stamp row */}
         <div className="flex items-start justify-between">
           <motion.p
@@ -188,7 +188,7 @@ export default function OrganizationDashboard() {
           </motion.div>
         </div>
 
-        {/* Title */}
+
         <motion.h1
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
@@ -204,7 +204,7 @@ export default function OrganizationDashboard() {
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.7, delay: 0.3, ease: [0.65, 0, 0.35, 1] }}
           style={{ transformOrigin: "left" }}
-          className="mt-8 h-0.5 w-full bg-zinc-300"
+          className="mt-8 h-0.5 w-full bg-zinc-300 -mx-10"
         />
 
         {/* Field list */}
@@ -284,7 +284,7 @@ export default function OrganizationDashboard() {
               organization.assessments.map((assessment) => (
                 <Link
                   key={assessment.id}
-                  href={`/assessment/${assessment.id}`}
+                  href={`/assessments/${assessment.id}`}
                   className="group flex items-center justify-between gap-5 border-b border-zinc-300 p-5 transition-colors last:border-b-0 hover:bg-emerald-50"
                 >
                   <div>
