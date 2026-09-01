@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Droplets, FileText, Sprout, UsersRound, Zap } from "lucide-react";
 import {
   motion,
   AnimatePresence,
@@ -199,56 +200,21 @@ function SealIcon() {
 }
 
 function DocumentTypeIcon({ type }: { type: DocumentType }) {
-  const common = {
-    className: "h-[18px] w-[18px]",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.75,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-  };
-
   switch (type) {
     case "ELECTRICITY_BILL":
-      return (
-        <svg {...common}>
-          <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" />
-        </svg>
-      );
+      return <Zap className="h-[19px] w-[19px]" strokeWidth={2.25} />;
 
     case "WATER_REPORT":
-      return (
-        <svg {...common}>
-          <path d="M12 3s6 6.5 6 11a6 6 0 1 1-12 0c0-4.5 6-11 6-11Z" />
-        </svg>
-      );
+      return <Droplets className="h-[19px] w-[19px]" strokeWidth={2.25} />;
 
     case "EMPLOYEE_DATA":
-      return (
-        <svg {...common}>
-          <circle cx="9" cy="8" r="3" />
-          <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" />
-          <path d="M16 8a3 3 0 1 1 3 3" />
-          <path d="M22 20c0-2.7-1.7-5-4-5.8" />
-        </svg>
-      );
+      return <UsersRound className="h-[19px] w-[19px]" strokeWidth={2.1} />;
 
     case "CSR_REPORT":
-      return (
-        <svg {...common}>
-          <path d="M5 21c0-6 4-14 14-16-1 8-6 14-14 16Z" />
-          <path d="M5 21c2-2.5 4.5-4.5 7-6" />
-        </svg>
-      );
+      return <Sprout className="h-[19px] w-[19px]" strokeWidth={2.1} />;
 
     default:
-      return (
-        <svg {...common}>
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
-          <path d="M14 2v6h6" />
-        </svg>
-      );
+      return <FileText className="h-[19px] w-[19px]" strokeWidth={2.1} />;
   }
 }
 
