@@ -637,7 +637,7 @@ export default function AssessmentDetail({
   };
 
   return (
-    <div className="bg-zinc-100 px-12">
+    <div className="bg-zinc-100 px-">
       <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10">
         {/* Breadcrumb */}
 
@@ -665,6 +665,7 @@ export default function AssessmentDetail({
           </Link>
         </motion.div>
 
+        <div className="sticky top-12 z-20 -mx-10 bg-white border-b border-emerald-500/40">
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -672,99 +673,99 @@ export default function AssessmentDetail({
               duration: 0.4,
               delay: 0.05,
             }}
-            className="mt-6 text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600"
+            className="pt-6 text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600 mx-12"
           >
             Assessment record
           </motion.p>
 
-
-        <div className="mt-3 sticky top-12 z-20 grid grid-cols-[minmax(0,1fr)_auto_auto_auto_minmax(0,1fr)] items-center gap-6 border-b-4 border-zinc-950 pb-8 bg-white">
-          <motion.h1
-            initial={{
-              opacity: 0,
-              y: 14,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            transition={{
-              duration: 0.55,
-              delay: 0.05,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="justify-self-start truncate text-4xl font-medium tracking-tight text-zinc-950 sm:text-5xl"
-            title={assessment.name}
-          >
-            {assessment.name}
-          </motion.h1>
-
-          <Divider />
-
-          <motion.div
-            initial={{
-              opacity: 0,
-              y: 14,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            transition={{
-              duration: 0.55,
-              delay: 0.2,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="flex flex-col items-center gap-1.5"
-          >
-            <span className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
-              Status
-            </span>
-
-            <motion.span
-              whileHover={{ y: -1 }}
-              className={`inline-flex items-center gap-1.5 whitespace-nowrap border px-3 py-1 text-[11px] font-medium capitalize tracking-wide ${statusStyle(
-                assessment.status,
-              )}`}
+          <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto_auto_auto_minmax(0,1fr)] items-center gap-6  pb-8 mx-12">
+            <motion.h1
+              initial={{
+                opacity: 0,
+                y: 14,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.55,
+                delay: 0.05,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="justify-self-start truncate text-4xl font-medium tracking-tight text-zinc-950 sm:text-5xl"
+              title={assessment.name}
             >
-              <StatusIcon status={assessment.status} />
-              {statusLabel(assessment.status)}
-            </motion.span>
-          </motion.div>
+              {assessment.name}
+            </motion.h1>
 
-          <Divider />
+            <Divider />
 
-          <motion.div
-            initial={
-              prefersReducedMotion
-                ? { opacity: 0 }
-                : {
-                    opacity: 0,
-                    scale: 1.3,
-                    rotate: -6,
-                  }
-            }
-            animate={{
-              opacity: 1,
-              scale: 1,
-              rotate: 0,
-            }}
-            transition={{
-              duration: 0.5,
-              delay: 0.3,
-              ease: [0.34, 1.56, 0.64, 1],
-            }}
-            className="flex flex-col items-end gap-1.5 justify-self-end"
-          >
-            <span className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
-              Reference
-            </span>
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: 14,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.55,
+                delay: 0.2,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="flex flex-col items-center gap-1.5"
+            >
+              <span className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
+                Status
+              </span>
 
-            <span className="inline-flex items-center gap-1.5 whitespace-nowrap border border-emerald-600 bg-emerald-50 py-1 pl-2.5 pr-3 text-[11px] font-medium tracking-wide text-emerald-800">
-              <SealIcon />
-              {referenceNumber}
-            </span>
-          </motion.div>
+              <motion.span
+                whileHover={{ y: -1 }}
+                className={`inline-flex items-center gap-1.5 whitespace-nowrap border px-3 py-1 text-[11px] font-medium capitalize tracking-wide ${statusStyle(
+                  assessment.status,
+                )}`}
+              >
+                <StatusIcon status={assessment.status} />
+                {statusLabel(assessment.status)}
+              </motion.span>
+            </motion.div>
+
+            <Divider />
+
+            <motion.div
+              initial={
+                prefersReducedMotion
+                  ? { opacity: 0 }
+                  : {
+                      opacity: 0,
+                      scale: 1.3,
+                      rotate: -6,
+                    }
+              }
+              animate={{
+                opacity: 1,
+                scale: 1,
+                rotate: 0,
+              }}
+              transition={{
+                duration: 0.5,
+                delay: 0.3,
+                ease: [0.34, 1.56, 0.64, 1],
+              }}
+              className="flex flex-col items-end gap-1.5 justify-self-end"
+            >
+              <span className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
+                Reference
+              </span>
+
+              <span className="inline-flex items-center gap-1.5 whitespace-nowrap border border-emerald-600 bg-emerald-50 py-1 pl-2.5 pr-3 text-[11px] font-medium tracking-wide text-emerald-800">
+                <SealIcon />
+                {referenceNumber}
+              </span>
+            </motion.div>
+          </div>
         </div>
 
         <motion.div
@@ -823,7 +824,7 @@ export default function AssessmentDetail({
               delay: 1.05,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="mt-8 border border-zinc-300 bg-zinc-50 p-5"
+            className="mt-8 border-b border-emerald-500/40 pb-5"
           >
             <p className="text-[11px] font-medium uppercase tracking-widest text-zinc-600">
               Description

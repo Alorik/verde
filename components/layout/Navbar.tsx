@@ -61,7 +61,7 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative border px-3 py-2 text-sm font-semibold transition-colors ${
+                className={`relative border px-3 py-2 text-sm font-medium transition-colors ${
                   isActive
                     ? "border-emerald-300 text-emerald-900"
                     : "border-transparent text-zinc-600 hover:text-zinc-950"
