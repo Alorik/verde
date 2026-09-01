@@ -141,10 +141,9 @@ export default function AssessmentsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-zinc-100 p-4 sm:p-8">
-        <div className="mx-auto min-h-screen max-w-5xl border border-zinc-300 bg-white">
-          <div className="px-6 py-10 sm:px-10 sm:py-14">
-            <motion.div
+      <main className="bg-zinc-100 px-12">
+        <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10">
+          <motion.div
               animate={
                 prefersReducedMotion ? undefined : { opacity: [0.3, 0.7, 0.3] }
               }
@@ -157,8 +156,7 @@ export default function AssessmentsPage() {
             >
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
               retrieving assessments…
-            </motion.div>
-          </div>
+          </motion.div>
         </div>
       </main>
     );
@@ -166,13 +164,11 @@ export default function AssessmentsPage() {
 
   if (!organization) {
     return (
-      <main className="min-h-screen bg-zinc-100 p-4 sm:p-8">
-        <div className="mx-auto min-h-screen max-w-5xl border border-zinc-300 bg-white">
-          <div className="px-6 py-10 sm:px-10 sm:py-14">
-            <p className="text-xs font-semibold text-red-700">
-              Failed to load assessments.
-            </p>
-          </div>
+      <main className="bg-zinc-100 px-12">
+        <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10">
+          <p className="text-xs font-semibold text-red-700">
+            Failed to load assessments.
+          </p>
         </div>
       </main>
     );
@@ -189,9 +185,8 @@ export default function AssessmentsPage() {
   ).length;
 
   return (
-    <main className="min-h-screen bg-zinc-100 p-4 sm:p-8">
-      <div className="mx-auto min-h-screen max-w-5xl border border-zinc-300 bg-white shadow-sm">
-        <div className="px-6 py-10 sm:px-10 sm:py-14">
+    <main className="bg-zinc-100 px-12">
+      <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10">
           {/* Header */}
           <div className="flex flex-col gap-6 border-b-4 border-zinc-950 pb-8 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -512,7 +507,6 @@ export default function AssessmentsPage() {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
       </div>
     </main>
   );

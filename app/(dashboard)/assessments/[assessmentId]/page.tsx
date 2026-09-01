@@ -51,11 +51,11 @@ type Assessment = {
 };
 
 const STATUS_STYLES: Record<string, string> = {
-  draft: "bg-zinc-100 text-zinc-600 border-zinc-200",
-  in_review: "bg-amber-50 text-amber-700 border-amber-200",
-  submitted: "bg-blue-50 text-blue-700 border-blue-200",
-  complete: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  completed: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  draft: "bg-zinc-100 text-zinc-800 border-zinc-400",
+  in_review: "bg-amber-50 text-amber-800 border-amber-500",
+  submitted: "bg-blue-50 text-blue-800 border-blue-500",
+  complete: "bg-emerald-50 text-emerald-800 border-emerald-600",
+  completed: "bg-emerald-50 text-emerald-800 border-emerald-600",
 };
 
 const DOCUMENT_TYPE_META: Record<
@@ -64,23 +64,23 @@ const DOCUMENT_TYPE_META: Record<
 > = {
   ELECTRICITY_BILL: {
     label: "Electricity bill",
-    chip: "bg-amber-50 text-amber-700 border-amber-200",
+    chip: "bg-amber-50 text-amber-800 border-amber-500",
   },
   WATER_REPORT: {
     label: "Water report",
-    chip: "bg-blue-50 text-blue-700 border-blue-200",
+    chip: "bg-blue-50 text-blue-800 border-blue-500",
   },
   EMPLOYEE_DATA: {
     label: "Employee data",
-    chip: "bg-violet-50 text-violet-700 border-violet-200",
+    chip: "bg-violet-50 text-violet-800 border-violet-500",
   },
   CSR_REPORT: {
     label: "CSR report",
-    chip: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    chip: "bg-emerald-50 text-emerald-800 border-emerald-600",
   },
   OTHER: {
     label: "Other",
-    chip: "bg-zinc-100 text-zinc-600 border-zinc-200",
+    chip: "bg-zinc-100 text-zinc-800 border-zinc-400",
   },
 };
 
@@ -90,15 +90,15 @@ const EXTRACTION_META: Record<
 > = {
   PENDING: {
     label: "Queued",
-    chip: "bg-zinc-100 text-zinc-500 border-zinc-200",
+    chip: "bg-zinc-100 text-zinc-700 border-zinc-400",
   },
   PROCESSING: {
     label: "Extracting",
-    chip: "bg-blue-50 text-blue-700 border-blue-200",
+    chip: "bg-blue-50 text-blue-800 border-blue-500",
   },
   COMPLETED: {
     label: "Extracted",
-    chip: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    chip: "bg-emerald-50 text-emerald-800 border-emerald-600",
   },
   FAILED: {
     label: "Failed",
@@ -378,36 +378,36 @@ function DocumentCard({ doc }: { doc: Document }) {
       initial="hidden"
       animate="show"
       exit="exit"
-      className="overflow-hidden rounded-xl border border-zinc-200 bg-white transition hover:border-zinc-300"
+      className="overflow-hidden border border-zinc-300 bg-white transition hover:border-emerald-500"
     >
       <div className="flex items-start gap-3 p-3.5">
         <span
-          className={`flex h-10 w-10 flex-none items-center justify-center rounded-lg border ${typeMeta.chip}`}
+          className={`flex h-10 w-10 flex-none items-center justify-center border ${typeMeta.chip}`}
         >
           <DocumentTypeIcon type={doc.documentType} />
         </span>
 
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            <span className="truncate text-sm font-medium text-zinc-900">
+            <span className="truncate text-sm font-bold text-zinc-950">
               {doc.fileName}
             </span>
 
             <span
-              className={`inline-flex flex-none items-center rounded-full border px-2 py-0.5  text-[10px] font-medium uppercase tracking-wide ${typeMeta.chip}`}
+              className={`inline-flex flex-none items-center border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${typeMeta.chip}`}
             >
               {typeMeta.label}
             </span>
 
             <span
-              className={`inline-flex flex-none items-center gap-1 rounded-full border px-2 py-0.5  text-[10px] font-medium uppercase tracking-wide ${extractionMeta.chip}`}
+              className={`inline-flex flex-none items-center gap-1 border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${extractionMeta.chip}`}
             >
               <ExtractionIcon status={doc.extractionStatus} />
               {extractionMeta.label}
             </span>
           </div>
 
-          <div className="mt-1.5 flex flex-wrap items-center gap-x-2  text-[10px] uppercase tracking-wider text-zinc-400">
+          <div className="mt-1.5 flex flex-wrap items-center gap-x-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-600">
             <span>{formatFileSize(doc.fileSize)}</span>
             <span aria-hidden="true">·</span>
             <span>Uploaded {formatDate(doc.uploadedAt)}</span>
@@ -441,23 +441,23 @@ function DocumentCard({ doc }: { doc: Document }) {
               ease: [0.22, 1, 0.36, 1],
             }}
           >
-            <div className="grid grid-cols-2 gap-4 border-t border-zinc-100 bg-zinc-50/60 px-3.5 py-3">
+            <div className="grid grid-cols-2 gap-4 border-t border-zinc-300 bg-zinc-50 px-3.5 py-3">
               <div>
-                <p className=" text-[10px] uppercase tracking-widest text-zinc-400">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">
                   Electricity cost
                 </p>
 
-                <p className="mt-0.5 text-sm font-medium text-zinc-900">
+                <p className="mt-0.5 text-sm font-bold text-zinc-950">
                   ${formatNumber(doc.electricity.electricityCost)}
                 </p>
               </div>
 
               <div>
-                <p className=" text-[10px] uppercase tracking-widest text-zinc-400">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">
                   Units consumed
                 </p>
 
-                <p className="mt-0.5 text-sm font-medium text-zinc-900">
+                <p className="mt-0.5 text-sm font-bold text-zinc-950">
                   {formatNumber(doc.electricity.unitsConsumed)} kWh
                 </p>
               </div>
@@ -622,7 +622,7 @@ export default function AssessmentDetail({
 
   if (!assessment) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white">
+      <div className="flex min-h-screen items-center justify-center bg-zinc-100">
         <motion.div
           animate={
             prefersReducedMotion
@@ -636,7 +636,7 @@ export default function AssessmentDetail({
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="flex items-center gap-3  text-xs tracking-wide text-zinc-400"
+          className="flex items-center gap-3 text-xs font-semibold tracking-wide text-zinc-600"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
           retrieving record…
@@ -671,8 +671,8 @@ export default function AssessmentDetail({
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-6xl px-8 py-20 sm:px-12">
+    <div className="bg-zinc-100 px-12">
+      <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10">
         {/* Breadcrumb */}
 
         <motion.div
@@ -682,7 +682,7 @@ export default function AssessmentDetail({
         >
           <Link
             href={`/organization/${assessment.organizationId}`}
-            className="inline-flex items-center gap-1.5  text-[11px] uppercase tracking-widest text-zinc-400 transition hover:text-emerald-600"
+            className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-zinc-600 transition hover:text-emerald-800"
           >
             <svg
               className="h-3 w-3"
@@ -706,12 +706,12 @@ export default function AssessmentDetail({
             duration: 0.4,
             delay: 0.05,
           }}
-          className="mt-6  text-[11px] uppercase tracking-[0.2em] text-zinc-400"
+          className="mt-6 text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-600"
         >
           Assessment record
         </motion.p>
 
-        <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto_auto_auto_minmax(0,1fr)] items-center gap-6">
+        <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto_auto_auto_minmax(0,1fr)] items-center gap-6 border-b-4 border-zinc-950 pb-8">
           <motion.h1
             initial={{
               opacity: 0,
@@ -726,7 +726,7 @@ export default function AssessmentDetail({
               delay: 0.05,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="justify-self-start truncate  text-4xl tracking-tight text-zinc-900 sm:text-5xl"
+            className="justify-self-start truncate text-4xl font-bold tracking-tight text-zinc-950 sm:text-5xl"
             title={assessment.name}
           >
             {assessment.name}
@@ -750,13 +750,13 @@ export default function AssessmentDetail({
             }}
             className="flex flex-col items-center gap-1.5"
           >
-            <span className=" text-[10px] uppercase tracking-widest text-zinc-300">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">
               Status
             </span>
 
             <motion.span
               whileHover={{ y: -1 }}
-              className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1  text-[11px] font-medium capitalize tracking-wide ${statusStyle(
+              className={`inline-flex items-center gap-1.5 whitespace-nowrap border px-3 py-1 text-[11px] font-bold capitalize tracking-wide ${statusStyle(
                 assessment.status,
               )}`}
             >
@@ -789,11 +789,11 @@ export default function AssessmentDetail({
             }}
             className="flex flex-col items-end gap-1.5 justify-self-end"
           >
-            <span className=" text-[10px] uppercase tracking-widest text-zinc-300">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">
               Reference
             </span>
 
-            <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm border border-emerald-200 bg-emerald-50 py-1 pl-2.5 pr-3  text-[11px] font-medium tracking-wide text-emerald-700">
+            <span className="inline-flex items-center gap-1.5 whitespace-nowrap border border-emerald-600 bg-emerald-50 py-1 pl-2.5 pr-3 text-[11px] font-bold tracking-wide text-emerald-800">
               <SealIcon />
               {referenceNumber}
             </span>
@@ -811,7 +811,7 @@ export default function AssessmentDetail({
           style={{
             transformOrigin: "left",
           }}
-          className="mt-10 h-px w-full bg-zinc-200"
+          className="hidden"
         />
 
         {/* Field list */}
@@ -820,19 +820,19 @@ export default function AssessmentDetail({
           variants={listVariants}
           initial="hidden"
           animate="show"
-          className="mt-2"
+          className="mt-8 grid border-l border-t border-zinc-300 sm:max-w-sm"
         >
           {fields.map((field) => (
             <motion.div
               key={field.label}
               variants={rowVariants}
-              className="grid grid-cols-[1fr_auto] items-baseline gap-4 border-b border-zinc-100 py-4"
+              className="flex min-h-28 flex-col justify-between border-b border-r border-zinc-300 bg-zinc-50 p-5"
             >
-              <dt className=" text-[11px] uppercase tracking-widest text-zinc-400">
+              <dt className="text-[11px] font-bold uppercase tracking-widest text-zinc-600">
                 {field.label}
               </dt>
 
-              <dd className="justify-self-end text-base text-zinc-900">
+              <dd className="mt-4 text-lg font-bold text-zinc-950">
                 {field.value}
               </dd>
             </motion.div>
@@ -856,13 +856,13 @@ export default function AssessmentDetail({
               delay: 1.05,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="mt-8"
+            className="mt-8 border border-zinc-300 bg-zinc-50 p-5"
           >
-            <p className=" text-[11px] uppercase tracking-widest text-zinc-400">
+            <p className="text-[11px] font-bold uppercase tracking-widest text-zinc-600">
               Description
             </p>
 
-            <p className="mt-3 text-sm leading-relaxed text-zinc-600">
+            <p className="mt-3 text-sm font-medium leading-relaxed text-zinc-800">
               {assessment.description}
             </p>
           </motion.div>
@@ -877,7 +877,7 @@ export default function AssessmentDetail({
             duration: 0.5,
             delay: 1.25,
           }}
-          className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-1  text-[11px] text-zinc-400"
+          className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-1 text-[11px] font-semibold text-zinc-600"
         >
           <span className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
@@ -907,26 +907,26 @@ export default function AssessmentDetail({
           }}
           className="mt-14"
         >
-          <div className="grid grid-cols-[1fr_auto] items-center gap-4 border-b border-zinc-200 pb-4">
+          <div className="grid grid-cols-[1fr_auto] items-center gap-4 border border-zinc-950 bg-zinc-950 p-5 text-white">
             <div>
-              <p className=" text-[11px] uppercase tracking-[0.2em] text-zinc-400">
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-400">
                 Documents
               </p>
 
               <h2
-                className="mt-2  text-2xl tracking-tight text-zinc-900"
+                className="mt-2 text-2xl font-bold tracking-tight text-white"
               >
                 Assessment documents
               </h2>
             </div>
 
-            <span className="justify-self-end  text-xs text-zinc-400">
+            <span className="justify-self-end text-xs font-semibold text-zinc-300">
               {assessment.documents.length}{" "}
               {assessment.documents.length === 1 ? "file" : "files"}
             </span>
           </div>
 
-          <div className="mt-5 divide-y divide-zinc-100 rounded-xl border border-zinc-200">
+          <div className="mt-5 divide-y divide-zinc-300 border border-zinc-300">
             {UPLOAD_TYPES.map(({ type, label }) => {
               const existing = assessment.documents.find(
                 (d) => d.documentType === type,
@@ -937,22 +937,22 @@ export default function AssessmentDetail({
               return (
                 <div
                   key={type}
-                  className="flex items-center justify-between gap-4 px-4 py-3.5"
+                  className="flex items-center justify-between gap-4 px-4 py-3.5 hover:bg-emerald-50"
                 >
                   <div className="flex items-center gap-3">
                     <span
-                      className={`flex h-9 w-9 flex-none items-center justify-center rounded-lg border ${DOCUMENT_TYPE_META[type].chip}`}
+                      className={`flex h-9 w-9 flex-none items-center justify-center border ${DOCUMENT_TYPE_META[type].chip}`}
                     >
                       <DocumentTypeIcon type={type} />
                     </span>
 
                     <div>
-                      <p className="text-sm font-medium text-zinc-900">
+                      <p className="text-sm font-bold text-zinc-950">
                         {label}
                       </p>
 
                       {existing && (
-                        <p className="mt-0.5 truncate  text-[10px] uppercase tracking-wide text-zinc-400">
+                        <p className="mt-0.5 truncate text-[10px] font-semibold uppercase tracking-wide text-zinc-600">
                           {existing.fileName}
                         </p>
                       )}
@@ -960,10 +960,10 @@ export default function AssessmentDetail({
                   </div>
 
                   <label
-                    className={`inline-flex flex-none items-center gap-1.5 rounded-lg border px-3.5 py-1.5 text-xs font-medium transition ${
+                    className={`inline-flex flex-none items-center gap-1.5 border px-3.5 py-1.5 text-xs font-bold transition ${
                       isUploading
-                        ? "cursor-wait border-zinc-200 text-zinc-400"
-                        : "cursor-pointer border-zinc-200 text-zinc-700 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+                        ? "cursor-wait border-zinc-300 text-zinc-500"
+                        : "cursor-pointer border-zinc-500 text-zinc-800 hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
                     }`}
                   >
                     <input
@@ -993,18 +993,18 @@ export default function AssessmentDetail({
           </div>
 
           {assessment.documents.length === 0 && (
-            <p className="mt-4  text-[11px] text-amber-600">
+            <p className="mt-4 text-[11px] font-semibold text-amber-700">
               Please upload at least one document.
             </p>
           )}
 
           <div className="mt-8 flex items-center justify-end gap-4">
             {calculateError && (
-              <p className=" text-[11px] text-red-600">{calculateError}</p>
+              <p className="text-[11px] font-semibold text-red-700">{calculateError}</p>
             )}
 
             {esgScore !== null && !calculateError && (
-              <p className=" text-[11px] uppercase tracking-widest text-emerald-700">
+              <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-800">
                 Score: {esgScore}
               </p>
             )}
@@ -1013,15 +1013,15 @@ export default function AssessmentDetail({
               type="button"
               disabled={assessment.documents.length === 0 || calculating}
               onClick={handleCalculateEsg}
-              className="rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+              className="border border-zinc-950 bg-zinc-950 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-40"
             >
               {calculating ? "Calculating…" : "Calculate ESG"}
             </button>
           </div>
 
           {assessment.documents.length === 0 ? (
-            <div className="mt-6 rounded-xl border border-dashed border-zinc-200 py-12 text-center">
-              <p className="text-sm text-zinc-500">
+            <div className="mt-6 border border-dashed border-zinc-400 bg-zinc-50 py-12 text-center">
+              <p className="text-sm font-medium text-zinc-700">
                 No documents uploaded yet.
               </p>
             </div>
