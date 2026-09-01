@@ -31,10 +31,10 @@ type Organization = {
 };
 
 const STATUS_STYLES: Record<AssessmentStatus, string> = {
-  DRAFT: "bg-amber-50 text-amber-700 border-amber-100",
-  IN_PROGRESS: "bg-blue-50 text-blue-700 border-blue-100",
-  UNDER_REVIEW: "bg-violet-50 text-violet-700 border-violet-100",
-  COMPLETED: "bg-emerald-50 text-emerald-700 border-emerald-100",
+  DRAFT: "bg-amber-50 text-amber-800 border-amber-500",
+  IN_PROGRESS: "bg-blue-50 text-blue-800 border-blue-500",
+  UNDER_REVIEW: "bg-violet-50 text-violet-800 border-violet-500",
+  COMPLETED: "bg-emerald-50 text-emerald-800 border-emerald-600",
 };
 
 const STATUS_LABELS: Record<AssessmentStatus, string> = {
@@ -120,7 +120,7 @@ export default function AssessmentsPage() {
       }
 
       // Go directly to the newly created assessment.
-      window.location.href = `/assessment/${data.assessment.id}`;
+      window.location.href = `/assessments/${data.assessment.id}`;
     } catch (error) {
       console.error(error);
       setCreateError("Something went wrong. Please try again.");
@@ -141,9 +141,9 @@ export default function AssessmentsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-white">
-        <div className="mx-24 min-h-screen border-x border-zinc-200">
-          <div className="mx-auto max-w-5xl px-8 py-20">
+      <main className="min-h-screen bg-zinc-100 p-4 sm:p-8">
+        <div className="mx-auto min-h-screen max-w-5xl border border-zinc-300 bg-white">
+          <div className="px-6 py-10 sm:px-10 sm:py-14">
             <motion.div
               animate={
                 prefersReducedMotion ? undefined : { opacity: [0.3, 0.7, 0.3] }
@@ -153,7 +153,7 @@ export default function AssessmentsPage() {
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="flex items-center gap-3 text-xs tracking-wide text-zinc-400"
+              className="flex items-center gap-3 text-xs font-semibold tracking-wide text-zinc-600"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
               retrieving assessments…
@@ -166,10 +166,10 @@ export default function AssessmentsPage() {
 
   if (!organization) {
     return (
-      <main className="min-h-screen bg-white">
-        <div className="mx-24 min-h-screen border-x border-zinc-200">
-          <div className="mx-auto max-w-5xl px-8 py-20">
-            <p className="text-xs text-red-600">
+      <main className="min-h-screen bg-zinc-100 p-4 sm:p-8">
+        <div className="mx-auto min-h-screen max-w-5xl border border-zinc-300 bg-white">
+          <div className="px-6 py-10 sm:px-10 sm:py-14">
+            <p className="text-xs font-semibold text-red-700">
               Failed to load assessments.
             </p>
           </div>
@@ -189,21 +189,21 @@ export default function AssessmentsPage() {
   ).length;
 
   return (
-    <main className="min-h-screen bg-white">
-      <div className="mx-24 min-h-screen border-x border-zinc-200">
-        <div className="mx-auto max-w-5xl px-8 py-20">
+    <main className="min-h-screen bg-zinc-100 p-4 sm:p-8">
+      <div className="mx-auto min-h-screen max-w-5xl border border-zinc-300 bg-white shadow-sm">
+        <div className="px-6 py-10 sm:px-10 sm:py-14">
           {/* Header */}
-          <div className="flex items-end justify-between">
+          <div className="flex flex-col gap-6 border-b-4 border-zinc-950 pb-8 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.2em] text-zinc-400">
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-600">
                 ESG reporting
               </p>
 
-              <h1 className="mt-3  text-4xl tracking-tight text-zinc-900">
+              <h1 className="mt-3 text-4xl font-bold tracking-tight text-zinc-950">
                 Assessments
               </h1>
 
-              <p className="mt-2 max-w-xl text-sm leading-6 text-zinc-500">
+              <p className="mt-2 max-w-xl text-sm font-medium leading-6 text-zinc-700">
                 Manage your organization&apos;s ESG reporting periods and track
                 assessment progress.
               </p>
@@ -212,7 +212,7 @@ export default function AssessmentsPage() {
             <button
               type="button"
               onClick={() => setShowCreateModal(true)}
-              className="inline-flex items-center gap-2 rounded-sm bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800"
+              className="inline-flex items-center gap-2 border border-zinc-950 bg-zinc-950 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-900"
             >
               <span className="text-base leading-none">+</span>
               New assessment
@@ -220,33 +220,33 @@ export default function AssessmentsPage() {
           </div>
 
           {/* Summary */}
-          <div className="mt-12 grid grid-cols-3 border-y border-zinc-200">
-            <div className="border-r border-zinc-200 px-5 py-5">
-              <p className="text-[10px] uppercase tracking-widest text-zinc-400">
+          <div className="mt-10 grid grid-cols-3 border-l border-t border-zinc-300">
+            <div className="border-b border-r border-zinc-300 bg-zinc-50 px-5 py-5">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">
                 Total
               </p>
 
-              <p className="mt-2 text-2xl font-medium text-zinc-900">
+              <p className="mt-2 text-3xl font-bold text-zinc-950">
                 {assessments.length}
               </p>
             </div>
 
-            <div className="border-r border-zinc-200 px-5 py-5">
-              <p className="text-[10px] uppercase tracking-widest text-zinc-400">
+            <div className="border-b border-r border-zinc-300 bg-zinc-50 px-5 py-5">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">
                 In progress
               </p>
 
-              <p className="mt-2 text-2xl font-medium text-zinc-900">
+              <p className="mt-2 text-3xl font-bold text-zinc-950">
                 {inProgressCount}
               </p>
             </div>
 
-            <div className="px-5 py-5">
-              <p className="text-[10px] uppercase tracking-widest text-zinc-400">
+            <div className="border-b border-r border-zinc-300 bg-zinc-50 px-5 py-5">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">
                 Completed
               </p>
 
-              <p className="mt-2 text-2xl font-medium text-zinc-900">
+              <p className="mt-2 text-3xl font-bold text-zinc-950">
                 {completedCount}
               </p>
             </div>
@@ -256,24 +256,24 @@ export default function AssessmentsPage() {
           <section className="mt-14">
             <div className="mb-4 flex items-center justify-between">
               <div>
-                <p className="text-[11px] uppercase tracking-[0.2em] text-zinc-400">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-600">
                   Organization assessments
                 </p>
               </div>
 
-              <span className="text-[11px] text-zinc-400">
+              <span className="text-[11px] font-semibold text-zinc-600">
                 {assessments.length}{" "}
                 {assessments.length === 1 ? "record" : "records"}
               </span>
             </div>
 
             {assessments.length === 0 ? (
-              <div className="border border-dashed border-zinc-300 py-20 text-center">
-                <p className=" text-xl text-zinc-800">
+              <div className="border border-dashed border-zinc-400 bg-zinc-50 py-20 text-center">
+                <p className="text-xl font-bold text-zinc-950">
                   No assessments yet
                 </p>
 
-                <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-zinc-500">
+                <p className="mx-auto mt-2 max-w-sm text-sm font-medium leading-6 text-zinc-700">
                   Create your first ESG assessment to begin collecting
                   sustainability data.
                 </p>
@@ -281,28 +281,28 @@ export default function AssessmentsPage() {
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(true)}
-                  className="mt-6 rounded-sm bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800"
+                  className="mt-6 border border-zinc-950 bg-zinc-950 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-900"
                 >
                   Create assessment →
                 </button>
               </div>
             ) : (
-              <div className="divide-y divide-zinc-200 border-y border-zinc-200">
+              <div className="border border-zinc-300 bg-white">
                 {assessments.map((assessment) => (
                   <Link
                     key={assessment.id}
-                    href={`/assessment/${assessment.id}`}
-                    className="group block px-5 py-6 transition-colors hover:bg-zinc-50"
+                    href={`/assessments/${assessment.id}`}
+                    className="group block border-b border-zinc-300 px-5 py-6 transition-colors last:border-b-0 hover:bg-emerald-50"
                   >
                     <div className="flex items-start justify-between gap-8">
                       <div className="min-w-0">
                         <div className="flex items-center gap-3">
-                          <h2 className="truncate text-lg font-medium text-zinc-900">
+                          <h2 className="truncate text-lg font-bold text-zinc-950">
                             {assessment.name}
                           </h2>
 
                           <span
-                            className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-wider ${
+                            className={`shrink-0 border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${
                               STATUS_STYLES[assessment.status]
                             }`}
                           >
@@ -311,12 +311,12 @@ export default function AssessmentsPage() {
                         </div>
 
                         {assessment.description && (
-                          <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-500">
+                          <p className="mt-2 max-w-2xl text-sm font-medium leading-6 text-zinc-700">
                             {assessment.description}
                           </p>
                         )}
 
-                        <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] uppercase tracking-wider text-zinc-400">
+                        <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-600">
                           <span>Reporting year {assessment.reportingYear}</span>
 
                           <span>·</span>
@@ -342,23 +342,23 @@ export default function AssessmentsPage() {
                       <div className="flex shrink-0 items-center gap-5">
                         {assessment.esgScore?.overallScore != null ? (
                           <div className="text-right">
-                            <p className="text-[9px] uppercase tracking-widest text-zinc-400">
+                            <p className="text-[9px] font-bold uppercase tracking-widest text-zinc-600">
                               ESG score
                             </p>
 
-                            <p className="mt-1 text-xl font-medium text-zinc-900">
+                            <p className="mt-1 text-xl font-bold text-zinc-950">
                               {Number(assessment.esgScore.overallScore).toFixed(
                                 1,
                               )}
                             </p>
                           </div>
                         ) : (
-                          <span className="text-[10px] uppercase tracking-wider text-zinc-300">
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
                             No score
                           </span>
                         )}
 
-                        <span className="text-lg text-zinc-300 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-zinc-700">
+                        <span className="text-xl font-bold text-zinc-500 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-zinc-950">
                           →
                         </span>
                       </div>
@@ -391,15 +391,15 @@ export default function AssessmentsPage() {
                     duration: 0.25,
                     ease: [0.22, 1, 0.36, 1],
                   }}
-                  className="w-full max-w-lg rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl"
+                  className="w-full max-w-lg border border-zinc-400 bg-white p-6 shadow-2xl"
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-400">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600">
                         New record
                       </p>
 
-                      <h2 className="mt-2 text-2xl tracking-tight text-zinc-900">
+                      <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-950">
                         Create assessment
                       </h2>
                     </div>
@@ -407,7 +407,7 @@ export default function AssessmentsPage() {
                     <button
                       type="button"
                       onClick={closeCreateModal}
-                      className="text-xl leading-none text-zinc-400 transition hover:text-zinc-900"
+                      className="text-xl font-bold leading-none text-zinc-600 transition hover:text-zinc-950"
                     >
                       ×
                     </button>
@@ -417,7 +417,7 @@ export default function AssessmentsPage() {
                   <div className="mt-8">
                     <label
                       htmlFor="assessment-name"
-                      className="text-[10px] uppercase tracking-widest text-zinc-400"
+                      className="text-[10px] font-bold uppercase tracking-widest text-zinc-600"
                     >
                       Name
                     </label>
@@ -428,7 +428,7 @@ export default function AssessmentsPage() {
                       value={newName}
                       onChange={(event) => setNewName(event.target.value)}
                       placeholder={`e.g. ${organization.name} FY2026 Assessment`}
-                      className="mt-2 w-full rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400"
+                      className="mt-2 w-full border border-zinc-400 bg-white px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
                     />
                   </div>
 
@@ -436,7 +436,7 @@ export default function AssessmentsPage() {
                   <div className="mt-5">
                     <label
                       htmlFor="assessment-year"
-                      className="text-[10px] uppercase tracking-widest text-zinc-400"
+                      className="text-[10px] font-bold uppercase tracking-widest text-zinc-600"
                     >
                       Reporting year
                     </label>
@@ -448,7 +448,7 @@ export default function AssessmentsPage() {
                       onChange={(event) => setNewYear(event.target.value)}
                       min={2000}
                       max={2100}
-                      className="mt-2 w-full rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400"
+                      className="mt-2 w-full border border-zinc-400 bg-white px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
                     />
                   </div>
 
@@ -456,10 +456,10 @@ export default function AssessmentsPage() {
                   <div className="mt-5">
                     <label
                       htmlFor="assessment-description"
-                      className="text-[10px] uppercase tracking-widest text-zinc-400"
+                      className="text-[10px] font-bold uppercase tracking-widest text-zinc-600"
                     >
                       Description{" "}
-                      <span className="normal-case text-zinc-300">
+                      <span className="normal-case font-medium text-zinc-500">
                         (optional)
                       </span>
                     </label>
@@ -472,7 +472,7 @@ export default function AssessmentsPage() {
                       }
                       rows={3}
                       placeholder="Briefly describe this reporting period..."
-                      className="mt-2 w-full resize-none rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400"
+                      className="mt-2 w-full resize-none border border-zinc-400 bg-white px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
                     />
                   </div>
 
@@ -487,7 +487,7 @@ export default function AssessmentsPage() {
                       type="button"
                       onClick={closeCreateModal}
                       disabled={creating}
-                      className="rounded-sm border border-zinc-200 bg-white px-5 py-2.5 text-sm font-medium text-zinc-800 transition hover:border-zinc-300 disabled:opacity-50"
+                      className="border border-zinc-500 bg-white px-5 py-2.5 text-sm font-bold text-zinc-950 transition hover:bg-zinc-100 disabled:opacity-50"
                     >
                       Cancel
                     </button>
@@ -502,7 +502,7 @@ export default function AssessmentsPage() {
                         creating
                       }
                       onClick={handleCreateAssessment}
-                      className="inline-flex items-center gap-1.5 rounded-sm bg-emerald-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-40"
+                      className="inline-flex items-center gap-1.5 border border-emerald-950 bg-emerald-800 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-950 disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       {creating ? "Creating…" : "Create"}
                       {!creating && <span aria-hidden="true">→</span>}
