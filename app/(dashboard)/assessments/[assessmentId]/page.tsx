@@ -638,7 +638,7 @@ export default function AssessmentDetail({
 
   return (
     <div className="bg-zinc-100 px-">
-      <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10">
+      <div className="mx-12 border-x border-emerald-800/30 bg-white py-10 sm:px-10">
         {/* Breadcrumb */}
 
         <motion.div
@@ -665,7 +665,7 @@ export default function AssessmentDetail({
           </Link>
         </motion.div>
 
-        <div className="sticky top-12 z-20 -mx-10 bg-white border-b border-emerald-500/40">
+        <div className="sticky top-12 z-20 -mx-10 bg-white border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)]">
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -673,12 +673,12 @@ export default function AssessmentDetail({
               duration: 0.4,
               delay: 0.05,
             }}
-            className="pt-6 text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600 mx-12"
+            className="pt-6 text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600 mx-10"
           >
             Assessment record
           </motion.p>
 
-          <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto_auto_auto_minmax(0,1fr)] items-center gap-6  pb-8 mx-12">
+          <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto_auto_auto_minmax(0,1fr)] items-center gap-6  pb-8 mx-10">
             <motion.h1
               initial={{
                 opacity: 0,

@@ -77,19 +77,21 @@ export default function MetricsPage() {
     <main className="bg-zinc-100 px-12">
       <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10">
         {/* Header */}
-        <div className="border-b-4 border-zinc-950 pb-8">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-600">
-            ESG framework
-          </p>
+        <div className="border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)]  z-20 pb-8 -mx-10">
+          <div className="mx-10">
+            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600 ">
+              ESG framework
+            </p>
 
-          <h1 className="mt-3 text-4xl font-medium tracking-tight text-zinc-950">
-            Metrics
-          </h1>
+            <h1 className="mt-3 text-4xl font-medium tracking-tight text-zinc-950">
+              Metrics
+            </h1>
 
-          <p className="mt-3 max-w-2xl text-sm font-medium leading-6 text-zinc-700">
-            The metrics used to evaluate an organization&apos;s environmental,
-            social, and governance performance.
-          </p>
+            <p className="mt-3 max-w-2xl text-sm font-medium leading-6 text-zinc-700">
+              The metrics used to evaluate an organization&apos;s environmental,
+              social, and governance performance.
+            </p>
+          </div>
         </div>
 
         {/* ESG Categories */}
@@ -106,8 +108,11 @@ export default function MetricsPage() {
               className="relative border-b border-zinc-300 pb-10 last:border-b-0"
             >
               {/* Category */}
-              <h2 className="sticky top-16 z-10 border-b border-emerald-700/30 bg-white py-3 text-xs font-medium uppercase tracking-[0.2em] text-zinc-900">
-                {category.category}
+              <h2 className="sticky top-16 z-10 border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)] -mx-10 bg-white py-3 text-xs font-medium uppercase tracking-[0.2em] text-zinc-900">
+                <div className="mx-10">
+                        {category.category} 
+                </div>
+         
               </h2>
 
               {/* EVERYTHING BELOW BELONGS TO THIS CATEGORY */}
@@ -118,7 +123,7 @@ export default function MetricsPage() {
                     {category.description}
                   </p>
 
-                  <div className="shrink-0 border border-zinc-400 bg-zinc-100 px-3 py-1.5 text-xs font-bold text-zinc-700">
+                  <div className="shrink-0 border border-zinc-400 bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-700">
                     {category.areas.length}{" "}
                     {category.areas.length === 1 ? "area" : "areas"}
                   </div>
@@ -132,11 +137,11 @@ export default function MetricsPage() {
                       className="border border-zinc-300 bg-zinc-50 p-6 transition-colors hover:border-emerald-500 hover:bg-emerald-50/40"
                     >
                       <div className="flex items-center justify-between">
-                        <h3 className="text-base font-bold text-zinc-950">
+                        <h3 className="text-base font-medium text-zinc-950">
                           {area.name}
                         </h3>
 
-                        <span className="text-xs font-semibold text-zinc-600">
+                        <span className="text-xs font-semimedium text-zinc-600">
                           {area.metrics.length} metrics
                         </span>
                       </div>
@@ -167,7 +172,7 @@ export default function MetricsPage() {
           transition={{ duration: 0.4, delay: 0.35 }}
           className="mt-4 border border-zinc-300 bg-zinc-950 p-6 text-white"
         >
-          <h2 className="text-lg font-bold text-white">ESG Score</h2>
+          <h2 className="text-lg font-medium text-white">ESG Score</h2>
 
           <p className="mt-2 text-sm font-medium leading-6 text-zinc-300">
             The collected metrics are used to calculate individual
@@ -182,11 +187,13 @@ export default function MetricsPage() {
                   key={score}
                   className="border border-zinc-500 bg-white p-4 text-zinc-950"
                 >
-                  <p className="text-xs font-bold uppercase tracking-wide text-zinc-600">
+                  <p className="text-xs font-medium uppercase tracking-wide text-zinc-600">
                     {score}
                   </p>
 
-                  <p className="mt-2 text-lg font-bold text-zinc-950">Score</p>
+                  <p className="mt-2 text-lg font-medium text-zinc-950">
+                    Score
+                  </p>
                 </div>
               ),
             )}
