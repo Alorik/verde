@@ -354,26 +354,26 @@ function DocumentCard({ doc }: { doc: Document }) {
         </span>
 
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            <span className="truncate text-sm font-bold text-zinc-950">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 sticky top-12">
+            <span className="truncate text-sm font-medium text-zinc-950">
               {doc.fileName}
             </span>
 
             <span
-              className={`inline-flex flex-none items-center border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${typeMeta.chip}`}
+              className={`inline-flex flex-none items-center border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide ${typeMeta.chip}`}
             >
               {typeMeta.label}
             </span>
 
             <span
-              className={`inline-flex flex-none items-center gap-1 border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${extractionMeta.chip}`}
+              className={`inline-flex flex-none items-center gap-1 border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide ${extractionMeta.chip}`}
             >
               <ExtractionIcon status={doc.extractionStatus} />
               {extractionMeta.label}
             </span>
           </div>
 
-          <div className="mt-1.5 flex flex-wrap items-center gap-x-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-600">
+          <div className="mt-1.5 flex flex-wrap items-center gap-x-2 text-[10px] font-semimedium uppercase tracking-wider text-zinc-600">
             <span>{formatFileSize(doc.fileSize)}</span>
             <span aria-hidden="true">·</span>
             <span>Uploaded {formatDate(doc.uploadedAt)}</span>
@@ -409,21 +409,21 @@ function DocumentCard({ doc }: { doc: Document }) {
           >
             <div className="grid grid-cols-2 gap-4 border-t border-zinc-300 bg-zinc-50 px-3.5 py-3">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">
+                <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
                   Electricity cost
                 </p>
 
-                <p className="mt-0.5 text-sm font-bold text-zinc-950">
+                <p className="mt-0.5 text-sm font-medium text-zinc-950">
                   ${formatNumber(doc.electricity.electricityCost)}
                 </p>
               </div>
 
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">
+                <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
                   Units consumed
                 </p>
 
-                <p className="mt-0.5 text-sm font-bold text-zinc-950">
+                <p className="mt-0.5 text-sm font-medium text-zinc-950">
                   {formatNumber(doc.electricity.unitsConsumed)} kWh
                 </p>
               </div>
@@ -602,7 +602,7 @@ export default function AssessmentDetail({
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="flex items-center gap-3 text-xs font-semibold tracking-wide text-zinc-600"
+          className="flex items-center gap-3 text-xs font-semimedium tracking-wide text-zinc-600"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
           retrieving record…
@@ -648,7 +648,7 @@ export default function AssessmentDetail({
         >
           <Link
             href={`/organization/${assessment.organizationId}`}
-            className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-zinc-600 transition hover:text-emerald-800"
+            className="inline-flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-widest text-zinc-600 transition hover:text-emerald-800"
           >
             <svg
               className="h-3 w-3"
@@ -665,19 +665,20 @@ export default function AssessmentDetail({
           </Link>
         </motion.div>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{
-            duration: 0.4,
-            delay: 0.05,
-          }}
-          className="mt-6 text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-600"
-        >
-          Assessment record
-        </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: 0.4,
+              delay: 0.05,
+            }}
+            className="mt-6 text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600"
+          >
+            Assessment record
+          </motion.p>
 
-        <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto_auto_auto_minmax(0,1fr)] items-center gap-6 border-b-4 border-zinc-950 pb-8">
+
+        <div className="mt-3 sticky top-12 z-20 grid grid-cols-[minmax(0,1fr)_auto_auto_auto_minmax(0,1fr)] items-center gap-6 border-b-4 border-zinc-950 pb-8 bg-white">
           <motion.h1
             initial={{
               opacity: 0,
@@ -692,7 +693,7 @@ export default function AssessmentDetail({
               delay: 0.05,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="justify-self-start truncate text-4xl font-bold tracking-tight text-zinc-950 sm:text-5xl"
+            className="justify-self-start truncate text-4xl font-medium tracking-tight text-zinc-950 sm:text-5xl"
             title={assessment.name}
           >
             {assessment.name}
@@ -716,13 +717,13 @@ export default function AssessmentDetail({
             }}
             className="flex flex-col items-center gap-1.5"
           >
-            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">
+            <span className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
               Status
             </span>
 
             <motion.span
               whileHover={{ y: -1 }}
-              className={`inline-flex items-center gap-1.5 whitespace-nowrap border px-3 py-1 text-[11px] font-bold capitalize tracking-wide ${statusStyle(
+              className={`inline-flex items-center gap-1.5 whitespace-nowrap border px-3 py-1 text-[11px] font-medium capitalize tracking-wide ${statusStyle(
                 assessment.status,
               )}`}
             >
@@ -755,11 +756,11 @@ export default function AssessmentDetail({
             }}
             className="flex flex-col items-end gap-1.5 justify-self-end"
           >
-            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">
+            <span className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
               Reference
             </span>
 
-            <span className="inline-flex items-center gap-1.5 whitespace-nowrap border border-emerald-600 bg-emerald-50 py-1 pl-2.5 pr-3 text-[11px] font-bold tracking-wide text-emerald-800">
+            <span className="inline-flex items-center gap-1.5 whitespace-nowrap border border-emerald-600 bg-emerald-50 py-1 pl-2.5 pr-3 text-[11px] font-medium tracking-wide text-emerald-800">
               <SealIcon />
               {referenceNumber}
             </span>
@@ -794,11 +795,11 @@ export default function AssessmentDetail({
               variants={rowVariants}
               className="flex min-h-28 flex-col justify-between border-b border-r border-zinc-300 bg-zinc-50 p-5"
             >
-              <dt className="text-[11px] font-bold uppercase tracking-widest text-zinc-600">
+              <dt className="text-[11px] font-medium uppercase tracking-widest text-zinc-600">
                 {field.label}
               </dt>
 
-              <dd className="mt-4 text-lg font-bold text-zinc-950">
+              <dd className="mt-4 text-lg font-medium text-zinc-950">
                 {field.value}
               </dd>
             </motion.div>
@@ -824,7 +825,7 @@ export default function AssessmentDetail({
             }}
             className="mt-8 border border-zinc-300 bg-zinc-50 p-5"
           >
-            <p className="text-[11px] font-bold uppercase tracking-widest text-zinc-600">
+            <p className="text-[11px] font-medium uppercase tracking-widest text-zinc-600">
               Description
             </p>
 
@@ -843,7 +844,7 @@ export default function AssessmentDetail({
             duration: 0.5,
             delay: 1.25,
           }}
-          className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-1 text-[11px] font-semibold text-zinc-600"
+          className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-1 text-[11px] font-semimedium text-zinc-600"
         >
           <span className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
@@ -875,18 +876,16 @@ export default function AssessmentDetail({
         >
           <div className="grid grid-cols-[1fr_auto] items-center gap-4 border border-zinc-950 bg-zinc-950 p-5 text-white">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-400">
+              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-400">
                 Documents
               </p>
 
-              <h2
-                className="mt-2 text-2xl font-bold tracking-tight text-white"
-              >
+              <h2 className="mt-2 text-2xl font-medium tracking-tight text-white">
                 Assessment documents
               </h2>
             </div>
 
-            <span className="justify-self-end text-xs font-semibold text-zinc-300">
+            <span className="justify-self-end text-xs font-semimedium text-zinc-300">
               {assessment.documents.length}{" "}
               {assessment.documents.length === 1 ? "file" : "files"}
             </span>
@@ -913,12 +912,12 @@ export default function AssessmentDetail({
                     </span>
 
                     <div>
-                      <p className="text-sm font-bold text-zinc-950">
+                      <p className="text-sm font-medium text-zinc-950">
                         {label}
                       </p>
 
                       {existing && (
-                        <p className="mt-0.5 truncate text-[10px] font-semibold uppercase tracking-wide text-zinc-600">
+                        <p className="mt-0.5 truncate text-[10px] font-semimedium uppercase tracking-wide text-zinc-600">
                           {existing.fileName}
                         </p>
                       )}
@@ -926,7 +925,7 @@ export default function AssessmentDetail({
                   </div>
 
                   <label
-                    className={`inline-flex flex-none items-center gap-1.5 border px-3.5 py-1.5 text-xs font-bold transition ${
+                    className={`inline-flex flex-none items-center gap-1.5 border px-3.5 py-1.5 text-xs font-medium transition ${
                       isUploading
                         ? "cursor-wait border-zinc-300 text-zinc-500"
                         : "cursor-pointer border-zinc-500 text-zinc-800 hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
@@ -959,18 +958,20 @@ export default function AssessmentDetail({
           </div>
 
           {assessment.documents.length === 0 && (
-            <p className="mt-4 text-[11px] font-semibold text-amber-700">
+            <p className="mt-4 text-[11px] font-semimedium text-amber-700">
               Please upload at least one document.
             </p>
           )}
 
           <div className="mt-8 flex items-center justify-end gap-4">
             {calculateError && (
-              <p className="text-[11px] font-semibold text-red-700">{calculateError}</p>
+              <p className="text-[11px] font-semimedium text-red-700">
+                {calculateError}
+              </p>
             )}
 
             {esgScore !== null && !calculateError && (
-              <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-800">
+              <p className="text-[11px] font-medium uppercase tracking-widest text-emerald-800">
                 Score: {esgScore}
               </p>
             )}
@@ -979,7 +980,7 @@ export default function AssessmentDetail({
               type="button"
               disabled={assessment.documents.length === 0 || calculating}
               onClick={handleCalculateEsg}
-              className="border border-zinc-950 bg-zinc-950 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-40"
+              className="border border-zinc-950 bg-zinc-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-40"
             >
               {calculating ? "Calculating…" : "Calculate ESG"}
             </button>

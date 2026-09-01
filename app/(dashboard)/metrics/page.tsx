@@ -82,7 +82,7 @@ export default function MetricsPage() {
             ESG framework
           </p>
 
-          <h1 className="mt-3 text-4xl font-bold tracking-tight text-zinc-950">
+          <h1 className="mt-3 text-4xl font-medium tracking-tight text-zinc-950">
             Metrics
           </h1>
 

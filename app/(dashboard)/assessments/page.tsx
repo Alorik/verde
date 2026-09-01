@@ -152,7 +152,7 @@ export default function AssessmentsPage() {
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="flex items-center gap-3 text-xs font-semibold tracking-wide text-zinc-600"
+              className="flex items-center gap-3 text-xs font-semimedium tracking-wide text-zinc-600"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
               retrieving assessments…
@@ -166,7 +166,7 @@ export default function AssessmentsPage() {
     return (
       <main className="bg-zinc-100 px-12">
         <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10">
-          <p className="text-xs font-semibold text-red-700">
+          <p className="text-xs font-semimedium text-red-700">
             Failed to load assessments.
           </p>
         </div>
@@ -190,11 +190,11 @@ export default function AssessmentsPage() {
           {/* Header */}
           <div className="flex flex-col gap-6 border-b-4 border-zinc-950 pb-8 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-600">
+              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
                 ESG reporting
               </p>
 
-              <h1 className="mt-3 text-4xl font-bold tracking-tight text-zinc-950">
+              <h1 className="mt-3 text-4xl font-medium tracking-tight text-zinc-950">
                 Assessments
               </h1>
 
@@ -207,7 +207,7 @@ export default function AssessmentsPage() {
             <button
               type="button"
               onClick={() => setShowCreateModal(true)}
-              className="inline-flex items-center gap-2 border border-zinc-950 bg-zinc-950 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-900"
+              className="inline-flex items-center gap-2 border border-zinc-950 bg-zinc-950 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900"
             >
               <span className="text-base leading-none">+</span>
               New assessment
@@ -217,31 +217,31 @@ export default function AssessmentsPage() {
           {/* Summary */}
           <div className="mt-10 grid grid-cols-3 border-l border-t border-zinc-300">
             <div className="border-b border-r border-zinc-300 bg-zinc-50 px-5 py-5">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">
+              <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
                 Total
               </p>
 
-              <p className="mt-2 text-3xl font-bold text-zinc-950">
+              <p className="mt-2 text-3xl font-medium text-zinc-950">
                 {assessments.length}
               </p>
             </div>
 
             <div className="border-b border-r border-zinc-300 bg-zinc-50 px-5 py-5">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">
+              <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
                 In progress
               </p>
 
-              <p className="mt-2 text-3xl font-bold text-zinc-950">
+              <p className="mt-2 text-3xl font-medium text-zinc-950">
                 {inProgressCount}
               </p>
             </div>
 
             <div className="border-b border-r border-zinc-300 bg-zinc-50 px-5 py-5">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">
+              <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
                 Completed
               </p>
 
-              <p className="mt-2 text-3xl font-bold text-zinc-950">
+              <p className="mt-2 text-3xl font-medium text-zinc-950">
                 {completedCount}
               </p>
             </div>
@@ -251,12 +251,12 @@ export default function AssessmentsPage() {
           <section className="mt-14">
             <div className="mb-4 flex items-center justify-between">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-600">
+                <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
                   Organization assessments
                 </p>
               </div>
 
-              <span className="text-[11px] font-semibold text-zinc-600">
+              <span className="text-[11px] font-semimedium text-zinc-600">
                 {assessments.length}{" "}
                 {assessments.length === 1 ? "record" : "records"}
               </span>
@@ -264,7 +264,7 @@ export default function AssessmentsPage() {
 
             {assessments.length === 0 ? (
               <div className="border border-dashed border-zinc-400 bg-zinc-50 py-20 text-center">
-                <p className="text-xl font-bold text-zinc-950">
+                <p className="text-xl font-medium text-zinc-950">
                   No assessments yet
                 </p>
 
@@ -276,7 +276,7 @@ export default function AssessmentsPage() {
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(true)}
-                  className="mt-6 border border-zinc-950 bg-zinc-950 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-900"
+                  className="mt-6 border border-zinc-950 bg-zinc-950 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900"
                 >
                   Create assessment →
                 </button>
@@ -292,12 +292,12 @@ export default function AssessmentsPage() {
                     <div className="flex items-start justify-between gap-8">
                       <div className="min-w-0">
                         <div className="flex items-center gap-3">
-                          <h2 className="truncate text-lg font-bold text-zinc-950">
+                          <h2 className="truncate text-lg font-medium text-zinc-950">
                             {assessment.name}
                           </h2>
 
                           <span
-                            className={`shrink-0 border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${
+                            className={`shrink-0 border px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider ${
                               STATUS_STYLES[assessment.status]
                             }`}
                           >
@@ -311,7 +311,7 @@ export default function AssessmentsPage() {
                           </p>
                         )}
 
-                        <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-600">
+                        <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] font-semimedium uppercase tracking-wider text-zinc-600">
                           <span>Reporting year {assessment.reportingYear}</span>
 
                           <span>·</span>
@@ -337,23 +337,23 @@ export default function AssessmentsPage() {
                       <div className="flex shrink-0 items-center gap-5">
                         {assessment.esgScore?.overallScore != null ? (
                           <div className="text-right">
-                            <p className="text-[9px] font-bold uppercase tracking-widest text-zinc-600">
+                            <p className="text-[9px] font-medium uppercase tracking-widest text-zinc-600">
                               ESG score
                             </p>
 
-                            <p className="mt-1 text-xl font-bold text-zinc-950">
+                            <p className="mt-1 text-xl font-medium text-zinc-950">
                               {Number(assessment.esgScore.overallScore).toFixed(
                                 1,
                               )}
                             </p>
                           </div>
                         ) : (
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                          <span className="text-[10px] font-semimedium uppercase tracking-wider text-zinc-500">
                             No score
                           </span>
                         )}
 
-                        <span className="text-xl font-bold text-zinc-500 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-zinc-950">
+                        <span className="text-xl font-medium text-zinc-500 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-zinc-950">
                           →
                         </span>
                       </div>
@@ -390,11 +390,11 @@ export default function AssessmentsPage() {
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600">
+                      <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-600">
                         New record
                       </p>
 
-                      <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-950">
+                      <h2 className="mt-2 text-2xl font-medium tracking-tight text-zinc-950">
                         Create assessment
                       </h2>
                     </div>
@@ -402,7 +402,7 @@ export default function AssessmentsPage() {
                     <button
                       type="button"
                       onClick={closeCreateModal}
-                      className="text-xl font-bold leading-none text-zinc-600 transition hover:text-zinc-950"
+                      className="text-xl font-medium leading-none text-zinc-600 transition hover:text-zinc-950"
                     >
                       ×
                     </button>
@@ -412,7 +412,7 @@ export default function AssessmentsPage() {
                   <div className="mt-8">
                     <label
                       htmlFor="assessment-name"
-                      className="text-[10px] font-bold uppercase tracking-widest text-zinc-600"
+                      className="text-[10px] font-medium uppercase tracking-widest text-zinc-600"
                     >
                       Name
                     </label>
@@ -431,7 +431,7 @@ export default function AssessmentsPage() {
                   <div className="mt-5">
                     <label
                       htmlFor="assessment-year"
-                      className="text-[10px] font-bold uppercase tracking-widest text-zinc-600"
+                      className="text-[10px] font-medium uppercase tracking-widest text-zinc-600"
                     >
                       Reporting year
                     </label>
@@ -451,7 +451,7 @@ export default function AssessmentsPage() {
                   <div className="mt-5">
                     <label
                       htmlFor="assessment-description"
-                      className="text-[10px] font-bold uppercase tracking-widest text-zinc-600"
+                      className="text-[10px] font-medium uppercase tracking-widest text-zinc-600"
                     >
                       Description{" "}
                       <span className="normal-case font-medium text-zinc-500">
@@ -482,7 +482,7 @@ export default function AssessmentsPage() {
                       type="button"
                       onClick={closeCreateModal}
                       disabled={creating}
-                      className="border border-zinc-500 bg-white px-5 py-2.5 text-sm font-bold text-zinc-950 transition hover:bg-zinc-100 disabled:opacity-50"
+                      className="border border-zinc-500 bg-white px-5 py-2.5 text-sm font-medium text-zinc-950 transition hover:bg-zinc-100 disabled:opacity-50"
                     >
                       Cancel
                     </button>
@@ -497,7 +497,7 @@ export default function AssessmentsPage() {
                         creating
                       }
                       onClick={handleCreateAssessment}
-                      className="inline-flex items-center gap-1.5 border border-emerald-950 bg-emerald-800 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-950 disabled:cursor-not-allowed disabled:opacity-40"
+                      className="inline-flex items-center gap-1.5 border border-emerald-950 bg-emerald-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-950 disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       {creating ? "Creating…" : "Create"}
                       {!creating && <span aria-hidden="true">→</span>}
