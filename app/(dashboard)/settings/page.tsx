@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 
 type Organization = {
@@ -143,9 +144,9 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen border-x border-zinc-200 mx-24 bg-white">
-        <div className="mx-auto max-w-5xl px-8 py-20">
-          <p className="text-xs text-zinc-400">retrieving settings…</p>
+      <main className="bg-zinc-100 px-12">
+        <div className="mx-12 border-x border-zinc-300 bg-white py-10 sm:px-10">
+          <p className="text-xs font-medium text-zinc-600">retrieving settings…</p>
         </div>
       </main>
     );
@@ -153,9 +154,9 @@ export default function SettingsPage() {
 
   if (!organization) {
     return (
-      <main className="min-h-screen border-x border-zinc-200 mx-24 bg-white">
-        <div className="mx-auto max-w-5xl px-8 py-20">
-          <p className="text-sm text-red-600">
+      <main className="bg-zinc-100 px-12">
+        <div className="mx-12 border-x border-emerald-800/30  bg-white py-10 sm:px-10">
+          <p className="text-sm font-medium text-red-700">
             {error ?? "Organization not found"}
           </p>
         </div>
@@ -164,32 +165,34 @@ export default function SettingsPage() {
   }
 
   return (
-    <main className="min-h-screen border-x border-zinc-200 mx-24 bg-white">
-      <div className="mx-auto max-w-5xl px-8 py-20">
+    <main className="bg-zinc-100 px-12">
+      <div className="mx-12 border-x border-emerald-800/30  bg-white py-10 sm:px-10">
         {/* Header */}
-        <div className="border-b border-zinc-200 pb-8">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-zinc-400">
+        <div className="border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)] sticky top-12 z-20 bg-white pb-8 -mx-10">
+          <div className="mx-10">
+          <p className="text-[11px] bg-white font-medium uppercase tracking-[0.2em] text-zinc-600">
             Account configuration
           </p>
-
-          <h1 className="mt-3 text-4xl tracking-tight text-zinc-900">
+          <h1 className="mt-3 text-4xl font-medium tracking-tight text-zinc-950">
             Settings
           </h1>
 
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-500">
+          <p className="mt-3 max-w-2xl text-sm font-medium leading-6 text-zinc-700">
             Manage your organization&apos;s information and account settings.
-          </p>
+          </p>        
+          </div>
+
         </div>
 
         {/* Organization */}
         <section className="mt-12">
-          <div className="flex items-end justify-between border-b border-zinc-200 pb-5">
+          <div className="flex items-end justify-between border-b border-zinc-300 pb-5">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.2em] text-zinc-400">
+              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
                 Organization
               </p>
 
-              <h2 className="mt-2 text-2xl tracking-tight text-zinc-900">
+              <h2 className="mt-2 text-2xl font-medium tracking-tight text-zinc-950">
                 Organization information
               </h2>
             </div>
@@ -202,7 +205,7 @@ export default function SettingsPage() {
                   setMessage(null);
                   setError(null);
                 }}
-                className="rounded-sm border border-zinc-200 bg-white px-4 py-2 text-xs font-medium text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50"
+                className="border border-zinc-500 bg-white px-4 py-2 text-xs font-medium text-zinc-800 transition hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
               >
                 Edit information
               </button>
@@ -210,72 +213,82 @@ export default function SettingsPage() {
           </div>
 
           {editing ? (
-            <div className="mt-6 space-y-5">
+            <div className="mt-6 border border-zinc-300 bg-zinc-50 p-5 space-y-5">
               <div>
-                <label className="text-xs text-zinc-500">
+                <label className="text-xs font-medium text-zinc-600">
                   Organization name
                 </label>
 
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400"
+                  className="mt-2 w-full border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
                 />
               </div>
 
               <div>
-                <label className="text-xs text-zinc-500">Industry</label>
+                <label className="text-xs font-medium text-zinc-600">
+                  Industry
+                </label>
 
                 <input
                   value={industry}
                   onChange={(e) => setIndustry(e.target.value)}
-                  className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400"
+                  className="mt-2 w-full border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
                 />
               </div>
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="text-xs text-zinc-500">Employees</label>
+                  <label className="text-xs font-medium text-zinc-600">
+                    Employees
+                  </label>
 
                   <input
                     type="number"
                     min={1}
                     value={employeeCount}
                     onChange={(e) => setEmployeeCount(e.target.value)}
-                    className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400"
+                    className="mt-2 w-full border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs text-zinc-500">Country</label>
+                  <label className="text-xs font-medium text-zinc-600">
+                    Country
+                  </label>
 
                   <input
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                    className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400"
+                    className="mt-2 w-full border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
                   />
                 </div>
               </div>
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="text-xs text-zinc-500">City</label>
+                  <label className="text-xs font-medium text-zinc-600">
+                    City
+                  </label>
 
                   <input
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400"
+                    className="mt-2 w-full border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs text-zinc-500">Founded</label>
+                  <label className="text-xs font-medium text-zinc-600">
+                    Founded
+                  </label>
 
                   <input
                     type="date"
                     value={foundedAt}
                     onChange={(e) => setFoundedAt(e.target.value)}
-                    className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400"
+                    className="mt-2 w-full border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
                   />
                 </div>
               </div>
@@ -287,7 +300,7 @@ export default function SettingsPage() {
                   type="button"
                   onClick={cancelEditing}
                   disabled={saving}
-                  className="rounded-sm border border-zinc-200 bg-white px-5 py-2.5 text-sm font-medium text-zinc-700 transition hover:border-zinc-300 disabled:opacity-50"
+                  className="border border-zinc-500 bg-white px-5 py-2.5 text-sm font-medium text-zinc-950 transition hover:bg-zinc-100 disabled:opacity-50"
                 >
                   Cancel
                 </button>
@@ -302,14 +315,14 @@ export default function SettingsPage() {
                     !employeeCount ||
                     !country.trim()
                   }
-                  className="rounded-sm bg-zinc-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="border border-zinc-950 bg-zinc-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {saving ? "Saving…" : "Save changes"}
                 </button>
               </div>
             </div>
           ) : (
-            <div className="divide-y divide-zinc-100">
+            <div className="border border-zinc-300 bg-white">
               <SettingRow label="Organization name" value={organization.name} />
 
               <SettingRow label="Email" value={organization.email} />
@@ -342,43 +355,43 @@ export default function SettingsPage() {
 
         {/* Account */}
         <section className="mt-16">
-          <div className="border-b border-zinc-200 pb-5">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-zinc-400">
+          <div className="border-b border-zinc-300 pb-5">
+            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
               Account
             </p>
 
-            <h2 className="mt-2 text-2xl tracking-tight text-zinc-900">
+            <h2 className="mt-2 text-2xl font-medium tracking-tight text-zinc-950">
               Account & security
             </h2>
           </div>
 
-          <div className="divide-y divide-zinc-100">
-            <div className="flex items-center justify-between gap-6 py-5">
+          <div className="border border-zinc-300 bg-white">
+            <div className="flex items-center justify-between gap-6 border-b border-zinc-300 p-5">
               <div>
-                <p className="text-sm font-medium text-zinc-900">
+                <p className="text-sm font-medium text-zinc-950">
                   Account email
                 </p>
 
-                <p className="mt-1 text-sm text-zinc-500">
+                <p className="mt-1 text-sm font-medium text-zinc-700">
                   {organization.email}
                 </p>
               </div>
 
-              <span className="text-xs text-zinc-400">Primary</span>
+              <span className="text-xs font-medium text-zinc-600">Primary</span>
             </div>
 
-            <div className="flex items-center justify-between gap-6 py-5">
+            <div className="flex items-center justify-between gap-6 p-5">
               <div>
-                <p className="text-sm font-medium text-zinc-900">Password</p>
+                <p className="text-sm font-medium text-zinc-950">Password</p>
 
-                <p className="mt-1 text-sm text-zinc-500">
+                <p className="mt-1 text-sm font-medium text-zinc-700">
                   Your organization account password
                 </p>
               </div>
 
               <button
                 type="button"
-                className="rounded-sm border border-zinc-200 bg-white px-4 py-2 text-xs font-medium text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50"
+                className="border border-zinc-500 bg-white px-4 py-2 text-xs font-medium text-zinc-800 transition hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
               >
                 Change password
               </button>
@@ -388,76 +401,79 @@ export default function SettingsPage() {
 
         {/* Data */}
         <section className="mt-16">
-          <div className="border-b border-zinc-200 pb-5">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-zinc-400">
+          <div className="border-b border-zinc-300 pb-5">
+            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
               Data
             </p>
 
-            <h2 className="mt-2 text-2xl tracking-tight text-zinc-900">
+            <h2 className="mt-2 text-2xl font-medium tracking-tight text-zinc-950">
               Documents & assessments
             </h2>
           </div>
 
-          <div className="divide-y divide-zinc-100">
-            <div className="flex items-center justify-between gap-6 py-5">
+          <div className="border border-zinc-300 bg-white">
+            <div className="flex items-center justify-between gap-6 border-b border-zinc-300 p-5">
               <div>
-                <p className="text-sm font-medium text-zinc-900">
+                <p className="text-sm font-medium text-zinc-950">
                   Document archive
                 </p>
 
-                <p className="mt-1 text-sm text-zinc-500">
+                <p className="mt-1 text-sm font-medium text-zinc-700">
                   View documents uploaded across your ESG assessments.
                 </p>
               </div>
 
-              <a
+              <Link
                 href="/documents"
-                className="rounded-sm border border-zinc-200 bg-white px-4 py-2 text-xs font-medium text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50"
+                className="border border-zinc-500 bg-white px-4 py-2 text-xs font-medium text-zinc-800 transition hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
               >
                 View documents
-              </a>
+              </Link>
             </div>
 
-            <div className="flex items-center justify-between gap-6 py-5">
+            <div className="flex items-center justify-between gap-6 p-5">
               <div>
-                <p className="text-sm font-medium text-zinc-900">Assessments</p>
+                <p className="text-sm font-medium text-zinc-950">Assessments</p>
 
-                <p className="mt-1 text-sm text-zinc-500">
+                <p className="mt-1 text-sm font-medium text-zinc-700">
                   Manage your organization&apos;s ESG assessments.
                 </p>
               </div>
 
-              <a
+              <Link
                 href="/assessments"
-                className="rounded-sm border border-zinc-200 bg-white px-4 py-2 text-xs font-medium text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50"
+                className="border border-zinc-500 bg-white px-4 py-2 text-xs font-medium text-zinc-800 transition hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
               >
                 View assessments
-              </a>
+              </Link>
             </div>
           </div>
         </section>
 
         {/* Danger Zone */}
         <section className="mt-16 pb-10">
-          <div className="border-b border-red-100 pb-5">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-red-400">
+          <div className="border-b border-red-300 pb-5 -mx-10">
+            <div className="mx-10">
+                     <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-red-600 px-1">
               Danger zone
             </p>
 
-            <h2 className="mt-2 text-2xl tracking-tight text-zinc-900">
+            <h2 className="mt-2 text-2xl font-medium tracking-tight text-zinc-950">
               Delete organization
-            </h2>
+            </h2>     
+            </div>
+
           </div>
 
-          <div className="mt-5 rounded-xl border border-red-100 bg-red-50/40 p-5">
-            <p className="text-sm text-zinc-700">
+          <div className="mt-5 border border-red-300 bg-red-50 p-5">
+            <p className="text-sm font-medium text-zinc-800">
               Permanently delete your organization and its associated
               assessments, documents, metrics, scores, and recommendations.
             </p>
 
             <button
               type="button"
-              className="mt-4 rounded-sm border border-red-200 bg-white px-4 py-2 text-xs font-medium text-red-600 transition hover:border-red-300 hover:bg-red-50"
+              className="mt-4 border border-red-400 bg-white px-4 py-2 text-xs font-medium text-red-700 transition hover:bg-red-100"
             >
               Delete organization
             </button>
@@ -483,10 +499,10 @@ export default function SettingsPage() {
 
 function SettingRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-8 py-5">
-      <span className="text-sm text-zinc-500">{label}</span>
+    <div className="flex items-center justify-between gap-8 border-b border-zinc-300 p-5 last:border-b-0">
+      <span className="text-sm font-medium text-zinc-700">{label}</span>
 
-      <span className="text-right text-sm text-zinc-900">{value}</span>
+      <span className="text-right text-sm font-medium text-zinc-950">{value}</span>
     </div>
   );
 }
