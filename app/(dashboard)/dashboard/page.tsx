@@ -8,7 +8,7 @@ import FAQSection from "@/components/dashboard/FAQSection";
 export default function Dashboard() {
   return (
     <div className="px-12">
-      <div className="relative overflow-hidden border-x border-zinc-300 h-[850px]">
+      <div className="mx-12 relative overflow-hidden border-x border-zinc-300 h-[850px]">
         {/* Background */}
         <BubblePage />
         {/* Hero content */}

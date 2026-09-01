@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const NAV_ITEMS = [
   { href: "/organization", label: "Overview" },
-  { href: "/assessment", label: "Assessments" },
+  { href: "/assessments", label: "Assessments" },
   { href: "/documents", label: "Documents" },
   { href: "/metrics", label: "ESG Metrics" },
   { href: "/reports", label: "Reports" },
