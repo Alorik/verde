@@ -160,7 +160,7 @@ export default function OrganizationDashboard() {
     <div className=" bg-zinc-100 px-12">
       <div className="mx-12 border-x border-emerald-800/30  bg-white py-10 sm:px-10 ">
         {/* Eyebrow + stamp row */}
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between bg-white">
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -192,9 +192,9 @@ export default function OrganizationDashboard() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-4 text-4xl font-medium tracking-tight text-zinc-950 border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)] -mx-10"
+          className="mt-5 text-4xl font-medium sticky top-17 z-20 bg-white tracking-tight text-zinc-950 border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)] -mx-10"
         >
-          <div className="mx-10  mb-8 ">{organization.name}</div>
+          <div className="mx-10 mb-8 ">{organization.name}</div>
         </motion.h1>
 
         {/* Field list */}
