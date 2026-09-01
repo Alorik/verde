@@ -204,7 +204,7 @@ export default function OrganizationDashboard() {
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.7, delay: 0.3, ease: [0.65, 0, 0.35, 1] }}
           style={{ transformOrigin: "left" }}
-          className="mt-8 h-1 w-full bg-zinc-900"
+          className="mt-8 h-0.5 w-full bg-zinc-300"
         />
 
         {/* Field list */}

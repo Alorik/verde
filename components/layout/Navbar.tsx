@@ -61,10 +61,10 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                className={`relative border px-3 py-2 text-sm font-semibold transition-colors ${
                   isActive
-                    ? "text-emerald-700"
-                    : "text-zinc-500 hover:text-zinc-900"
+                    ? "border-emerald-300 text-emerald-900"
+                    : "border-transparent text-zinc-600 hover:text-zinc-950"
                 }`}
               >
                 {item.label}
@@ -72,7 +72,7 @@ export default function Navbar() {
                   <motion.span
                     layoutId="navbar-active-pill"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    className="absolute inset-0 -z-10 rounded-md bg-emerald-50"
+                    className="absolute inset-0 -z-10 border border-emerald-300 bg-emerald-100"
                   />
                 )}
               </Link>
