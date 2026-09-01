@@ -165,7 +165,7 @@ export default function OrganizationDashboard() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
-            className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600"
+            className="text-[11px] px-1 font-medium uppercase tracking-[0.2em] text-zinc-600"
           >
             Organization record
           </motion.p>
@@ -188,24 +188,14 @@ export default function OrganizationDashboard() {
           </motion.div>
         </div>
 
-
         <motion.h1
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-4 text-4xl font-medium tracking-tight text-zinc-950"
+          className="mt-4 text-4xl font-medium tracking-tight text-zinc-950 border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)] -mx-10"
         >
-          {organization.name}
+          <div className="mx-10  mb-8 ">{organization.name}</div>
         </motion.h1>
-
-        {/* Drawn rule */}
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 0.7, delay: 0.3, ease: [0.65, 0, 0.35, 1] }}
-          style={{ transformOrigin: "left" }}
-          className="mt-8 h-0.5 w-full bg-zinc-300 -mx-10"
-        />
 
         {/* Field list */}
         <motion.dl

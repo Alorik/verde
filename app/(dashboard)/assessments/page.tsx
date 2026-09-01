@@ -190,7 +190,7 @@ export default function AssessmentsPage() {
         {/* Header */}
         <div className="flex flex-col gap-6 border-b sticky top-12 -mx-10 border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)] pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div className="mx-10">
-            <p className="text-[11px] font-medium uppercase tracking-[0.2em]  text-zinc-600">
+            <p className="text-[11px] px-1 font-medium uppercase tracking-[0.2em]  text-zinc-600">
               ESG reporting
             </p>
 
