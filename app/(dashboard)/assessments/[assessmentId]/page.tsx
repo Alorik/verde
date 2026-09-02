@@ -354,7 +354,7 @@ function DocumentCard({ doc }: { doc: Document }) {
         </span>
 
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 sticky top-12">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <span className="truncate text-sm font-medium text-zinc-950">
               {doc.fileName}
             </span>
