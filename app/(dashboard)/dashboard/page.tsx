@@ -15,7 +15,7 @@ export default function Dashboard() {
         {/* Hero content */}
         <HeroSection />
       </div>
-      {/* <Flowgraph /> */}
+    
       <HowWeWorkSection />
       <WhyUsSection />
       <FAQSection />

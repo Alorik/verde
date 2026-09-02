@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import Flowgraph from "../FlowGraph";
 
 export default function HowWeWorkSection() {
   const prefersReducedMotion = useReducedMotion();
@@ -52,9 +53,9 @@ export default function HowWeWorkSection() {
         {/* INTRO + FLOW GRAPH */}
         {/* ========================================================= */}
 
-        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-baseline">
           {/* LEFT — ESG text */}
-          <div className="max-w-2xl">
+          <div className="max-w-2xl  ">
             <motion.h2
               initial={{
                 opacity: 0,
@@ -72,26 +73,6 @@ export default function HowWeWorkSection() {
               <br />
               to ESG insight.
             </motion.h2>
-
-            <motion.p
-              initial={{
-                opacity: 0,
-                y: prefersReducedMotion ? 0 : 10,
-              }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-              }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.5,
-                delay: 0.1,
-              }}
-              className="mt-6 max-w-xl text-sm leading-6 text-zinc-500"
-            >
-              Turn your sustainability documents into structured ESG data,
-              measurable performance, and recommendations for improvement.
-            </motion.p>
           </div>
 
           <div className="relative border border-emerald-700/40 bg-zinc-50 p-6 sm:p-8">
@@ -268,42 +249,9 @@ export default function HowWeWorkSection() {
         {/* ========================================================= */}
         {/* STEP BOXES */}
         {/* ========================================================= */}
-
-        <div className="mt-16 grid border-t border-emerald-700/20 md:grid-cols-4">
-          {steps.map((step, index) => (
-            <motion.div
-              key={step.number}
-              initial={{
-                opacity: 0,
-                y: prefersReducedMotion ? 0 : 10,
-              }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-              }}
-              viewport={{
-                once: true,
-                amount: 0.2,
-              }}
-              transition={{
-                duration: 0.45,
-                delay: index * 0.08,
-              }}
-              className="border-b border-emerald-700/20 py-8 md:border-b-0 md:border-r md:px-8 md:first:pl-0 md:last:border-r-0"
-            >
-              <p className="text-xs text-zinc-400">{step.number}</p>
-
-              <h3 className="mt-8 text-lg font-medium tracking-tight text-zinc-900">
-                {step.title}
-              </h3>
-
-              <p className="mt-4 text-sm leading-6 text-zinc-500">
-                {step.description}
-              </p>
-            </motion.div>
-          ))}
-        </div>
       </div>
+
+      <Flowgraph />
     </section>
   );
 }
