@@ -12,7 +12,20 @@ export async function GET(
         id: assessmentId,
       },
       include: {
-        documents: true,
+        documents: {
+          include: {
+            electricity: true,
+            water: true,
+            employeeData: true,
+            csrReport: true,
+            esgMetrics: true,
+          },
+        },
+        esgScore: {
+          include: {
+            metrics: true,
+          },
+        },
       },
     });
 

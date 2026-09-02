@@ -22,6 +22,28 @@ type Assessment = {
 
 type Organization = { name: string; assessments: Assessment[] };
 
+type DetailAssessment = Assessment & {
+  description: string | null;
+  updatedAt: string;
+  documents: Array<{
+    id: string;
+    fileName: string;
+    documentType: string;
+    fileSize: number;
+    uploadedAt: string;
+    extractionStatus: string;
+    electricity: Record<string, unknown> | null;
+    water: Record<string, unknown> | null;
+    employeeData: Record<string, unknown> | null;
+    csrReport: Record<string, unknown> | null;
+    esgMetrics: Array<Record<string, unknown>>;
+  }>;
+  esgScore: (Assessment["esgScore"] & {
+    calculatedAt?: string;
+    metrics?: Array<Record<string, unknown>>;
+  }) | null;
+};
+
 function score(value: Score) {
   return value == null ? "—" : Number(value).toFixed(1);
 }
@@ -33,6 +55,22 @@ function statusLabel(status: string) {
 export default function ReportsPage() {
   const [organization, setOrganization] = useState<Organization | null>(null);
   const [loading, setLoading] = useState(true);
+  const [detail, setDetail] = useState<DetailAssessment | null>(null);
+  const [detailLoading, setDetailLoading] = useState(false);
+
+  async function openDetail(assessmentId: string) {
+    setDetailLoading(true);
+    try {
+      const response = await fetch(`/api/assessments/${assessmentId}`);
+      if (!response.ok) throw new Error("Failed to load detailed report");
+      const data = await response.json();
+      setDetail(data.assessment);
+    } catch (error) {
+      console.error("Failed to load detailed report:", error);
+    } finally {
+      setDetailLoading(false);
+    }
+  }
 
   useEffect(() => {
     async function loadReports() {
@@ -141,13 +179,62 @@ export default function ReportsPage() {
                         </div>
                       ))}
                     </div>
-                    <Link href={`/assessments/${assessment.id}`} className="mt-4 inline-flex border border-zinc-500 px-3 py-1.5 text-xs font-bold text-zinc-800 hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900">Open assessment →</Link>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      <Link href={`/assessments/${assessment.id}`} className="inline-flex border border-zinc-500 px-3 py-1.5 text-xs font-bold text-zinc-800 hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900">View assessment →</Link>
+                      <button type="button" onClick={() => openDetail(assessment.id)} className="border border-emerald-700 bg-emerald-800 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-950">View detailed report</button>
+                    </div>
                   </article>
                 );
               })}
             </div>
           )}
         </section>
+
+        {(detailLoading || detail) && (
+          <div className="fixed inset-0 z-50 flex justify-end bg-zinc-950/30" onMouseDown={(event) => { if (event.target === event.currentTarget) setDetail(null); }}>
+            <aside className="h-full w-full max-w-2xl overflow-y-auto border-l border-zinc-400 bg-white p-6 shadow-2xl sm:p-10">
+              <div className="flex items-start justify-between border-b-4 border-zinc-950 pb-5">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600">Detailed report</p>
+                  <h2 className="mt-2 text-2xl font-bold text-zinc-950">{detail?.name ?? "Loading report…"}</h2>
+                </div>
+                <button type="button" onClick={() => setDetail(null)} className="border border-zinc-500 px-3 py-1 text-lg font-bold text-zinc-700 hover:bg-zinc-100" aria-label="Close detailed report">×</button>
+              </div>
+
+              {detailLoading && !detail ? (
+                <p className="mt-8 text-sm font-semibold text-zinc-600">Loading report details…</p>
+              ) : detail ? (
+                <div className="mt-6 space-y-8">
+                  <div className="grid grid-cols-2 border-l border-t border-zinc-300 sm:grid-cols-4">
+                    {[["Overall", detail.esgScore?.overallScore], ["Environmental", detail.esgScore?.environmentalScore], ["Social", detail.esgScore?.socialScore], ["Governance", detail.esgScore?.governanceScore]].map(([label, value]) => (
+                      <div key={label as string} className="border-b border-r border-zinc-300 bg-zinc-50 p-3"><p className="text-[9px] font-bold uppercase tracking-wider text-zinc-600">{label as string}</p><p className="mt-1 text-xl font-bold text-zinc-950">{score(value as Score)}</p></div>
+                    ))}
+                  </div>
+
+                  <div className="border border-zinc-300">
+                    <div className="border-b border-zinc-300 bg-zinc-950 p-4 text-sm font-bold text-white">Assessment details</div>
+                    <div className="grid gap-3 p-4 text-sm sm:grid-cols-2"><p><span className="font-bold text-zinc-600">Status:</span> {statusLabel(detail.status)}</p><p><span className="font-bold text-zinc-600">Reporting year:</span> {detail.reportingYear}</p><p><span className="font-bold text-zinc-600">Created:</span> {new Date(detail.createdAt).toLocaleString()}</p><p><span className="font-bold text-zinc-600">Updated:</span> {new Date(detail.updatedAt).toLocaleString()}</p></div>
+                    {detail.description && <p className="border-t border-zinc-300 p-4 text-sm font-medium text-zinc-800">{detail.description}</p>}
+                  </div>
+
+                  <div>
+                    <h3 className="border-b border-zinc-300 pb-3 text-lg font-bold text-zinc-950">Uploaded documents</h3>
+                    <div className="mt-4 space-y-3">
+                      {detail.documents.length === 0 ? <p className="text-sm font-medium text-zinc-600">No documents uploaded.</p> : detail.documents.map((doc) => (
+                        <div key={doc.id} className="border border-zinc-300 bg-zinc-50 p-4">
+                          <div className="flex flex-wrap items-start justify-between gap-3"><p className="text-sm font-bold text-zinc-950">{doc.fileName}</p><span className="border border-zinc-400 px-2 py-1 text-[10px] font-bold uppercase text-zinc-700">{doc.extractionStatus}</span></div>
+                          <p className="mt-2 text-[11px] font-semibold uppercase tracking-wide text-zinc-600">{doc.documentType.replace(/_/g, " ")} · {(doc.fileSize / 1024).toFixed(1)} KB · Uploaded {new Date(doc.uploadedAt).toLocaleString()}</p>
+                          {[doc.electricity, doc.water, doc.employeeData, doc.csrReport].filter(Boolean).map((values, index) => <div key={index} className="mt-3 grid grid-cols-2 gap-2 border-t border-zinc-300 pt-3 text-xs">{Object.entries(values as Record<string, unknown>).filter(([key]) => !["id", "documentId"].includes(key)).map(([key, value]) => <p key={key}><span className="font-bold text-zinc-600">{key.replace(/([A-Z])/g, " $1")}:</span> {String(value)}</p>)}</div>)}
+                          {doc.esgMetrics.length > 0 && <div className="mt-3 border-t border-zinc-300 pt-3"><p className="text-[10px] font-bold uppercase tracking-wider text-zinc-600">Calculated metrics</p>{doc.esgMetrics.map((metric, index) => <p key={index} className="mt-1 text-xs font-medium text-zinc-800">{Object.entries(metric).filter(([key]) => !["id", "esgScoreId"].includes(key)).map(([key, value]) => `${key}: ${String(value)}`).join(" · ")}</p>)}</div>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+            </aside>
+          </div>
+        )}
       </div>
     </main>
   );
