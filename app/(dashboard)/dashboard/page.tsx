@@ -4,6 +4,7 @@ import FooterSection from "@/components/dashboard/Footer";
 import HowWeWorkSection from "@/components/dashboard/HowWorkSection";
 import WhyUsSection from "@/components/dashboard/WhyUs";
 import FAQSection from "@/components/dashboard/FAQSection";
+import Flowgraph from "@/components/FlowGraph";
 
 export default function Dashboard() {
   return (
@@ -14,6 +15,7 @@ export default function Dashboard() {
         {/* Hero content */}
         <HeroSection />
       </div>
+      {/* <Flowgraph /> */}
       <HowWeWorkSection />
       <WhyUsSection />
       <FAQSection />
