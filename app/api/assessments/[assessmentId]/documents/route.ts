@@ -11,6 +11,7 @@ import { normalizeToCubicMeter } from "@/lib/extraction/normalize/normalizeWter"
 import { extractElectricityData } from "@/lib/extraction/Environment/Electricity";
 import { extractWaterData } from "@/lib/extraction/Environment/water";
 import { extractEmployeeData } from "@/lib/extraction/social/EmployeeData";
+import { extractCSRData } from "@/lib/extraction/Governance/Csr";
 
 const allowedDocumentTypes: DocumentType[] = [
   DocumentType.ELECTRICITY_BILL,
@@ -318,7 +319,45 @@ export async function POST(
       }
     }
 
-    // CSR / OTHER
+    // CSR REPORT
+    else if (documentType === DocumentType.CSR_REPORT) {
+      try {
+        await prisma.document.update({
+          where: { id: document.id },
+          data: { extractionStatus: "PROCESSING" },
+        });
+
+        const extractedCSR = await extractCSRData(file);
+
+        await prisma.cSRReport.create({
+          data: {
+            documentId: document.id,
+            boardIndependence: extractedCSR.boardIndependence,
+            ethicsPolicy: extractedCSR.ethicsPolicy,
+            antiCorruptionPolicy: extractedCSR.antiCorruptionPolicy,
+            whistleblowerPolicy: extractedCSR.whistleblowerPolicy,
+            riskManagement: extractedCSR.riskManagement,
+            regulatoryCompliance: extractedCSR.regulatoryCompliance,
+            governanceTraining: extractedCSR.governanceTraining,
+            complianceIncidents: extractedCSR.complianceIncidents,
+          },
+        });
+
+        await prisma.document.update({
+          where: { id: document.id },
+          data: { extractionStatus: "COMPLETED" },
+        });
+      } catch (error) {
+        console.error("CSR extraction failed:", error);
+
+        await prisma.document.update({
+          where: { id: document.id },
+          data: { extractionStatus: "FAILED" },
+        });
+      }
+    }
+
+    // OTHER
     else {
       await prisma.document.update({
         where: { id: document.id },
