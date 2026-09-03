@@ -97,12 +97,12 @@ export default function Navbar() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 24 }}
                 transition={{ type: "spring", stiffness: 320, damping: 24 }}
-                className="absolute right-0 top-12 w-36 origin-top-right overflow-hidden border border-zinc-400 bg-white shadow-xl"
+                className="absolute right-0 top-12 w-36 origin-top-right overflow-hidden border border-zinc-400 bg-white shadow-xl z-9999"
               >
                 <button
                   type="button"
                   onClick={() => signOut()}
-                  className="block w-full cursor-pointer border-b-2 border-transparent px-4 py-3 text-left text-sm font-medium text-zinc-800 transition-colors hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
+                  className="block w-full cursor-pointer border-b-2 border-transparent px-4 py-3 text-left text-sm font-medium text-zinc-800 transition-colors hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900 z-9999999"
                 >
                   Log out
                 </button>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+
 import { useEffect, useState } from "react";
 import {
   FileText,
@@ -11,6 +12,7 @@ import {
   Users,
   ShieldCheck,
   ArrowUpRight,
+  Download
 } from "lucide-react";
 
 type Score = number | string | null;
@@ -101,7 +103,13 @@ export default function ReportPage({
   params,
 }: {
   params: Promise<{ assessmentId: string }>;
-}) {
+  }) {
+  
+  const handleDownloadPDF = () => {
+    window.print();
+  };
+  
+  
   const [assessment, setAssessment] = useState<Assessment | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -169,15 +177,26 @@ export default function ReportPage({
             HEADER
         ========================================================= */}
 
-        <header className="relative border-b -mx-10 border-emerald-700/30 pb-10 z-999 sticky top-16 bg-white">
+        <header className="relative -mx-10 border-b border-emerald-700/30 bg-white pb-10 sticky top-16 z-999 print:static print:mx-0 print:border-b print:bg-white">
           <div className="mx-10">
             {" "}
-            <Link
-              href="/reports"
-              className="mt-6  inline-flex border border-emerald-700/30 hover:border-emerald-700 px-4 py-2 text-sm font-medium hover:bg-emerald-50 "
-            >
-              ← Back to reports
-            </Link>
+            <div className="mt-6 flex items-center gap-3 print:hidden">
+              <Link
+                href="/reports"
+                className="inline-flex items-center border border-emerald-700/30 px-4 py-2 text-sm font-medium transition hover:border-emerald-700 hover:bg-emerald-50"
+              >
+                ← Back to reports
+              </Link>
+
+              <button
+                type="button"
+                onClick={handleDownloadPDF}
+                className="inline-flex items-center gap-2 border border-emerald-700 bg-emerald-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-800"
+              >
+                <Download size={14} />
+                Download PDF
+              </button>
+            </div>
             <div className="mt-4 flex flex-col justify-between gap-10 md:flex-row md:items-end">
               <div>
                 <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-emerald-800">

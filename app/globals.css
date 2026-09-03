@@ -30,3 +30,70 @@ body {
   color: var(--foreground);
 
 }
+
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  html,
+  body {
+    background: white !important;
+  }
+
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Remove the large screen-only outer spacing */
+  main {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    background: white !important;
+  }
+
+  /* Make the report use the full printable width */
+  main > div {
+    margin: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    min-height: auto !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Don't print UI-only elements */
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /* Prevent ugly shadows in PDF */
+  * {
+    box-shadow: none !important;
+  }
+
+  /* Avoid splitting cards across pages where possible */
+  section,
+  header,
+  .group {
+    break-inside: avoid;
+  }
+
+  /* Tables should be allowed to continue across pages */
+  table {
+    break-inside: auto;
+  }
+
+  tr {
+    break-inside: avoid;
+    break-after: auto;
+  }
+
+  /* Don't show hover transforms in PDF */
+  .group:hover > div {
+    transform: none !important;
+  }
+}
