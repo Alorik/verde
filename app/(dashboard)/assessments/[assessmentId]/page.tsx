@@ -451,18 +451,23 @@ export default function AssessmentDetail({
 
   const prefersReducedMotion = useReducedMotion();
 
-  async function loadAssessment(assessmentId: string) {
-    const response = await fetch(`/api/assessments/${assessmentId}`);
+async function loadAssessment(assessmentId: string) {
+  const response = await fetch(`/api/assessments/${assessmentId}`);
 
-    if (!response.ok) {
-      console.error("failed to load assessment");
-      return;
-    }
-
-    const data = await response.json();
-
-    setAssessment(data.assessment);
+  if (!response.ok) {
+    console.error("failed to load assessment");
+    return;
   }
+
+  const data = await response.json();
+
+  const assessmentData = data.assessment;
+
+  setAssessment({
+    ...assessmentData,
+    documents: getLatestDocuments(assessmentData.documents),
+  });
+}
 
   const UPLOAD_TYPES: {
     type: DocumentType;
@@ -485,6 +490,24 @@ export default function AssessmentDetail({
       label: "Employee data",
     },
   ];
+
+  function getLatestDocuments(documents: Document[]) {
+    const latest = new Map<DocumentType, Document>();
+
+    for (const doc of documents) {
+      const existing = latest.get(doc.documentType);
+
+      if (
+        !existing ||
+        new Date(doc.uploadedAt).getTime() >
+          new Date(existing.uploadedAt).getTime()
+      ) {
+        latest.set(doc.documentType, doc);
+      }
+    }
+
+    return Array.from(latest.values());
+  }
 
   async function handleUpload(type: DocumentType, file: File) {
     if (!assessment) return;
@@ -542,32 +565,37 @@ export default function AssessmentDetail({
     setCalculating(false);
   }
 
-  useEffect(() => {
-    let cancelled = false;
+ useEffect(() => {
+   let cancelled = false;
 
-    async function load() {
-      const { assessmentId } = await params;
+   async function load() {
+     const { assessmentId } = await params;
 
-      const response = await fetch(`/api/assessments/${assessmentId}`);
+     const response = await fetch(`/api/assessments/${assessmentId}`);
 
-      if (!response.ok) {
-        console.error("failed to load assessment");
-        return;
-      }
+     if (!response.ok) {
+       console.error("failed to load assessment");
+       return;
+     }
 
-      const data = await response.json();
+     const data = await response.json();
 
-      if (!cancelled) {
-        setAssessment(data.assessment);
-      }
-    }
+     if (!cancelled) {
+       const assessmentData = data.assessment;
 
-    load();
+       setAssessment({
+         ...assessmentData,
+         documents: getLatestDocuments(assessmentData.documents),
+       });
+     }
+   }
 
-    return () => {
-      cancelled = true;
-    };
-  }, [params]);
+   load();
+
+   return () => {
+     cancelled = true;
+   };
+ }, [params]);
 
   useEffect(() => {
     if (!assessment) return;
