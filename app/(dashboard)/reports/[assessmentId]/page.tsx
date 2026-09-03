@@ -12,7 +12,7 @@ import {
   Users,
   ShieldCheck,
   ArrowUpRight,
-  Download
+  Download,
 } from "lucide-react";
 
 type Score = number | string | null;
@@ -103,13 +103,11 @@ export default function ReportPage({
   params,
 }: {
   params: Promise<{ assessmentId: string }>;
-  }) {
-  
+}) {
   const handleDownloadPDF = () => {
     window.print();
   };
-  
-  
+
   const [assessment, setAssessment] = useState<Assessment | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -169,6 +167,21 @@ export default function ReportPage({
   }
 
   const current = assessment.esgScore;
+  const latestDocuments = Object.values(
+    assessment.documents.reduce<
+      Record<string, Assessment["documents"][number]>
+    >((acc, document) => {
+      if (
+        !acc[document.documentType] ||
+        new Date(document.uploadedAt) >
+          new Date(acc[document.documentType].uploadedAt)
+      ) {
+        acc[document.documentType] = document;
+      }
+
+      return acc;
+    }, {}),
+  );
 
   return (
     <main className="min-h-screen bg-zinc-100 px-12">
@@ -374,13 +387,12 @@ export default function ReportPage({
                 </p>
               </div>
             ) : (
-              assessment.documents.map((doc, index) => (
+              latestDocuments.map((doc, index) => (
                 <DocumentCard key={doc.id} document={doc} index={index} />
               ))
             )}
           </div>
         </section>
-
         {/* =========================================================
             FOOTER
         ========================================================= */}
