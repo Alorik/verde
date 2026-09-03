@@ -227,18 +227,18 @@ export default function OrganizationDashboard() {
           transition={{ duration: 0.5, delay: 1.2 }}
           className="mt-14"
         >
-          <div className="flex flex-col gap-5 border border-zinc-300 bg-zinc-950 p-5 text-white sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex flex-col gap-5 border border-zinc-300 bg-emerald-50 p-5  sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-400">
+              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-900">
                 Assessments
               </p>
-              <h2 className="mt-2 text-2xl font-medium tracking-tight text-white">
+              <h2 className="mt-2 text-2xl font-medium tracking-tight">
                 ESG Assessments
               </h2>
             </div>
 
             <div className="flex items-center gap-4">
-              <span className="text-xs font-semimedium text-zinc-300">
+              <span className="text-xs font-semimedium text-zinc-900">
                 {organization.assessments.length} total
               </span>
 

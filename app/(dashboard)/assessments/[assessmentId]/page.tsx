@@ -721,7 +721,7 @@ async function loadAssessment(assessmentId: string) {
                 delay: 0.05,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="justify-self-start truncate text-4xl font-medium tracking-tight text-zinc-950 sm:text-5xl"
+              className="justify-self-start truncate text-4xl font-medium tracking-tight text-zinc-950 sm:text-5xl z-10"
               title={assessment.name}
             >
               {assessment.name}
