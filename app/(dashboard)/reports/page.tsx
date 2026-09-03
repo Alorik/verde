@@ -239,13 +239,12 @@ export default function ReportsPage() {
                       >
                         View assessment →
                       </Link>
-                      <button
-                        type="button"
-                        onClick={() => openDetail(assessment.id)}
+                      <Link
+                        href={`/reports/${assessment.id}`}
                         className="border border-emerald-700 bg-emerald-800 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-950"
                       >
-                        View detailed report
-                      </button>
+                        View detailed report →
+                      </Link>
                     </div>
                   </article>
                 );
