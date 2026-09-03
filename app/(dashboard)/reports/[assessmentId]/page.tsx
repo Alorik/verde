@@ -93,8 +93,6 @@ function getScoreTone(value: Score) {
   };
 }
 
-
-
 function statusLabel(status: string) {
   return status.replace(/_/g, " ");
 }
@@ -489,7 +487,6 @@ function ScoreCard({
       </div>
     </div>
   );
-  
 }
 
 /* =========================================================
