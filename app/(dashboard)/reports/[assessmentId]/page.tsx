@@ -151,7 +151,7 @@ export default function ReportPage({
 
           <Link
             href="/reports"
-            className="mt-6 inline-flex border border-emerald-700 bg-zinc-950 px-4 py-2 text-sm font-medium text-white"
+            className="mt-6  inline-flex border border-emerald-700 bg-zinc-950 px-4 py-2 text-sm font-medium text-white"
           >
             ← Back to reports
           </Link>
@@ -169,73 +169,75 @@ export default function ReportPage({
             HEADER
         ========================================================= */}
 
-        <header className="relative border-b border-emerald-700/30 pb-10">
-          <Link
-            href="/reports"
-            className="inline-flex items-center gap-1 text-xs font-medium text-zinc-500 transition hover:text-emerald-800"
-          >
-            ← Back to reports
-          </Link>
+        <header className="relative border-b -mx-10 border-emerald-700/30 pb-10 z-999 sticky top-16 bg-white">
+          <div className="mx-10">
+            {" "}
+            <Link
+              href="/reports"
+              className="mt-6  inline-flex border border-emerald-700/30 hover:border-emerald-700 px-4 py-2 text-sm font-medium hover:bg-emerald-50 "
+            >
+              ← Back to reports
+            </Link>
+            <div className="mt-4 flex flex-col justify-between gap-10 md:flex-row md:items-end">
+              <div>
+                <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-emerald-800">
+                  ESG performance report
+                </p>
 
-          <div className="mt-8 flex flex-col justify-between gap-10 md:flex-row md:items-end">
-            <div>
-              <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-emerald-800">
-                ESG performance report
-              </p>
+                <h1 className="mt-3 text-5xl font-medium tracking-tight text-zinc-950">
+                  {assessment.name}
+                </h1>
 
-              <h1 className="mt-3 text-5xl font-medium tracking-tight text-zinc-950">
-                {assessment.name}
-              </h1>
+                <div className="mt-4 flex items-center gap-4 text-xs font-medium text-zinc-500">
+                  <span className="flex items-center gap-1.5">
+                    <CalendarDays size={13} />
+                    Reporting year {assessment.reportingYear}
+                  </span>
 
-              <div className="mt-4 flex items-center gap-4 text-xs font-medium text-zinc-500">
-                <span className="flex items-center gap-1.5">
-                  <CalendarDays size={13} />
-                  Reporting year {assessment.reportingYear}
-                </span>
+                  <span className="h-1 w-1 bg-emerald-700" />
 
-                <span className="h-1 w-1 bg-emerald-700" />
-
-                <span className="uppercase tracking-wider">
-                  {statusLabel(assessment.status)}
-                </span>
+                  <span className="uppercase tracking-wider">
+                    {statusLabel(assessment.status)}
+                  </span>
+                </div>
               </div>
-            </div>
 
-            {/* Main score */}
-            {/* Main score */}
-            {(() => {
-              const overallTone = getScoreTone(current?.overallScore ?? null);
+              {/* Main score */}
+              {/* Main score */}
+              {(() => {
+                const overallTone = getScoreTone(current?.overallScore ?? null);
 
-              return (
-                <div className="relative w-fit">
-                  {/* 3D depth */}
-                  <div
-                    className={`absolute inset-0 translate-x-2 translate-y-2 border ${overallTone.layer}`}
-                  />
+                return (
+                  <div className="relative w-fit">
+                    {/* 3D depth */}
+                    <div
+                      className={`absolute inset-0 translate-x-2 translate-y-2 border ${overallTone.layer}`}
+                    />
 
-                  <div
-                    className={`relative flex min-w-[150px] flex-col border-2 ${overallTone.border} ${overallTone.bg} p-5 shadow-[0_15px_35px_rgba(6,78,59,0.14)]`}
-                  >
-                    <p
-                      className={`text-[9px] font-medium uppercase tracking-[0.2em] ${overallTone.text}`}
+                    <div
+                      className={`relative flex min-w-[150px] flex-col border-2 ${overallTone.border} ${overallTone.bg} p-5 shadow-[0_15px_35px_rgba(6,78,59,0.14)]`}
                     >
-                      Overall ESG
-                    </p>
+                      <p
+                        className={`text-[9px] font-medium uppercase tracking-[0.2em] ${overallTone.text}`}
+                      >
+                        Overall ESG
+                      </p>
 
-                    <p
-                      className={`mt-1 text-5xl font-medium tracking-tight ${overallTone.text}`}
-                    >
-                      {score(current?.overallScore ?? null)}
-                    </p>
+                      <p
+                        className={`mt-1 text-5xl font-medium tracking-tight ${overallTone.text}`}
+                      >
+                        {score(current?.overallScore ?? null)}
+                      </p>
 
-                    <div className="mt-2 flex items-center gap-1 text-[9px] font-medium uppercase tracking-widest text-zinc-500">
-                      <Activity size={11} />
-                      Overall score
+                      <div className="mt-2 flex items-center gap-1 text-[9px] font-medium uppercase tracking-widest text-zinc-500">
+                        <Activity size={11} />
+                        Overall score
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })()}
+                );
+              })()}
+            </div>
           </div>
         </header>
 
