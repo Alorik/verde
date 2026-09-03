@@ -256,14 +256,15 @@ export default function ReportPage({
             <ScoreCard
               letter="E"
               title="Environmental"
-              value={current?.environmentalScore}
+              value={current?.environmentalScore ?? null}
               icon={Leaf}
               description="Environmental impact and resource performance."
             />
+
             <ScoreCard
               letter="S"
               title="Social"
-              value={current?.socialScore}
+              value={current?.socialScore ?? null}
               icon={Users}
               description="People, workforce and social responsibility."
             />
@@ -271,7 +272,7 @@ export default function ReportPage({
             <ScoreCard
               letter="G"
               title="Governance"
-              value={current?.governanceScore}
+              value={current?.governanceScore ?? null}
               icon={ShieldCheck}
               description="Governance, ethics and compliance."
             />
@@ -488,6 +489,7 @@ function ScoreCard({
       </div>
     </div>
   );
+  
 }
 
 /* =========================================================
@@ -716,7 +718,7 @@ function DocumentCard({
                                 {name}
                               </p>
 
-                              {metric.category && (
+                              {metric.category != null && (
                                 <p className="mt-1 text-[8px] font-medium uppercase tracking-wider text-emerald-700">
                                   {String(metric.category)}
                                 </p>
