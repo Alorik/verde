@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -45,13 +46,8 @@ export default function LoginPage() {
           <div className="absolute inset-0 translate-x-3 translate-y-3 bg-emerald-500" />
 
           <div className="absolute inset-0 z-10 overflow-hidden bg-zinc-950">
-            <Image
-              src="/images/esg-register.png"
-              alt="Verde ESG platform"
-              fill
-              priority
-              className="object-cover"
-            />
+            {/* Repeating ESG background instead of the image */}
+            <ESGShapesBackground />
 
             {/* Image overlay */}
             <div className="absolute inset-0 bg-black/25" />
@@ -59,7 +55,6 @@ export default function LoginPage() {
             {/* Bottom information */}
             <div className="absolute bottom-8 left-8 right-8 z-20">
               <div className="mb-4 flex items-center gap-3">
-
                 <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-emerald-300">
                   Verde / ESG
                 </span>
@@ -85,20 +80,20 @@ export default function LoginPage() {
             {/* Logo / heading */}
             <div className="mb-10">
               <div className="mb-8 flex items-center gap-3">
-              <div className="relative">
-                {/* 3D depth */}
-                <div className="absolute inset-0 translate-x-2 translate-y-2 border border-emerald-700/25  " />
-  
-                <div className="relative flex h-12 w-15 items-center justify-center  ">
-                  <Image
-                    src="/verde.jpg"
-                    alt="Verde logo"
-                    width={64}
-                    height={64}
-                    className="h-full w-full object-cover"
-                  />
+                <div className="relative">
+                  {/* 3D depth */}
+                  <div className="absolute inset-0 translate-x-2 translate-y-2 border border-emerald-700/25  " />
+
+                  <div className="relative flex h-12 w-15 items-center justify-center  ">
+                    <Image
+                      src="/verde.jpg"
+                      alt="Verde logo"
+                      width={64}
+                      height={64}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
                 </div>
-              </div>
               </div>
 
               <div className="mb-3 flex items-center gap-3">
@@ -215,3 +210,31 @@ export default function LoginPage() {
     </main>
   );
 }
+
+
+function ESGShapesBackground() {
+  return (
+    <div className="absolute inset-0 z-0 overflow-hidden">
+      {/* Single spotlight — soft teal/emerald glow radiating from top-center */}
+      <motion.div
+        className="absolute left-1/2 top-0 h-[1900px] w-[900px] -translate-x-1/2 -translate-y-1/2"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(45,212,191,0.35) 2%, rgba(16,185,129,0.18) 45%, rgba(16,185,129,0.05) 80%, transparent 95%)",
+        }}
+  
+      />
+
+      {/* Subtle dot grid so the rest of the panel isn't flat black */}
+      <div
+        className="absolute inset-0 opacity-[0.22]"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, rgba(255,255,255,0.4) 1px, transparent 1px)",
+          backgroundSize: "154px 154px",
+        }}
+      />
+    </div>
+  );
+}
+
