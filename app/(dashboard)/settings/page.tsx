@@ -32,6 +32,95 @@ export default function SettingsPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+//delete  organization
+const [deleteModal, setDeleteModal] = useState(false);
+const [deleting, setDeleting] = useState(false);
+const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  async function deleteOrganization() {
+    setDeleting(true);
+    setDeleteError(null);
+
+    try {
+      const response = await fetch("/api/organizations", {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message ?? "Failed to delete organization");
+      }
+
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Failed to delete organization:", error);
+
+      setDeleteError(
+        error instanceof Error
+          ? error.message
+          : "Failed to delete organization",
+      );
+    } finally {
+      setDeleting(false);
+    }
+  }
+
+  //passwords
+  const [passwordModal, setPasswordModal] = useState(false);
+
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [changingPassword, setChangingPassword] = useState(false);
+  const [passwordMessage, setPasswordMessage] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+
+
+  async function changePassword() {
+    setChangingPassword(true);
+    setPasswordError(null);
+    setPasswordMessage(null);
+
+    try {
+      const response = await fetch("/api/organizations/password", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+          confirmPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message ?? "Failed to change password");
+      }
+
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+
+      setPasswordMessage("Password changed successfully.");
+
+      setTimeout(() => {
+        setPasswordModal(false);
+        setPasswordMessage(null);
+      }, 1200);
+    } catch (error) {
+      setPasswordError(
+        error instanceof Error ? error.message : "Failed to change password",
+      );
+    } finally {
+      setChangingPassword(false);
+    }
+  }
+
   useEffect(() => {
     async function loadOrganization() {
       try {
@@ -395,6 +484,11 @@ export default function SettingsPage() {
 
               <button
                 type="button"
+                onClick={() => {
+                  setPasswordModal(true);
+                  setPasswordError(null);
+                  setPasswordMessage(null);
+                }}
                 className="w-full shrink-0 border border-zinc-500 bg-white px-4 py-2 text-xs font-medium text-zinc-800 transition hover:border-emerald-600 hover:bg-emerald-50 hover:text-emerald-900 sm:w-auto"
               >
                 Change password
@@ -402,6 +496,112 @@ export default function SettingsPage() {
             </div>
           </div>
         </section>
+
+        {passwordModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/30 p-4">
+            <div className="w-full max-w-md border border-emerald-700/30 bg-white shadow-2xl">
+              <div className="border-b border-emerald-700/30 p-5 sm:p-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-600">
+                      Account security
+                    </p>
+
+                    <h2 className="mt-2 text-xl font-medium text-zinc-950">
+                      Change password
+                    </h2>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setPasswordModal(false)}
+                    className="border border-zinc-300 px-2.5 py-1 text-lg font-medium text-zinc-600 transition hover:bg-emerald-50 hover:text-zinc-950"
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-5 p-5 sm:p-6">
+                <div>
+                  <label className="text-xs font-medium text-zinc-600">
+                    Current password
+                  </label>
+
+                  <input
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    className="mt-2 w-full border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none focus:border-zinc-950"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-medium text-zinc-600">
+                    New password
+                  </label>
+
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="mt-2 w-full border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none focus:border-zinc-950"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-medium text-zinc-600">
+                    Confirm new password
+                  </label>
+
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="mt-2 w-full border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none focus:border-zinc-950"
+                  />
+                </div>
+
+                {passwordError && (
+                  <p className="text-xs font-medium text-red-600">
+                    {passwordError}
+                  </p>
+                )}
+
+                {passwordMessage && (
+                  <p className="text-xs font-medium text-emerald-700">
+                    {passwordMessage}
+                  </p>
+                )}
+
+                <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setPasswordModal(false)}
+                    disabled={changingPassword}
+                    className="w-full border border-zinc-500 bg-white px-5 py-2.5 text-sm font-medium text-zinc-950 transition hover:bg-emerald-50 disabled:opacity-50 sm:w-auto"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={changePassword}
+                    disabled={
+                      changingPassword ||
+                      !currentPassword ||
+                      !newPassword ||
+                      !confirmPassword
+                    }
+                    className="w-full border border-zinc-950 bg-zinc-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
+                  >
+                    {changingPassword ? "Changing…" : "Change password"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Data */}
         <section className="mt-14 sm:mt-16">
@@ -474,12 +674,70 @@ export default function SettingsPage() {
 
             <button
               type="button"
+              onClick={() => {
+                setDeleteError(null);
+                setDeleteModal(true);
+              }}
               className="mt-4 w-full border border-red-400 bg-white px-4 py-2 text-xs font-medium text-red-700 transition hover:bg-red-100 sm:w-auto"
             >
               Delete organization
             </button>
           </div>
         </section>
+
+        {deleteModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/40 p-4">
+            <div className="w-full max-w-lg border border-red-300 bg-white shadow-2xl">
+              <div className="border-b border-red-300 p-5 sm:p-6">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-red-600">
+                  Danger zone
+                </p>
+
+                <h2 className="mt-2 text-xl font-medium text-zinc-950">
+                  Delete organization?
+                </h2>
+              </div>
+
+              <div className="p-5 sm:p-6">
+                <p className="text-sm font-medium leading-6 text-zinc-700">
+                  This permanently deletes your organization and all associated
+                  assessments, documents, extracted data, ESG metrics, scores,
+                  and recommendations.
+                </p>
+
+                <p className="mt-4 text-sm font-medium text-red-700">
+                  This action cannot be undone.
+                </p>
+
+                {deleteError && (
+                  <p className="mt-4 text-xs font-medium text-red-600">
+                    {deleteError}
+                  </p>
+                )}
+
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setDeleteModal(false)}
+                    disabled={deleting}
+                    className="w-full border border-zinc-500 bg-white px-5 py-2.5 text-sm font-medium text-zinc-950 transition hover:bg-emerald-50 disabled:opacity-50 sm:w-auto"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={deleteOrganization}
+                    disabled={deleting}
+                    className="w-full border border-red-600 bg-red-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+                  >
+                    {deleting ? "Deleting…" : "Delete organization"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Status */}
         {(message || error) && !editing && (
