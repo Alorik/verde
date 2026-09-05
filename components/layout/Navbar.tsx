@@ -81,34 +81,46 @@ export default function Navbar() {
         </nav>
 
         {/* Right */}
+        {/* Right */}
         <div className="relative z-10 flex-none" ref={menuRef}>
-          <button
-            type="button"
-            onClick={() => setMenuOpen((open) => !open)}
-            className="relative z-10 flex h-10 w-10 items-center justify-center border border-zinc-950 bg-emerald-800 text-sm font-medium text-white transition hover:border-emerald-700 hover:bg-emerald-900"
-          >
-            {initial}
-          </button>
-
-          <AnimatePresence>
-            {menuOpen && (
-              <motion.div
-                initial={{ opacity: 0, x: 24 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 24 }}
-                transition={{ type: "spring", stiffness: 320, damping: 24 }}
-                className="absolute right-0 top-12 w-36 origin-top-right overflow-hidden border border-zinc-400 bg-white shadow-xl z-9999"
+          {session ? (
+            <>
+              <button
+                type="button"
+                onClick={() => setMenuOpen((open) => !open)}
+                className="relative z-10 flex h-10 w-10 items-center justify-center border border-zinc-950 bg-emerald-800 text-sm font-medium text-white transition hover:border-emerald-700 hover:bg-emerald-900"
               >
-                <button
-                  type="button"
-                  onClick={() => signOut()}
-                  className="block w-full cursor-pointer border-b-2 border-transparent px-4 py-3 text-left text-sm font-medium text-zinc-800 transition-colors hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900 z-9999999"
-                >
-                  Log out
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                {initial}
+              </button>
+
+              <AnimatePresence>
+                {menuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, x: 24 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 24 }}
+                    transition={{ type: "spring", stiffness: 320, damping: 24 }}
+                    className="absolute right-0 top-12 z-[9999] w-36 origin-top-right overflow-hidden border border-zinc-400 bg-white shadow-xl"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => signOut()}
+                      className="block w-full cursor-pointer border-b-2 border-transparent px-4 py-3 text-left text-sm font-medium text-zinc-800 transition-colors hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
+                    >
+                      Log out
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              className="flex h-10 items-center justify-center border border-zinc-950 bg-zinc-950 px-4 text-xs font-semibold uppercase tracking-[0.15em] text-white transition hover:border-emerald-700 hover:bg-emerald-800"
+            >
+              Login
+            </Link>
+          )}
         </div>
       </div>
     </header>
