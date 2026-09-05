@@ -46,6 +46,7 @@ export default function DocumentsPage() {
 
   function formatFileSize(bytes: number) {
     if (bytes < 1024) return `${bytes} B`;
+
     if (bytes < 1024 * 1024) {
       return `${(bytes / 1024).toFixed(1)} KB`;
     }
@@ -62,8 +63,8 @@ export default function DocumentsPage() {
 
   if (loading) {
     return (
-      <main className="bg-white-100 px-12">
-        <div className="border-x border-emerald-700/30 bg-white py-10 sm:px-10">
+      <main className="bg-white px-4 sm:px-6 md:px-8 lg:px-12">
+        <div className="min-h-screen border-x border-emerald-700/30 bg-white px-4 py-8 sm:px-6 sm:py-10 md:px-8 lg:px-10">
           <p className="text-xs font-medium text-zinc-600">
             retrieving documents…
           </p>
@@ -73,26 +74,26 @@ export default function DocumentsPage() {
   }
 
   return (
-    <main className="bg-white px-12">
-      <div className="border-x border-emerald-800/30 bg-white py-10 sm:px-10">
+    <main className="bg-white px-4 sm:px-6 md:px-8 lg:px-12">
+      <div className="min-h-screen border-x border-emerald-800/30 bg-white px-4 py-8 sm:px-6 sm:py-10 md:px-8 lg:px-10">
         {/* Header */}
-        <div className="-mx-10 sticky top-12 z-20 border-b border-emerald-800/30 bg-white shadow-[0_3px_6px_rgba(6,95,70,0.18)]">
-          <div className="mx-10 flex items-end justify-between pb-8">
-            <div>
+        <div className="-mx-4 sticky top-16 z-20 border-b border-emerald-800/30 bg-white px-4 shadow-[0_3px_6px_rgba(6,95,70,0.18)] sm:-mx-6 sm:px-6 md:-mx-8 md:px-8 lg:-mx-10 lg:px-10">
+          <div className="flex flex-col gap-4 pb-5 sm:pb-6 md:flex-row md:items-end md:justify-between lg:pb-8">
+            <div className="min-w-0">
               <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
                 Document archive
               </p>
 
-              <h1 className="mt-3 text-4xl font-medium tracking-tight text-zinc-950">
+              <h1 className="mt-3 text-3xl font-medium tracking-tight text-zinc-950 sm:text-4xl">
                 Documents
               </h1>
 
-              <p className="mt-2 text-sm font-medium text-zinc-700">
+              <p className="mt-2 max-w-xl text-sm font-medium leading-6 text-zinc-700">
                 All documents submitted across your ESG assessments.
               </p>
             </div>
 
-            <div className="text-xs font-medium text-zinc-600">
+            <div className="shrink-0 text-xs font-medium text-zinc-600">
               {documents.length}{" "}
               {documents.length === 1 ? "document" : "documents"}
             </div>
@@ -101,36 +102,36 @@ export default function DocumentsPage() {
 
         {/* Empty state */}
         {documents.length === 0 ? (
-          <div className="border border-dashed border-emerald-700/30 bg-white py-24 text-center">
+          <div className="mt-6 border border-dashed border-emerald-700/30 bg-white px-4 py-16 text-center sm:mt-8 sm:px-6 sm:py-24">
             <div className="mx-auto flex h-12 w-12 items-center justify-center border border-emerald-700/30 text-xl font-medium text-zinc-600">
               +
             </div>
 
-            <h2 className="mt-5 text-2xl font-medium text-zinc-950">
+            <h2 className="mt-5 text-xl font-medium text-zinc-950 sm:text-2xl">
               No documents yet
             </h2>
 
-            <p className="mx-auto mt-2 max-w-md text-sm font-medium text-zinc-700">
+            <p className="mx-auto mt-2 max-w-md text-sm font-medium leading-6 text-zinc-700">
               Documents uploaded to your ESG assessments will appear here.
             </p>
 
             <Link
               href="/assessments"
-              className="mt-6 inline-flex border border-zinc-950 bg-zinc-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900"
+              className="mt-6 inline-flex w-full items-center justify-center border border-zinc-950 bg-zinc-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900 sm:w-auto"
             >
               View assessments →
             </Link>
           </div>
         ) : (
           /* Document list */
-          <div className="border border-emerald-700/30 bg-white">
+          <div className="mt-6 border border-emerald-700/30 bg-white sm:mt-8">
             {documents.map((document) => (
               <div
                 key={document.id}
-                className="group flex items-center justify-between gap-6 border-b border-emerald-700/30 p-5 transition last:border-b-0 hover:bg-emerald-50"
+                className="group flex flex-col gap-5 border-b border-emerald-700/30 p-4 transition last:border-b-0 hover:bg-emerald-50 sm:p-5 lg:flex-row lg:items-center lg:justify-between lg:gap-6"
               >
                 {/* File information */}
-                <div className="flex min-w-0 items-center gap-4">
+                <div className="flex min-w-0 items-start gap-3 sm:gap-4">
                   {/* PDF icon */}
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-emerald-700/30 bg-white">
                     <svg
@@ -147,12 +148,12 @@ export default function DocumentsPage() {
                     </svg>
                   </div>
 
-                  <div className="min-w-0">
-                    <h2 className="truncate text-sm font-medium text-zinc-950">
+                  <div className="min-w-0 flex-1">
+                    <h2 className="break-words text-sm font-medium text-zinc-950 sm:truncate">
                       {document.fileName}
                     </h2>
 
-                    <div className="mt-1 flex flex-wrap items-center gap-2 text-[10px] font-medium uppercase tracking-wider text-zinc-600">
+                    <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-medium uppercase tracking-wider text-zinc-600">
                       <span>{formatDocumentType(document.documentType)}</span>
 
                       <span>·</span>
@@ -166,7 +167,7 @@ export default function DocumentsPage() {
                       </span>
                     </div>
 
-                    <p className="mt-2 text-xs font-medium text-zinc-700">
+                    <p className="mt-2 break-words text-xs font-medium leading-5 text-zinc-700">
                       Assessment:{" "}
                       <span className="font-medium text-zinc-950">
                         {document.assessment.name}
@@ -176,24 +177,18 @@ export default function DocumentsPage() {
                 </div>
 
                 {/* Actions */}
-                <div className="flex shrink-0 items-center gap-3">
+                <div className="flex w-full shrink-0 items-center gap-3 sm:w-auto">
                   {document.fileUrl && (
                     <Link
                       href={`/api/documents/${document.id}/view`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="border border-zinc-500 bg-white px-4 py-2 text-xs font-medium text-zinc-800 transition hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
+                      className="flex flex-1 items-center justify-center gap-3 border border-zinc-500 px-4 py-2.5 text-xs font-medium text-zinc-800 transition-colors hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900 sm:flex-none"
                     >
-                      View document
+                      <span>View document</span>
+                      <span className="text-base leading-none">→</span>
                     </Link>
                   )}
-
-                  <Link
-                    href={`/assessment/${document.assessment.id}`}
-                    className="text-xl font-medium text-zinc-500 transition group-hover:text-zinc-950"
-                  >
-                    →
-                  </Link>
                 </div>
               </div>
             ))}

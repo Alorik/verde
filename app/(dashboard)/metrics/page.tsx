@@ -74,16 +74,16 @@ const metrics = [
 
 export default function MetricsPage() {
   return (
-    <main className="bg-white px-12">
-      <div className="border-x border-emerald-800/30 bg-white py-10 sm:px-10">
+    <main className="bg-white px-4 sm:px-6 md:px-8 lg:px-12">
+      <div className="min-h-screen border-x border-emerald-800/30 bg-white px-4 py-8 sm:px-6 sm:py-10 md:px-8 lg:px-10">
         {/* Header */}
-        <div className="border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)]  z-20 pb-8 -mx-10">
-          <div className="mx-10">
-            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600 ">
+        <div className="-mx-4 border-b border-emerald-800/30 bg-white px-4 pb-6 shadow-[0_3px_6px_rgba(6,95,70,0.18)] sm:-mx-6 sm:px-6 sm:pb-8 md:-mx-8 md:px-8 lg:-mx-10 lg:px-10">
+          <div>
+            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
               ESG framework
             </p>
 
-            <h1 className="mt-3 text-4xl font-medium tracking-tight text-zinc-950">
+            <h1 className="mt-3 text-3xl font-medium tracking-tight text-zinc-950 sm:text-4xl">
               Metrics
             </h1>
 
@@ -95,7 +95,7 @@ export default function MetricsPage() {
         </div>
 
         {/* ESG Categories */}
-        <div className="mt-12 space-y-10">
+        <div className="mt-8 space-y-8 sm:mt-10 sm:space-y-10">
           {metrics.map((category, categoryIndex) => (
             <motion.section
               key={category.category}
@@ -105,40 +105,40 @@ export default function MetricsPage() {
                 duration: 0.4,
                 delay: categoryIndex * 0.1,
               }}
-              className="pb-10 "
+              className="pb-6 sm:pb-10"
             >
               {/* Category */}
-              <h2 className="sticky top-16 z-10 border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)] -mx-10 bg-white py-3 text-xs font-medium uppercase tracking-[0.2em] text-zinc-900">
-                <div className="mx-10">{category.category}</div>
+              <h2 className="-mx-4 sticky top-16 z-10 border-b border-emerald-800/30 bg-white px-4 py-3 text-xs font-medium uppercase tracking-[0.2em] text-zinc-900 shadow-[0_3px_6px_rgba(6,95,70,0.18)] sm:-mx-6 sm:px-6 md:-mx-8 md:px-8 lg:-mx-10 lg:px-10">
+                {category.category}
               </h2>
 
-              {/* EVERYTHING BELOW BELONGS TO THIS CATEGORY */}
+              {/* Everything below belongs to this category */}
               <div className="pt-4">
                 {/* Description + count */}
-                <div className="flex items-start justify-between gap-8">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
                   <p className="max-w-2xl text-sm font-medium leading-6 text-zinc-700">
                     {category.description}
                   </p>
 
-                  <div className="shrink-0 border border-zinc-400 bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-700">
+                  <div className="w-fit shrink-0 border border-zinc-400 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700">
                     {category.areas.length}{" "}
                     {category.areas.length === 1 ? "area" : "areas"}
                   </div>
                 </div>
 
                 {/* Areas */}
-                <div className="mt-8 space-y-5">
+                <div className="mt-6 space-y-4 sm:mt-8 sm:space-y-5">
                   {category.areas.map((area) => (
                     <div
                       key={area.name}
-                      className="border border-emerald-700/30 bg-zinc-50 p-6 transition-colors hover:border-emerald-500 hover:bg-emerald-50/40"
+                      className="border border-emerald-700/30 bg-white p-4 transition-colors hover:border-emerald-500 hover:bg-emerald-50/40 sm:p-6"
                     >
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <h3 className="text-base font-medium text-zinc-950">
                           {area.name}
                         </h3>
 
-                        <span className="text-xs font-semimedium text-zinc-600">
+                        <span className="text-xs font-medium text-zinc-600">
                           {area.metrics.length} metrics
                         </span>
                       </div>
@@ -147,10 +147,13 @@ export default function MetricsPage() {
                         {area.metrics.map((metric) => (
                           <div
                             key={metric}
-                            className="flex items-start gap-3 text-sm font-medium text-zinc-800"
+                            className="flex min-w-0 items-start gap-3 text-sm font-medium text-zinc-800"
                           >
                             <span className="mt-1.5 h-2 w-2 shrink-0 bg-emerald-600" />
-                            <span>{metric}</span>
+
+                            <span className="min-w-0 break-words">
+                              {metric}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -167,17 +170,17 @@ export default function MetricsPage() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.35 }}
-          className="mt-4 border border-emerald-700/30 bg-zinc-950 p-6 text-white"
+          className="mt-2 border border-emerald-700/30 bg-zinc-950 p-4 text-white sm:mt-4 sm:p-6"
         >
           <h2 className="text-lg font-medium text-white">ESG Score</h2>
 
-          <p className="mt-2 text-sm font-medium leading-6 text-zinc-300">
+          <p className="mt-2 max-w-3xl text-sm font-medium leading-6 text-zinc-300">
             The collected metrics are used to calculate individual
             Environmental, Social, and Governance scores, which are combined
             into an overall ESG score.
           </p>
 
-          <div className="mt-6 grid gap-4 sm:grid-cols-4">
+          <div className="mt-5 grid gap-3 sm:mt-6 sm:grid-cols-2 lg:grid-cols-4">
             {["Environmental", "Social", "Governance", "Overall ESG"].map(
               (score) => (
                 <div

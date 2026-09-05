@@ -38,10 +38,12 @@ type DetailAssessment = Assessment & {
     csrReport: Record<string, unknown> | null;
     esgMetrics: Array<Record<string, unknown>>;
   }>;
-  esgScore: (Assessment["esgScore"] & {
-    calculatedAt?: string;
-    metrics?: Array<Record<string, unknown>>;
-  }) | null;
+  esgScore:
+    | (Assessment["esgScore"] & {
+        calculatedAt?: string;
+        metrics?: Array<Record<string, unknown>>;
+      })
+    | null;
 };
 
 function score(value: Score) {
@@ -60,9 +62,14 @@ export default function ReportsPage() {
 
   async function openDetail(assessmentId: string) {
     setDetailLoading(true);
+
     try {
       const response = await fetch(`/api/assessments/${assessmentId}`);
-      if (!response.ok) throw new Error("Failed to load detailed report");
+
+      if (!response.ok) {
+        throw new Error("Failed to load detailed report");
+      }
+
       const data = await response.json();
       setDetail(data.assessment);
     } catch (error) {
@@ -76,7 +83,11 @@ export default function ReportsPage() {
     async function loadReports() {
       try {
         const response = await fetch("/api/organizations");
-        if (!response.ok) throw new Error("Failed to load reports");
+
+        if (!response.ok) {
+          throw new Error("Failed to load reports");
+        }
+
         const data = await response.json();
         setOrganization(data.organization);
       } catch (error) {
@@ -90,10 +101,13 @@ export default function ReportsPage() {
   }, []);
 
   const assessments = organization?.assessments ?? [];
+
   const scoredAssessments = assessments.filter(
     (assessment) => assessment.esgScore?.overallScore != null,
   );
+
   const latest = scoredAssessments[0];
+
   const average = scoredAssessments.length
     ? scoredAssessments.reduce(
         (total, assessment) =>
@@ -104,8 +118,8 @@ export default function ReportsPage() {
 
   if (loading) {
     return (
-      <main className="bg-zinc-100 px-12">
-        <div className="border-x border-emerald-700/30 bg-white py-10 sm:px-10">
+      <main className="bg-white px-4 sm:px-6 md:px-8 lg:px-12">
+        <div className="min-h-screen border-x border-emerald-700/30 bg-white px-4 py-8 sm:px-6 sm:py-10 md:px-8 lg:px-10">
           <p className="text-xs font-medium text-zinc-600">
             retrieving reports…
           </p>
@@ -115,16 +129,19 @@ export default function ReportsPage() {
   }
 
   return (
-    <main className="bg-zinc-100 px-12">
-      <div className="border-x border-emerald-700/30 bg-white py-10 sm:px-10">
-        <header className="border-b shadow-[0_3px_6px_rgba(6,95,70,0.18)] border-emerald-700/30 -mx-10 pb-8 top-12 sticky z-20 bg-white">
-          <div className="mx-10">
+    <main className="bg-white px-4 sm:px-6 md:px-8 lg:px-12">
+      <div className="min-h-screen border-x border-emerald-700/30 bg-white px-4 py-8 sm:px-6 sm:py-10 md:px-8 lg:px-10">
+        {/* Header */}
+        <header className="-mx-4 sticky top-16 z-20 border-b border-emerald-700/30 bg-white px-4 pb-6 shadow-[0_3px_6px_rgba(6,95,70,0.18)] sm:-mx-6 sm:px-6 sm:pb-8 md:-mx-8 md:px-8 lg:-mx-10 lg:px-10">
+          <div>
             <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
               ESG performance
             </p>
-            <h1 className="mt-3 text-4xl font-medium tracking-tight text-zinc-950">
+
+            <h1 className="mt-3 text-3xl font-medium tracking-tight text-zinc-950 sm:text-4xl">
               Reports
             </h1>
+
             <p className="mt-3 max-w-2xl text-sm font-medium leading-6 text-zinc-700">
               Review score performance across{" "}
               {organization?.name ?? "your organization"}&apos;s ESG
@@ -133,7 +150,8 @@ export default function ReportsPage() {
           </div>
         </header>
 
-        <section className="mt-10 grid border-l border-t border-emerald-700/30 sm:grid-cols-3">
+        {/* Summary */}
+        <section className="mt-8 grid border-l border-t border-emerald-700/30 sm:mt-10 sm:grid-cols-3">
           {[
             [
               "Latest overall",
@@ -144,37 +162,44 @@ export default function ReportsPage() {
           ].map(([label, value]) => (
             <div
               key={label}
-              className="border-b border-r border-emerald-700/30 bg-zinc-50 p-5"
+              className="border-b border-r border-emerald-700/30 bg-white p-4 sm:p-5"
             >
               <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
                 {label}
               </p>
-              <p className="mt-2 text-3xl font-medium text-zinc-950">{value}</p>
+
+              <p className="mt-2 text-2xl font-medium text-zinc-950 sm:text-3xl">
+                {value}
+              </p>
             </div>
           ))}
         </section>
 
-        <section className="mt-12">
-          <div className=" pb-5">
+        {/* Assessment Reports */}
+        <section className="mt-10 sm:mt-12">
+          <div className="border-b border-emerald-700/30 pb-5">
             <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
               Assessment reports
             </p>
-            <h2 className="mt-2 text-2xl font-medium tracking-tight text-zinc-950">
+
+            <h2 className="mt-2 text-xl font-medium tracking-tight text-zinc-950 sm:text-2xl">
               Score breakdown
             </h2>
           </div>
 
           {assessments.length === 0 ? (
-            <div className="mt-5 border border-dashed border-emerald-700/30 bg-zinc-50 py-20 text-center">
+            <div className="mt-5 border border-dashed border-emerald-700/30 bg-white px-4 py-16 text-center sm:py-20">
               <p className="text-xl font-medium text-zinc-950">
                 No reports yet
               </p>
-              <p className="mx-auto mt-2 max-w-md text-sm font-medium text-zinc-700">
+
+              <p className="mx-auto mt-2 max-w-md text-sm font-medium leading-6 text-zinc-700">
                 Complete an assessment to generate an ESG performance report.
               </p>
+
               <Link
                 href="/assessments"
-                className="mt-6 inline-flex border border-emerald-800/30 bg-zinc-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900"
+                className="mt-6 inline-flex w-full items-center justify-center border border-emerald-800/30 bg-zinc-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900 sm:w-auto"
               >
                 View assessments →
               </Link>
@@ -183,21 +208,24 @@ export default function ReportsPage() {
             <div className="mt-5 border border-emerald-700/30">
               {assessments.map((assessment) => {
                 const current = assessment.esgScore;
+
                 return (
                   <article
                     key={assessment.id}
-                    className="border-b border-emerald-700/30 p-5 last:border-b-0 hover:bg-emerald-50/40"
+                    className="border-b border-emerald-700/30 p-4 transition last:border-b-0 hover:bg-emerald-50/40 sm:p-5"
                   >
-                    <div className="flex flex-wrap items-start justify-between gap-5">
-                      <div>
+                    <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                      <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-3">
-                          <h3 className="text-lg font-medium text-zinc-950">
+                          <h3 className="break-words text-lg font-medium text-zinc-950">
                             {assessment.name}
                           </h3>
-                          <span className="border border-emerald-700/30 bg-zinc-100 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-zinc-700">
+
+                          <span className="border border-emerald-700/30 bg-white px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-zinc-700">
                             {statusLabel(assessment.status)}
                           </span>
                         </div>
+
                         <p className="mt-2 text-xs font-medium uppercase tracking-wider text-zinc-600">
                           Reporting year {assessment.reportingYear} ·{" "}
                           {assessment._count.documents}{" "}
@@ -206,16 +234,20 @@ export default function ReportsPage() {
                             : "documents"}
                         </p>
                       </div>
-                      <div className="text-right">
+
+                      <div className="text-left lg:shrink-0 lg:text-right">
                         <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
                           Overall ESG
                         </p>
+
                         <p className="mt-1 text-3xl font-medium text-zinc-950">
                           {score(current?.overallScore ?? null)}
                         </p>
                       </div>
                     </div>
-                    <div className="mt-5 grid grid-cols-3 border-l border-t border-emerald-700/30">
+
+                    {/* Category scores */}
+                    <div className="mt-5 grid grid-cols-1 border-l border-t border-emerald-700/30 sm:grid-cols-3">
                       {[
                         ["Environmental", current?.environmentalScore],
                         ["Social", current?.socialScore],
@@ -223,27 +255,31 @@ export default function ReportsPage() {
                       ].map(([label, value]) => (
                         <div
                           key={label as string}
-                          className="border-b border-r border-emerald-700/30 bg-zinc-50 p-3"
+                          className="border-b border-r border-emerald-700/30 bg-white p-3"
                         >
                           <p className="text-[10px] font-medium uppercase tracking-wider text-zinc-600">
                             {label as string}
                           </p>
+
                           <p className="mt-1 text-lg font-medium text-zinc-950">
                             {score(value as Score)}
                           </p>
                         </div>
                       ))}
                     </div>
-                    <div className="mt-4 flex flex-wrap gap-2">
+
+                    {/* Actions */}
+                    <div className="mt-4 flex flex-col gap-2 sm:flex-row">
                       <Link
                         href={`/assessments/${assessment.id}`}
-                        className="inline-flex border border-zinc-500 px-3 py-1.5 text-xs font-medium text-zinc-800 hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
+                        className="inline-flex items-center justify-center border border-zinc-500 px-3 py-2 text-xs font-medium text-zinc-800 transition hover:border-emerald-600 hover:bg-emerald-50 hover:text-emerald-900 sm:w-auto"
                       >
                         View assessment →
                       </Link>
+
                       <Link
                         href={`/reports/${assessment.id}`}
-                        className="border border-emerald-700 bg-emerald-800 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-950"
+                        className="inline-flex items-center justify-center border border-emerald-700 bg-emerald-800 px-3 py-2 text-xs font-medium text-white transition hover:bg-emerald-950 sm:w-auto"
                       >
                         View detailed report →
                       </Link>
@@ -255,27 +291,33 @@ export default function ReportsPage() {
           )}
         </section>
 
+        {/* Detailed Report Drawer */}
         {(detailLoading || detail) && (
           <div
             className="fixed inset-0 z-50 flex justify-end bg-zinc-950/30"
             onMouseDown={(event) => {
-              if (event.target === event.currentTarget) setDetail(null);
+              if (event.target === event.currentTarget) {
+                setDetail(null);
+              }
             }}
           >
-            <aside className="h-full w-full max-w-2xl overflow-y-auto border-l border-emerald-700/30 bg-white p-6 shadow-2xl sm:p-10">
-              <div className="flex items-start justify-between border border-emerald-700/30  pb-5">
-                <div className="p-4">
+            <aside className="h-full w-full max-w-2xl overflow-y-auto border-l border-emerald-700/30 bg-white p-4 shadow-2xl sm:p-6 md:p-10">
+              {/* Drawer Header */}
+              <div className="flex items-start justify-between border border-emerald-700/30 pb-5">
+                <div className="min-w-0 p-4">
                   <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-600">
                     Detailed report
                   </p>
-                  <h2 className="mt-2 text-2xl font-medium text-zinc-950">
+
+                  <h2 className="mt-2 break-words text-xl font-medium text-zinc-950 sm:text-2xl">
                     {detail?.name ?? "Loading report…"}
                   </h2>
                 </div>
+
                 <button
                   type="button"
                   onClick={() => setDetail(null)}
-                  className="border border-emerald-800/30 px-3 py-1 text-lg font-medium text-zinc-700 hover:bg-zinc-100"
+                  className="mr-2 mt-2 flex h-9 w-9 shrink-0 items-center justify-center border border-emerald-800/30 text-lg font-medium text-zinc-700 transition hover:bg-emerald-50"
                   aria-label="Close detailed report"
                 >
                   ×
@@ -288,6 +330,7 @@ export default function ReportsPage() {
                 </p>
               ) : detail ? (
                 <div className="mt-6 space-y-8">
+                  {/* Scores */}
                   <div className="grid grid-cols-2 border-l border-t border-emerald-700/30 sm:grid-cols-4">
                     {[
                       ["Overall", detail.esgScore?.overallScore],
@@ -297,11 +340,12 @@ export default function ReportsPage() {
                     ].map(([label, value]) => (
                       <div
                         key={label as string}
-                        className="border-b border-r border-emerald-700/30 bg-zinc-50 p-3 "
+                        className="border-b border-r border-emerald-700/30 bg-white p-3"
                       >
                         <p className="text-[9px] font-medium uppercase tracking-wider text-zinc-600">
                           {label as string}
                         </p>
+
                         <p className="mt-1 text-xl font-medium text-zinc-950">
                           {score(value as Score)}
                         </p>
@@ -309,47 +353,55 @@ export default function ReportsPage() {
                     ))}
                   </div>
 
+                  {/* Assessment Details */}
                   <div className="border border-emerald-700/30">
                     <div className="border-b border-emerald-700/30 bg-zinc-950 p-4 text-sm font-medium text-white">
                       Assessment details
                     </div>
+
                     <div className="grid gap-3 p-4 text-sm sm:grid-cols-2">
-                      <p>
+                      <p className="break-words">
                         <span className="font-medium text-zinc-600">
                           Status:
                         </span>{" "}
                         {statusLabel(detail.status)}
                       </p>
+
                       <p>
                         <span className="font-medium text-zinc-600">
                           Reporting year:
                         </span>{" "}
                         {detail.reportingYear}
                       </p>
-                      <p>
+
+                      <p className="break-words">
                         <span className="font-medium text-zinc-600">
                           Created:
                         </span>{" "}
                         {new Date(detail.createdAt).toLocaleString()}
                       </p>
-                      <p>
+
+                      <p className="break-words">
                         <span className="font-medium text-zinc-600">
                           Updated:
                         </span>{" "}
                         {new Date(detail.updatedAt).toLocaleString()}
                       </p>
                     </div>
+
                     {detail.description && (
-                      <p className="border-t border-emerald-700/30 p-4 text-sm font-medium text-zinc-800">
+                      <p className="border-t border-emerald-700/30 p-4 text-sm font-medium leading-6 text-zinc-800">
                         {detail.description}
                       </p>
                     )}
                   </div>
 
+                  {/* Uploaded Documents */}
                   <div>
                     <h3 className="border-b border-emerald-700/30 pb-3 text-lg font-medium text-zinc-950">
                       Uploaded documents
                     </h3>
+
                     <div className="mt-4 space-y-3">
                       {detail.documents.length === 0 ? (
                         <p className="text-sm font-medium text-zinc-600">
@@ -359,21 +411,24 @@ export default function ReportsPage() {
                         detail.documents.map((doc) => (
                           <div
                             key={doc.id}
-                            className="border border-emerald-700/30 bg-zinc-50 p-4"
+                            className="border border-emerald-700/30 bg-white p-4"
                           >
-                            <div className="flex flex-wrap items-start justify-between gap-3">
-                              <p className="text-sm font-medium text-zinc-950">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                              <p className="min-w-0 break-words text-sm font-medium text-zinc-950">
                                 {doc.fileName}
                               </p>
-                              <span className="border border-emerald-700/30 px-2 py-1 text-[10px] font-medium uppercase text-zinc-700">
+
+                              <span className="w-fit shrink-0 border border-emerald-700/30 px-2 py-1 text-[10px] font-medium uppercase text-zinc-700">
                                 {doc.extractionStatus}
                               </span>
                             </div>
-                            <p className="mt-2 text-[11px] font-medium uppercase tracking-wide text-zinc-600">
+
+                            <p className="mt-2 break-words text-[11px] font-medium uppercase tracking-wide text-zinc-600">
                               {doc.documentType.replace(/_/g, " ")} ·{" "}
                               {(doc.fileSize / 1024).toFixed(1)} KB · Uploaded{" "}
                               {new Date(doc.uploadedAt).toLocaleString()}
                             </p>
+
                             {[
                               doc.electricity,
                               doc.water,
@@ -384,7 +439,7 @@ export default function ReportsPage() {
                               .map((values, index) => (
                                 <div
                                   key={index}
-                                  className="mt-3 grid grid-cols-2 gap-2 border-t border-emerald-700/30 pt-3 text-xs"
+                                  className="mt-3 grid grid-cols-1 gap-2 border-t border-emerald-700/30 pt-3 text-xs sm:grid-cols-2"
                                 >
                                   {Object.entries(
                                     values as Record<string, unknown>,
@@ -394,7 +449,10 @@ export default function ReportsPage() {
                                         !["id", "documentId"].includes(key),
                                     )
                                     .map(([key, value]) => (
-                                      <p key={key}>
+                                      <p
+                                        key={key}
+                                        className="min-w-0 break-words"
+                                      >
                                         <span className="font-medium text-zinc-600">
                                           {key.replace(/([A-Z])/g, " $1")}:
                                         </span>{" "}
@@ -403,15 +461,17 @@ export default function ReportsPage() {
                                     ))}
                                 </div>
                               ))}
+
                             {doc.esgMetrics.length > 0 && (
                               <div className="mt-3 border-t border-emerald-700/30 pt-3">
                                 <p className="text-[10px] font-medium uppercase tracking-wider text-zinc-600">
                                   Calculated metrics
                                 </p>
+
                                 {doc.esgMetrics.map((metric, index) => (
                                   <p
                                     key={index}
-                                    className="mt-1 text-xs font-medium text-zinc-800"
+                                    className="mt-1 break-words text-xs font-medium leading-5 text-zinc-800"
                                   >
                                     {Object.entries(metric)
                                       .filter(
