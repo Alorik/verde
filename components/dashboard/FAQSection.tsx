@@ -41,7 +41,7 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="border-x border-emerald-700/30 bg-white">
+    <section className="border-x border-emerald-700/30 bg-white ">
       {/* Sticky Section Label */}
       <p className="sticky top-16 z-10 border-b border-emerald-700/30 bg-white px-4 py-3 text-xs font-medium uppercase tracking-[0.2em] text-zinc-900 sm:px-6 md:px-8">
         FAQ
@@ -57,7 +57,7 @@ export default function FAQSection() {
       </div>
 
       {/* FAQ */}
-      <div className="mx-auto flex flex-col items-center px-4 pb-12 sm:px-6 md:px-8 md:pb-16">
+      <div className="mx-auto flex flex-col items-center px-4  sm:px-6 md:px-8 md:pb-32 ">
         <div className="mt-14 w-full max-w-3xl border border-emerald-700/30 sm:mt-20 md:mt-24">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
