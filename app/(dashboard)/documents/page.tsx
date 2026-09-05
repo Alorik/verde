@@ -76,24 +76,26 @@ export default function DocumentsPage() {
     <main className="bg-white px-12">
       <div className="border-x border-emerald-800/30 bg-white py-10 sm:px-10">
         {/* Header */}
-        <div className="flex items-end justify-between -mx-10 border-b  border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)] pb-8 mb-8">
-          <div className="mx-10">
-            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
-              Document archive
-            </p>
+        <div className="-mx-10 sticky top-12 z-20 border-b border-emerald-800/30 bg-white shadow-[0_3px_6px_rgba(6,95,70,0.18)]">
+          <div className="mx-10 flex items-end justify-between pb-8">
+            <div>
+              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
+                Document archive
+              </p>
 
-            <h1 className="mt-3 text-4xl font-medium tracking-tight text-zinc-950">
-              Documents
-            </h1>
+              <h1 className="mt-3 text-4xl font-medium tracking-tight text-zinc-950">
+                Documents
+              </h1>
 
-            <p className="mt-2 text-sm font-medium text-zinc-700">
-              All documents submitted across your ESG assessments.
-            </p>
-          </div>
+              <p className="mt-2 text-sm font-medium text-zinc-700">
+                All documents submitted across your ESG assessments.
+              </p>
+            </div>
 
-          <div className="text-xs font-medium text-zinc-600 mx-10">
-            {documents.length}{" "}
-            {documents.length === 1 ? "document" : "documents"}
+            <div className="text-xs font-medium text-zinc-600">
+              {documents.length}{" "}
+              {documents.length === 1 ? "document" : "documents"}
+            </div>
           </div>
         </div>
 
