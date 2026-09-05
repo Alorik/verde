@@ -95,9 +95,9 @@ export default function RegisterPage() {
           <div className="flex items-center gap-4">
             <div className="relative">
               {/* 3D depth */}
-              <div className="absolute inset-0 translate-x-2 translate-y-2 border border-emerald-700/25 bg-emerald-100" />
+              <div className="absolute inset-0 translate-x-2 translate-y-2 border border-emerald-700/25  " />
 
-              <div className="relative flex h-12 w-12 items-center justify-center border border-emerald-700/40 bg-emerald-600">
+              <div className="relative flex h-12 w-15 items-center justify-center  ">
                 <Image
                   src="/verde.jpg"
                   alt="Verde logo"
@@ -145,7 +145,7 @@ export default function RegisterPage() {
 
           <form
             onSubmit={handleSubmit}
-            className="relative border border-zinc-300 bg-white shadow-[0_14px_35px_rgba(6,78,59,0.07)]"
+            className="relative border border-emerald-700/40 bg-white shadow-[0_14px_35px_rgba(6,78,59,0.07)]"
           >
             <div className="p-6 sm:p-8">
               <div className="space-y-10">
@@ -189,7 +189,7 @@ export default function RegisterPage() {
                         value={form.name}
                         onChange={handleChange}
                         placeholder="Acme Corporation"
-                        className="w-full border border-zinc-300 bg-zinc-50 px-3.5 py-3 text-sm font-medium text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-emerald-700/40 focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10"
+                        className="w-full border border-emerald-700/40 bg-zinc-50 px-3.5 py-3 text-sm font-medium text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-emerald-700/40 focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10"
                       />
                     </div>
 
@@ -209,7 +209,7 @@ export default function RegisterPage() {
                           name="industry"
                           value={form.industry}
                           onChange={handleChange}
-                          className="w-full border border-zinc-300 bg-zinc-50 px-3.5 py-3 text-sm font-medium text-zinc-950 outline-none transition hover:border-emerald-700/40 focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10"
+                          className="w-full border border-emerald-700/40 bg-zinc-50 px-3.5 py-3 text-sm font-medium text-zinc-950 outline-none transition hover:border-emerald-700/40 focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10"
                         >
                           {industries.map((industry) => (
                             <option key={industry} value={industry}>
@@ -236,7 +236,7 @@ export default function RegisterPage() {
                           value={form.employeeCount}
                           onChange={handleChange}
                           placeholder="250"
-                          className="w-full border border-zinc-300 bg-zinc-50 px-3.5 py-3 text-sm font-medium text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-emerald-700/40 focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10"
+                          className="w-full border border-emerald-700/40 bg-zinc-50 px-3.5 py-3 text-sm font-medium text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-emerald-700/40 focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10"
                         />
                       </div>
                     </div>
@@ -260,7 +260,7 @@ export default function RegisterPage() {
                           value={form.country}
                           onChange={handleChange}
                           placeholder="India"
-                          className="w-full border border-zinc-300 bg-zinc-50 px-3.5 py-3 text-sm font-medium text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-emerald-700/40 focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10"
+                          className="w-full border border-emerald-700/40 bg-zinc-50 px-3.5 py-3 text-sm font-medium text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-emerald-700/40 focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10"
                         />
                       </div>
 
@@ -279,7 +279,7 @@ export default function RegisterPage() {
                           value={form.city}
                           onChange={handleChange}
                           placeholder="New Delhi"
-                          className="w-full border border-zinc-300 bg-zinc-50 px-3.5 py-3 text-sm font-medium text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-emerald-700/40 focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10"
+                          className="w-full border border-emerald-700/40 bg-zinc-50 px-3.5 py-3 text-sm font-medium text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-emerald-700/40 focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10"
                         />
                       </div>
                     </div>
@@ -300,7 +300,7 @@ export default function RegisterPage() {
                         type="date"
                         value={form.foundedAt}
                         onChange={handleChange}
-                        className="w-full border border-zinc-300 bg-zinc-50 px-3.5 py-3 text-sm font-medium text-zinc-950 outline-none transition hover:border-emerald-700/40 focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10"
+                        className="w-full border border-emerald-700/40 bg-zinc-50 px-3.5 py-3 text-sm font-medium text-zinc-950 outline-none transition hover:border-emerald-700/40 focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10"
                       />
                     </div>
                   </div>
@@ -353,7 +353,7 @@ export default function RegisterPage() {
                         value={form.email}
                         onChange={handleChange}
                         placeholder="you@company.com"
-                        className="w-full border border-zinc-300 bg-zinc-50 px-3.5 py-3 text-sm font-medium text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-emerald-700/40 focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10"
+                        className="w-full border border-emerald-700/40 bg-zinc-50 px-3.5 py-3 text-sm font-medium text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-emerald-700/40 focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10"
                       />
                     </div>
 
@@ -377,7 +377,7 @@ export default function RegisterPage() {
                         value={form.password}
                         onChange={handleChange}
                         placeholder="••••••••"
-                        className="w-full border border-zinc-300 bg-zinc-50 px-3.5 py-3 text-sm font-medium text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-emerald-700/40 focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10"
+                        className="w-full border border-emerald-700/40 bg-zinc-50 px-3.5 py-3 text-sm font-medium text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-emerald-700/40 focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10"
                       />
 
                       <p className="mt-2 text-[9px] font-medium uppercase tracking-wider text-zinc-400">
