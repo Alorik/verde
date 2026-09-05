@@ -1,12 +1,11 @@
-import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { s3 } from "@/lib/s3";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  req: Request,
+  req: NextRequest,
   { params }: { params: Promise<{ documentId: string }> },
 ) {
   try {
@@ -18,21 +17,24 @@ export async function GET(
     }
 
     const organizationId = session.user.id;
+
     const { documentId } = await params;
 
     // Find document and verify ownership
-    const document = await prisma.document.findFirst({
+    const document = await prisma.document.findUnique({
       where: {
         id: documentId,
-        assessment: {
-          organizationId,
-        },
       },
       select: {
         id: true,
         fileName: true,
         fileUrl: true,
         mimeType: true,
+        assessment: {
+          select: {
+            organizationId: true,
+          },
+        },
       },
     });
 
@@ -43,6 +45,11 @@ export async function GET(
       );
     }
 
+    // Ownership check
+    if (document.assessment.organizationId !== organizationId) {
+      return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+    }
+
     if (!document.fileUrl) {
       return NextResponse.json(
         { message: "Document file is not available" },
@@ -50,25 +57,36 @@ export async function GET(
       );
     }
 
-    // Generate temporary S3 URL
+    // Get original PDF from S3
     const command = new GetObjectCommand({
       Bucket: process.env.AWS_S3_BUCKET_NAME,
       Key: document.fileUrl,
-      ResponseContentType: document.mimeType,
-      ResponseContentDisposition: `inline; filename="${document.fileName}"`,
     });
 
-    const signedUrl = await getSignedUrl(s3, command, {
-      expiresIn: 300,
-    });
+    const response = await s3.send(command);
 
-    // Send user to the actual S3 document
-    return NextResponse.redirect(signedUrl);
+    if (!response.Body) {
+      return NextResponse.json(
+        { message: "Document file could not be retrieved" },
+        { status: 404 },
+      );
+    }
+
+    const body = await response.Body.transformToByteArray();
+
+    return new NextResponse(Buffer.from(body) as unknown as BodyInit, {
+      status: 200,
+      headers: {
+        "Content-Type": document.mimeType || "application/pdf",
+        "Content-Disposition": `inline; filename="${document.fileName}"`,
+        "Cache-Control": "private, no-store",
+      },
+    });
   } catch (error) {
-    console.error("Failed to generate document URL:", error);
+    console.error("Failed to view document:", error);
 
     return NextResponse.json(
-      { message: "Failed to open document" },
+      { message: "Failed to retrieve document" },
       { status: 500 },
     );
   }

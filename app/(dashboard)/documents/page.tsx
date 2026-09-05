@@ -19,8 +19,11 @@ type Document = {
 };
 
 export default function DocumentsPage() {
-  const [documents, setDocuments] = useState<Document[]>([]);
-  const [loading, setLoading] = useState(true);
+const [documents, setDocuments] = useState<Document[]>([]);
+const [loading, setLoading] = useState(true);
+
+const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+
 
   useEffect(() => {
     async function loadDocuments() {
@@ -179,15 +182,14 @@ export default function DocumentsPage() {
                 {/* Actions */}
                 <div className="flex w-full shrink-0 items-center gap-3 sm:w-auto">
                   {document.fileUrl && (
-                    <Link
-                      href={`/api/documents/${document.id}/view`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex flex-1 items-center justify-center gap-3 border border-zinc-500 px-4 py-2.5 text-xs font-medium text-zinc-800 transition-colors hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900 sm:flex-none"
+                    <button
+                      type="button"
+                      onClick={() => setSelectedDocument(document)}
+                      className="flex flex-1 items-center justify-center gap-3 border border-zinc-500 px-4 py-2.5 text-xs font-medium text-zinc-800 transition-colors hover:border-emerald-600 hover:bg-emerald-50 hover:text-emerald-900 sm:flex-none"
                     >
                       <span>View document</span>
                       <span className="text-base leading-none">→</span>
-                    </Link>
+                    </button>
                   )}
                 </div>
               </div>
@@ -195,6 +197,49 @@ export default function DocumentsPage() {
           </div>
         )}
       </div>
+
+      {selectedDocument && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/70 p-3 sm:p-6"
+          onClick={() => setSelectedDocument(null)}
+        >
+          <div
+            className="flex h-[95vh] w-full max-w-6xl flex-col border border-emerald-700/40 bg-white shadow-2xl sm:h-[90vh]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            {/* Modal header */}
+            <div className="flex shrink-0 items-center justify-between gap-4 border-b border-emerald-700/30 bg-white px-4 py-3 sm:px-5">
+              <div className="min-w-0">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-500">
+                  Document preview
+                </p>
+
+                <h2 className="mt-1 truncate text-sm font-medium text-zinc-950">
+                  {selectedDocument.fileName}
+                </h2>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setSelectedDocument(null)}
+                className="flex h-9 w-9 shrink-0 items-center justify-center border border-zinc-400 bg-white text-lg text-zinc-700 transition hover:border-emerald-600 hover:bg-emerald-50 hover:text-emerald-900"
+                aria-label="Close document preview"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* PDF */}
+            <div className="min-h-0 flex-1 bg-zinc-100">
+              <iframe
+                src={`/api/documents/${selectedDocument.id}/view`}
+                title={selectedDocument.fileName}
+                className="h-full w-full border-0"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
