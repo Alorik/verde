@@ -52,7 +52,7 @@ type Assessment = {
 };
 
 const STATUS_STYLES: Record<string, string> = {
-  draft: "bg-zinc-100 text-zinc-800 border-zinc-400",
+  draft: "bg-white text-zinc-800 border-zinc-400",
   in_review: "bg-amber-50 text-amber-800 border-amber-500",
   submitted: "bg-blue-50 text-blue-800 border-blue-500",
   complete: "bg-emerald-50 text-emerald-800 border-emerald-600",
@@ -81,7 +81,7 @@ const DOCUMENT_TYPE_META: Record<
   },
   OTHER: {
     label: "Other",
-    chip: "bg-zinc-100 text-zinc-800 border-zinc-400",
+    chip: "bg-white text-zinc-800 border-zinc-400",
   },
 };
 
@@ -91,7 +91,7 @@ const EXTRACTION_META: Record<
 > = {
   PENDING: {
     label: "Queued",
-    chip: "bg-zinc-100 text-zinc-700 border-zinc-400",
+    chip: "bg-white text-zinc-700 border-zinc-400",
   },
   PROCESSING: {
     label: "Extracting",
@@ -281,7 +281,7 @@ function Divider() {
         ease: [0.65, 0, 0.35, 1],
       }}
       style={{ transformOrigin: "center" }}
-      className="hidden h-10 w-px flex-none bg-zinc-200 sm:block"
+      className="hidden h-10 w-px flex-none bg-zinc-200 lg:block"
     />
   );
 }
@@ -346,7 +346,7 @@ function DocumentCard({ doc }: { doc: Document }) {
       exit="exit"
       className="overflow-hidden border border-emerald-700/30 bg-white transition hover:border-emerald-500"
     >
-      <div className="flex items-start gap-3 p-3.5">
+      <div className="flex items-start gap-3 p-3.5 sm:p-4">
         <span
           className={`flex h-10 w-10 flex-none items-center justify-center border ${typeMeta.chip}`}
         >
@@ -354,8 +354,8 @@ function DocumentCard({ doc }: { doc: Document }) {
         </span>
 
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            <span className="truncate text-sm font-medium text-zinc-950">
+          <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="min-w-0 max-w-full break-words text-sm font-medium text-zinc-950">
               {doc.fileName}
             </span>
 
@@ -373,14 +373,16 @@ function DocumentCard({ doc }: { doc: Document }) {
             </span>
           </div>
 
-          <div className="mt-1.5 flex flex-wrap items-center gap-x-2 text-[10px] font-semimedium uppercase tracking-wider text-zinc-600">
+          <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-medium uppercase tracking-wider text-zinc-600">
             <span>{formatFileSize(doc.fileSize)}</span>
+
             <span aria-hidden="true">·</span>
+
             <span>Uploaded {formatDate(doc.uploadedAt)}</span>
           </div>
 
           {doc.extractionStatus === "FAILED" && (
-            <p className="mt-2  text-[10px] uppercase tracking-wide text-coral-600">
+            <p className="mt-2 text-[10px] uppercase tracking-wide text-coral-600">
               Extraction failed — data not available
             </p>
           )}
@@ -407,7 +409,7 @@ function DocumentCard({ doc }: { doc: Document }) {
               ease: [0.22, 1, 0.36, 1],
             }}
           >
-            <div className="grid grid-cols-2 gap-4 border-t border-emerald-700/30 bg-zinc-50 px-3.5 py-3">
+            <div className="grid grid-cols-1 gap-3 border-t border-emerald-700/30 bg-white px-3.5 py-3 sm:grid-cols-2 sm:gap-4">
               <div>
                 <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
                   Electricity cost
@@ -451,23 +453,40 @@ export default function AssessmentDetail({
 
   const prefersReducedMotion = useReducedMotion();
 
-async function loadAssessment(assessmentId: string) {
-  const response = await fetch(`/api/assessments/${assessmentId}`);
+  function getLatestDocuments(documents: Document[]) {
+    const latest = new Map<DocumentType, Document>();
 
-  if (!response.ok) {
-    console.error("failed to load assessment");
-    return;
+    for (const doc of documents) {
+      const existing = latest.get(doc.documentType);
+
+      if (
+        !existing ||
+        new Date(doc.uploadedAt).getTime() >
+          new Date(existing.uploadedAt).getTime()
+      ) {
+        latest.set(doc.documentType, doc);
+      }
+    }
+
+    return Array.from(latest.values());
   }
 
-  const data = await response.json();
+  async function loadAssessment(assessmentId: string) {
+    const response = await fetch(`/api/assessments/${assessmentId}`);
 
-  const assessmentData = data.assessment;
+    if (!response.ok) {
+      console.error("failed to load assessment");
+      return;
+    }
 
-  setAssessment({
-    ...assessmentData,
-    documents: getLatestDocuments(assessmentData.documents),
-  });
-}
+    const data = await response.json();
+    const assessmentData = data.assessment;
+
+    setAssessment({
+      ...assessmentData,
+      documents: getLatestDocuments(assessmentData.documents),
+    });
+  }
 
   const UPLOAD_TYPES: {
     type: DocumentType;
@@ -490,24 +509,6 @@ async function loadAssessment(assessmentId: string) {
       label: "Employee data",
     },
   ];
-
-  function getLatestDocuments(documents: Document[]) {
-    const latest = new Map<DocumentType, Document>();
-
-    for (const doc of documents) {
-      const existing = latest.get(doc.documentType);
-
-      if (
-        !existing ||
-        new Date(doc.uploadedAt).getTime() >
-          new Date(existing.uploadedAt).getTime()
-      ) {
-        latest.set(doc.documentType, doc);
-      }
-    }
-
-    return Array.from(latest.values());
-  }
 
   async function handleUpload(type: DocumentType, file: File) {
     if (!assessment) return;
@@ -554,7 +555,6 @@ async function loadAssessment(assessmentId: string) {
 
     if (!response.ok) {
       setCalculateError(data.message ?? "Failed to calculate ESG score");
-
       setCalculating(false);
       return;
     }
@@ -565,37 +565,37 @@ async function loadAssessment(assessmentId: string) {
     setCalculating(false);
   }
 
- useEffect(() => {
-   let cancelled = false;
+  useEffect(() => {
+    let cancelled = false;
 
-   async function load() {
-     const { assessmentId } = await params;
+    async function load() {
+      const { assessmentId } = await params;
 
-     const response = await fetch(`/api/assessments/${assessmentId}`);
+      const response = await fetch(`/api/assessments/${assessmentId}`);
 
-     if (!response.ok) {
-       console.error("failed to load assessment");
-       return;
-     }
+      if (!response.ok) {
+        console.error("failed to load assessment");
+        return;
+      }
 
-     const data = await response.json();
+      const data = await response.json();
 
-     if (!cancelled) {
-       const assessmentData = data.assessment;
+      if (!cancelled) {
+        const assessmentData = data.assessment;
 
-       setAssessment({
-         ...assessmentData,
-         documents: getLatestDocuments(assessmentData.documents),
-       });
-     }
-   }
+        setAssessment({
+          ...assessmentData,
+          documents: getLatestDocuments(assessmentData.documents),
+        });
+      }
+    }
 
-   load();
+    load();
 
-   return () => {
-     cancelled = true;
-   };
- }, [params]);
+    return () => {
+      cancelled = true;
+    };
+  }, [params]);
 
   useEffect(() => {
     if (!assessment) return;
@@ -616,7 +616,7 @@ async function loadAssessment(assessmentId: string) {
 
   if (!assessment) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-100">
+      <div className="flex min-h-screen items-center justify-center bg-white px-4">
         <motion.div
           animate={
             prefersReducedMotion
@@ -630,9 +630,9 @@ async function loadAssessment(assessmentId: string) {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="flex items-center gap-3 text-xs font-semimedium tracking-wide text-zinc-600"
+          className="flex items-center gap-3 text-xs font-medium tracking-wide text-zinc-600"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
           retrieving record…
         </motion.div>
       </div>
@@ -665,10 +665,9 @@ async function loadAssessment(assessmentId: string) {
   };
 
   return (
-    <div className="bg-zinc-100 px-">
-      <div className="mx-12 border-x border-emerald-800/30 bg-white py-10 sm:px-10">
+    <div className="bg-white px-4 sm:px-6 md:px-8 lg:px-12">
+      <div className="min-h-screen border-x border-emerald-800/30 bg-white px-4 py-8 sm:px-6 sm:py-10 md:px-8 lg:px-10">
         {/* Breadcrumb */}
-
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -676,10 +675,10 @@ async function loadAssessment(assessmentId: string) {
         >
           <Link
             href={`/organization/${assessment.organizationId}`}
-            className="inline-flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-widest text-zinc-600 transition hover:text-emerald-800"
+            className="inline-flex max-w-full items-center gap-1.5 text-[10px] font-medium uppercase tracking-widest text-zinc-600 transition hover:text-emerald-800 sm:text-[11px]"
           >
             <svg
-              className="h-3 w-3"
+              className="h-3 w-3 shrink-0"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -689,11 +688,13 @@ async function loadAssessment(assessmentId: string) {
             >
               <path d="m15 18-6-6 6-6" />
             </svg>
-            Organization record
+
+            <span>Organization record</span>
           </Link>
         </motion.div>
 
-        <div className="sticky top-12 z-20 -mx-10 bg-white border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)]">
+        {/* Sticky assessment header */}
+        <div className="-mx-4 sticky top-16 z-20 mt-4 border-b border-emerald-800/30 bg-white px-4 shadow-[0_3px_6px_rgba(6,95,70,0.18)] sm:-mx-6 sm:px-6 md:-mx-8 md:px-8 lg:-mx-10 lg:px-10">
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -701,12 +702,13 @@ async function loadAssessment(assessmentId: string) {
               duration: 0.4,
               delay: 0.05,
             }}
-            className="pt-6 text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600 mx-10"
+            className="pt-5 text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-600 sm:pt-6 sm:text-[11px]"
           >
             Assessment record
           </motion.p>
 
-          <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto_auto_auto_minmax(0,1fr)] items-center gap-6  pb-8 mx-10">
+          <div className="mt-3 flex flex-col gap-5 pb-5 sm:pb-6 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_auto_auto_minmax(0,1fr)] lg:items-center lg:gap-6 lg:pb-8">
+            {/* Title */}
             <motion.h1
               initial={{
                 opacity: 0,
@@ -721,97 +723,87 @@ async function loadAssessment(assessmentId: string) {
                 delay: 0.05,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="justify-self-start truncate text-4xl font-medium tracking-tight text-zinc-950 sm:text-5xl z-10"
+              className="min-w-0 max-w-full break-words text-3xl font-medium tracking-tight text-zinc-950 sm:text-4xl lg:justify-self-start lg:truncate lg:text-5xl"
               title={assessment.name}
             >
               {assessment.name}
             </motion.h1>
 
-            <Divider />
-
-            <motion.div
-              initial={{
-                opacity: 0,
-                y: 14,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                duration: 0.55,
-                delay: 0.2,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="flex flex-col items-center gap-1.5"
-            >
-              <span className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
-                Status
-              </span>
-
-              <motion.span
-                whileHover={{ y: -1 }}
-                className={`inline-flex items-center gap-1.5 whitespace-nowrap border px-3 py-1 text-[11px] font-medium capitalize tracking-wide ${statusStyle(
-                  assessment.status,
-                )}`}
+            {/* Mobile status/reference */}
+            <div className="grid grid-cols-2 gap-3 lg:contents">
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  y: 14,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  duration: 0.55,
+                  delay: 0.2,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="flex min-w-0 flex-col items-start gap-1.5 lg:items-center"
               >
-                <StatusIcon status={assessment.status} />
-                {statusLabel(assessment.status)}
-              </motion.span>
-            </motion.div>
+                <span className="text-[9px] font-medium uppercase tracking-widest text-zinc-600 sm:text-[10px]">
+                  Status
+                </span>
 
+                <motion.span
+                  whileHover={{ y: -1 }}
+                  className={`inline-flex max-w-full items-center gap-1.5 border px-2.5 py-1 text-[10px] font-medium capitalize tracking-wide sm:px-3 sm:text-[11px] ${statusStyle(
+                    assessment.status,
+                  )}`}
+                >
+                  <StatusIcon status={assessment.status} />
+                  <span className="truncate">
+                    {statusLabel(assessment.status)}
+                  </span>
+                </motion.span>
+              </motion.div>
+
+              <motion.div
+                initial={
+                  prefersReducedMotion
+                    ? { opacity: 0 }
+                    : {
+                        opacity: 0,
+                        scale: 1.3,
+                        rotate: -6,
+                      }
+                }
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  rotate: 0,
+                }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.3,
+                  ease: [0.34, 1.56, 0.64, 1],
+                }}
+                className="flex min-w-0 flex-col items-end gap-1.5 lg:items-end lg:justify-self-end"
+              >
+                <span className="text-[9px] font-medium uppercase tracking-widest text-zinc-600 sm:text-[10px]">
+                  Reference
+                </span>
+
+                <span className="inline-flex max-w-full items-center gap-1.5 border border-emerald-600 bg-emerald-50 py-1 pl-2 pr-2.5 text-[10px] font-medium tracking-wide text-emerald-800 sm:pl-2.5 sm:pr-3 sm:text-[11px]">
+                  <SealIcon />
+                  <span className="truncate">{referenceNumber}</span>
+                </span>
+              </motion.div>
+            </div>
+
+            {/* Desktop dividers */}
             <Divider />
-
-            <motion.div
-              initial={
-                prefersReducedMotion
-                  ? { opacity: 0 }
-                  : {
-                      opacity: 0,
-                      scale: 1.3,
-                      rotate: -6,
-                    }
-              }
-              animate={{
-                opacity: 1,
-                scale: 1,
-                rotate: 0,
-              }}
-              transition={{
-                duration: 0.5,
-                delay: 0.3,
-                ease: [0.34, 1.56, 0.64, 1],
-              }}
-              className="flex flex-col items-end gap-1.5 justify-self-end"
-            >
-              <span className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
-                Reference
-              </span>
-
-              <span className="inline-flex items-center gap-1.5 whitespace-nowrap border border-emerald-600 bg-emerald-50 py-1 pl-2.5 pr-3 text-[11px] font-medium tracking-wide text-emerald-800">
-                <SealIcon />
-                {referenceNumber}
-              </span>
-            </motion.div>
+            <Divider />
           </div>
         </div>
 
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{
-            duration: 0.7,
-            delay: 0.45,
-            ease: [0.65, 0, 0.35, 1],
-          }}
-          style={{
-            transformOrigin: "left",
-          }}
-          className="hidden"
-        />
-
         {/* Field list */}
-
         <motion.dl
           variants={listVariants}
           initial="hidden"
@@ -822,13 +814,13 @@ async function loadAssessment(assessmentId: string) {
             <motion.div
               key={field.label}
               variants={rowVariants}
-              className="flex min-h-28 flex-col justify-between border-b border-r border-emerald-700/30 bg-zinc-50 p-5"
+              className="flex min-h-24 flex-col justify-between border-b border-r border-emerald-700/30 bg-white p-4 sm:min-h-28 sm:p-5"
             >
-              <dt className="text-[11px] font-medium uppercase tracking-widest text-zinc-600">
+              <dt className="text-[10px] font-medium uppercase tracking-widest text-zinc-600 sm:text-[11px]">
                 {field.label}
               </dt>
 
-              <dd className="mt-4 text-lg font-medium text-zinc-950">
+              <dd className="mt-4 text-base font-medium text-zinc-950 sm:text-lg">
                 {field.value}
               </dd>
             </motion.div>
@@ -836,7 +828,6 @@ async function loadAssessment(assessmentId: string) {
         </motion.dl>
 
         {/* Description */}
-
         {assessment.description && (
           <motion.div
             initial={{
@@ -854,18 +845,17 @@ async function loadAssessment(assessmentId: string) {
             }}
             className="mt-8 border-b border-emerald-500/40 pb-5"
           >
-            <p className="text-[11px] font-medium uppercase tracking-widest text-zinc-600">
+            <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600 sm:text-[11px]">
               Description
             </p>
 
-            <p className="mt-3 text-sm font-medium leading-relaxed text-zinc-800">
+            <p className="mt-3 break-words text-sm font-medium leading-relaxed text-zinc-800">
               {assessment.description}
             </p>
           </motion.div>
         )}
 
         {/* Filed footer */}
-
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -873,11 +863,11 @@ async function loadAssessment(assessmentId: string) {
             duration: 0.5,
             delay: 1.25,
           }}
-          className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-1 text-[11px] font-semimedium text-zinc-600"
+          className="mt-6 flex flex-col gap-2 text-[10px] font-medium text-zinc-600 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-1 sm:text-[11px]"
         >
-          <span className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            on file · {assessment.id}
+          <span className="flex min-w-0 items-center gap-2">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
+            <span className="break-all">on file · {assessment.id}</span>
           </span>
 
           <span>filed {formatDate(assessment.createdAt)}</span>
@@ -886,7 +876,6 @@ async function loadAssessment(assessmentId: string) {
         </motion.div>
 
         {/* Documents */}
-
         <motion.section
           initial={{
             opacity: 0,
@@ -901,25 +890,27 @@ async function loadAssessment(assessmentId: string) {
             delay: 1.35,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className="mt-14"
+          className="mt-10 sm:mt-14"
         >
-          <div className="grid grid-cols-[1fr_auto] items-center gap-4 border border-zinc-950 bg-zinc-950 p-5 text-white">
-            <div>
-              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-400">
+          {/* Documents header */}
+          <div className="flex flex-col gap-3 border border-zinc-950 bg-zinc-950 p-4 text-white sm:flex-row sm:items-center sm:justify-between sm:p-5">
+            <div className="min-w-0">
+              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-400 sm:text-[11px]">
                 Documents
               </p>
 
-              <h2 className="mt-2 text-2xl font-medium tracking-tight text-white">
+              <h2 className="mt-2 text-xl font-medium tracking-tight text-white sm:text-2xl">
                 Assessment documents
               </h2>
             </div>
 
-            <span className="justify-self-end text-xs font-semimedium text-zinc-300">
+            <span className="text-[11px] font-medium text-zinc-300 sm:text-xs">
               {assessment.documents.length}{" "}
               {assessment.documents.length === 1 ? "file" : "files"}
             </span>
           </div>
 
+          {/* Upload list */}
           <div className="mt-5 divide-y divide-zinc-300 border border-emerald-700/30">
             {UPLOAD_TYPES.map(({ type, label }) => {
               const existing = assessment.documents.find(
@@ -931,22 +922,22 @@ async function loadAssessment(assessmentId: string) {
               return (
                 <div
                   key={type}
-                  className="flex items-center justify-between gap-4 px-4 py-3.5 hover:bg-emerald-50"
+                  className="flex flex-col gap-4 px-4 py-4 transition-colors hover:bg-emerald-50 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:py-3.5"
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex min-w-0 items-center gap-3">
                     <span
                       className={`flex h-9 w-9 flex-none items-center justify-center border ${DOCUMENT_TYPE_META[type].chip}`}
                     >
                       <DocumentTypeIcon type={type} />
                     </span>
 
-                    <div>
+                    <div className="min-w-0">
                       <p className="text-sm font-medium text-zinc-950">
                         {label}
                       </p>
 
                       {existing && (
-                        <p className="mt-0.5 truncate text-[10px] font-semimedium uppercase tracking-wide text-zinc-600">
+                        <p className="mt-0.5 max-w-full truncate text-[10px] font-medium uppercase tracking-wide text-zinc-600">
                           {existing.fileName}
                         </p>
                       )}
@@ -954,7 +945,7 @@ async function loadAssessment(assessmentId: string) {
                   </div>
 
                   <label
-                    className={`inline-flex flex-none items-center gap-1.5 border px-3.5 py-1.5 text-xs font-medium transition ${
+                    className={`inline-flex w-full items-center justify-center gap-1.5 border px-3.5 py-2 text-xs font-medium transition sm:w-auto sm:py-1.5 ${
                       isUploading
                         ? "cursor-wait border-emerald-700/30 text-zinc-500"
                         : "cursor-pointer border-zinc-500 text-zinc-800 hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
@@ -987,14 +978,15 @@ async function loadAssessment(assessmentId: string) {
           </div>
 
           {assessment.documents.length === 0 && (
-            <p className="mt-4 text-[11px] font-semimedium text-amber-700">
+            <p className="mt-4 text-[11px] font-medium text-amber-700">
               Please upload at least one document.
             </p>
           )}
 
-          <div className="mt-8 flex items-center justify-end gap-4">
+          {/* Calculate */}
+          <div className="mt-6 flex flex-col gap-4 sm:mt-8 sm:flex-row sm:items-center sm:justify-end sm:gap-4">
             {calculateError && (
-              <p className="text-[11px] font-semimedium text-red-700">
+              <p className="break-words text-[11px] font-medium text-red-700 sm:text-right">
                 {calculateError}
               </p>
             )}
@@ -1009,14 +1001,14 @@ async function loadAssessment(assessmentId: string) {
               type="button"
               disabled={assessment.documents.length === 0 || calculating}
               onClick={handleCalculateEsg}
-              className="border border-zinc-950 bg-zinc-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-40"
+              className="w-full border border-zinc-950 bg-zinc-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
             >
               {calculating ? "Calculating…" : "Calculate ESG"}
             </button>
           </div>
 
           {assessment.documents.length === 0 ? (
-            <div className="mt-6 border border-dashed border-zinc-400 bg-zinc-50 py-12 text-center">
+            <div className="mt-6 border border-dashed border-zinc-400 bg-white px-4 py-10 text-center sm:py-12">
               <p className="text-sm font-medium text-zinc-700">
                 No documents uploaded yet.
               </p>

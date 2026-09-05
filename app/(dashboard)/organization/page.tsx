@@ -31,7 +31,7 @@ type Organization = {
   assessments: Assessment[];
 };
 
-const STATUS_OPTIONS = ["DRAFT", "IN_PROGRESS", "UNDER_REVIEW", "COMPLETED"]; // verify against your Prisma enum
+const STATUS_OPTIONS = ["DRAFT", "IN_PROGRESS", "UNDER_REVIEW", "COMPLETED"];
 
 export default function OrganizationDashboard() {
   const router = useRouter();
@@ -78,6 +78,7 @@ export default function OrganizationDashboard() {
 
   async function handleCreateAssessment() {
     if (!organization) return;
+
     setCreating(true);
     setCreateError(null);
 
@@ -106,22 +107,25 @@ export default function OrganizationDashboard() {
 
   if (!organization) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white">
+      <div className="flex min-h-screen items-center justify-center bg-white px-4">
         <motion.div
           animate={
             prefersReducedMotion ? undefined : { opacity: [0.3, 0.7, 0.3] }
           }
           transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-          className="flex items-center gap-3 text-xs font-semimedium tracking-wide text-zinc-600"
+          className="flex items-center gap-3 text-center text-xs font-medium tracking-wide text-zinc-600"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
           retrieving record…
         </motion.div>
       </div>
     );
   }
 
-  const referenceNumber = `ORG-${organization.id.slice(-6).toUpperCase().padStart(6, "0")}`;
+  const referenceNumber = `ORG-${organization.id
+    .slice(-6)
+    .toUpperCase()
+    .padStart(6, "0")}`;
 
   const fields: { label: string; value: string }[] = [
     { label: "Industry", value: organization.industry },
@@ -157,15 +161,15 @@ export default function OrganizationDashboard() {
   };
 
   return (
-    <div className="bg-white-100 px-12">
-      <div className="border-x border-emerald-800/30 bg-white py-10 sm:px-10">
+    <div className="bg-zinc-100 px-4 sm:px-6 md:px-8 lg:px-12">
+      <div className="border-x border-emerald-800/30 bg-white px-4 py-8 sm:px-6 sm:py-10 md:px-8 lg:px-10">
         {/* Eyebrow + stamp row */}
-        <div className="flex items-start justify-between bg-white">
+        <div className="flex items-start justify-between gap-4 bg-white">
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
-            className="text-[11px] px-1 font-medium uppercase tracking-[0.2em] text-zinc-600"
+            className="px-1 text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-600 sm:text-[11px]"
           >
             Organization record
           </motion.p>
@@ -182,19 +186,24 @@ export default function OrganizationDashboard() {
               delay: 0.15,
               ease: [0.34, 1.56, 0.64, 1],
             }}
-            className="border border-emerald-700 bg-emerald-50 px-3 py-1.5 text-[11px] font-medium tracking-wide text-emerald-800"
+            className="shrink-0 border border-emerald-700 bg-emerald-50 px-2.5 py-1.5 text-[10px] font-medium tracking-wide text-emerald-800 sm:px-3 sm:text-[11px]"
           >
             {referenceNumber}
           </motion.div>
         </div>
 
+        {/* Organization name */}
         <motion.h1
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-5 text-4xl font-medium sticky top-17 z-20 bg-white tracking-tight text-zinc-950 border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)] -mx-10"
+          transition={{
+            duration: 0.55,
+            delay: 0.05,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="-mx-4 mt-5 sticky top-16 z-20 border-b border-emerald-800/30 bg-white px-4 pb-6 pt-1 text-3xl font-medium tracking-tight text-zinc-950 shadow-[0_3px_6px_rgba(6,95,70,0.18)] sm:-mx-6 sm:px-6 sm:pb-8 sm:text-4xl md:-mx-8 md:px-8 lg:-mx-10 lg:px-10"
         >
-          <div className="mx-10 mb-8 ">{organization.name}</div>
+          {organization.name}
         </motion.h1>
 
         {/* Field list */}
@@ -208,12 +217,13 @@ export default function OrganizationDashboard() {
             <motion.div
               key={field.label}
               variants={rowVariants}
-              className="flex min-h-28 flex-col justify-between border-b border-r border-zinc-300 bg-white p-5 sm:min-h-32"
+              className="flex min-h-24 flex-col justify-between border-b border-r border-zinc-300 bg-white p-4 sm:min-h-32 sm:p-5"
             >
-              <dt className="text-[11px] font-medium uppercase tracking-widest text-zinc-600">
+              <dt className="text-[10px] font-medium uppercase tracking-widest text-zinc-600 sm:text-[11px]">
                 {field.label}
               </dt>
-              <dd className="mt-4 text-lg font-semimedium text-zinc-950">
+
+              <dd className="mt-4 break-words text-base font-medium text-zinc-950 sm:text-lg">
                 {field.value}
               </dd>
             </motion.div>
@@ -225,27 +235,28 @@ export default function OrganizationDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1.2 }}
-          className="mt-14"
+          className="mt-10 sm:mt-14"
         >
-          <div className="flex flex-col gap-5 border border-zinc-300 bg-emerald-50 p-5  sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex flex-col gap-5 border border-zinc-300 bg-emerald-50 p-4 sm:p-5 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-900">
+              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-900 sm:text-[11px]">
                 Assessments
               </p>
-              <h2 className="mt-2 text-2xl font-medium tracking-tight">
+
+              <h2 className="mt-2 text-xl font-medium tracking-tight sm:text-2xl">
                 ESG Assessments
               </h2>
             </div>
 
-            <div className="flex items-center gap-4">
-              <span className="text-xs font-semimedium text-zinc-900">
+            <div className="flex flex-wrap items-center justify-between gap-3 sm:justify-start sm:gap-4">
+              <span className="text-xs font-medium text-zinc-900">
                 {organization.assessments.length} total
               </span>
 
               <button
                 type="button"
                 onClick={() => setShowCreateModal(true)}
-                className="inline-flex items-center gap-1.5 border border-white bg-white px-4 py-2.5 text-xs font-medium text-zinc-950 transition hover:bg-zinc-200"
+                className="inline-flex items-center gap-1.5 border border-white bg-white px-3.5 py-2.5 text-xs font-medium text-zinc-950 transition hover:bg-zinc-200 sm:px-4"
               >
                 <svg
                   className="h-3.5 w-3.5"
@@ -265,7 +276,7 @@ export default function OrganizationDashboard() {
 
           <div className="border-x border-b border-zinc-300 bg-white">
             {organization.assessments.length === 0 ? (
-              <div className="py-10 text-center">
+              <div className="px-4 py-10 text-center">
                 <p className="text-sm font-medium text-zinc-600">
                   No assessments created yet.
                 </p>
@@ -275,22 +286,25 @@ export default function OrganizationDashboard() {
                 <Link
                   key={assessment.id}
                   href={`/assessments/${assessment.id}`}
-                  className="group flex items-center justify-between gap-5 border-b border-zinc-300 p-5 transition-colors last:border-b-0 hover:bg-emerald-50"
+                  className="group flex flex-col gap-5 border-b border-zinc-300 p-4 transition-colors last:border-b-0 hover:bg-emerald-50 sm:p-5 md:flex-row md:items-center md:justify-between"
                 >
-                  <div>
-                    <h3 className="text-lg font-medium text-zinc-950">
+                  {/* Assessment info */}
+                  <div className="min-w-0">
+                    <h3 className="break-words text-base font-medium text-zinc-950 sm:text-lg">
                       {assessment.name}
                     </h3>
 
                     {assessment.description && (
-                      <p className="mt-1 text-sm font-medium text-zinc-700">
+                      <p className="mt-1 break-words text-sm font-medium text-zinc-700">
                         {assessment.description}
                       </p>
                     )}
 
-                    <div className="mt-3 flex flex-wrap items-center gap-3 text-[11px] font-semimedium uppercase tracking-wider text-zinc-600">
+                    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] font-medium uppercase tracking-wider text-zinc-600 sm:text-[11px]">
                       <span>Reporting year: {assessment.reportingYear}</span>
-                      <span>·</span>
+
+                      <span className="hidden sm:inline">·</span>
+
                       <span>
                         Created{" "}
                         {new Date(assessment.createdAt).toLocaleDateString()}
@@ -298,9 +312,10 @@ export default function OrganizationDashboard() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-5">
+                  {/* Status + arrow */}
+                  <div className="flex shrink-0 items-center justify-between gap-4 md:justify-end md:gap-5">
                     <span
-                      className={`border px-3 py-1 text-[10px] font-medium uppercase tracking-wider ${
+                      className={`border px-2.5 py-1 text-[9px] font-medium uppercase tracking-wider sm:px-3 sm:text-[10px] ${
                         assessment.status === "DRAFT"
                           ? "border-amber-500 bg-amber-50 text-amber-800"
                           : assessment.status === "COMPLETED"
@@ -326,12 +341,13 @@ export default function OrganizationDashboard() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 1.1 }}
-          className="mt-8 flex items-center gap-2 text-[11px] font-semimedium text-zinc-600"
+          className="mt-6 flex min-w-0 items-start gap-2 text-[10px] font-medium text-zinc-600 sm:mt-8 sm:text-[11px]"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-          on file · {organization.id}
+          <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
+          <span className="break-all">on file · {organization.id}</span>
         </motion.div>
 
+        {/* Create Assessment Modal */}
         <AnimatePresence>
           {showCreateModal && (
             <motion.div
@@ -339,21 +355,25 @@ export default function OrganizationDashboard() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-6"
+              className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/20 p-4 sm:p-6"
             >
               <motion.div
                 initial={{ opacity: 0, y: 10, scale: 0.98 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 6, scale: 0.98 }}
-                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                className="w-full max-w-lg border border-zinc-400 bg-white p-6 shadow-2xl"
+                transition={{
+                  duration: 0.25,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="my-auto w-full max-w-lg border border-zinc-400 bg-white p-4 shadow-2xl sm:p-6"
               >
-                <div className="flex items-start justify-between">
-                  <div>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
                     <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-600">
                       New record
                     </p>
-                    <h2 className="mt-2 text-2xl font-medium text-zinc-950">
+
+                    <h2 className="mt-2 text-xl font-medium text-zinc-950 sm:text-2xl">
                       Create assessment
                     </h2>
                   </div>
@@ -361,16 +381,17 @@ export default function OrganizationDashboard() {
                   <button
                     type="button"
                     onClick={() => setShowCreateModal(false)}
-                    className="text-xl font-medium leading-none text-zinc-600 transition hover:text-zinc-950"
+                    className="shrink-0 text-xl font-medium leading-none text-zinc-600 transition hover:text-zinc-950"
                   >
                     ×
                   </button>
                 </div>
 
-                <div className="mt-8">
+                <div className="mt-6 sm:mt-8">
                   <label className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
                     Name
                   </label>
+
                   <input
                     type="text"
                     value={newName}
@@ -380,11 +401,12 @@ export default function OrganizationDashboard() {
                   />
                 </div>
 
-                <div className="mt-5 grid grid-cols-2 gap-4">
+                <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <label className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
                       Reporting year
                     </label>
+
                     <input
                       type="number"
                       value={newYear}
@@ -399,6 +421,7 @@ export default function OrganizationDashboard() {
                     <label className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">
                       Status
                     </label>
+
                     <select
                       value={newStatus}
                       onChange={(e) => setNewStatus(e.target.value)}
@@ -420,6 +443,7 @@ export default function OrganizationDashboard() {
                       (optional)
                     </span>
                   </label>
+
                   <textarea
                     value={newDescription}
                     onChange={(e) => setNewDescription(e.target.value)}
@@ -429,12 +453,10 @@ export default function OrganizationDashboard() {
                 </div>
 
                 {createError && (
-                  <p className="mt-4  text-[11px] text-red-600">
-                    {createError}
-                  </p>
+                  <p className="mt-4 text-[11px] text-red-600">{createError}</p>
                 )}
 
-                <div className="mt-8 flex justify-end gap-3">
+                <div className="mt-6 flex flex-col-reverse gap-3 sm:mt-8 sm:flex-row sm:justify-end">
                   <button
                     type="button"
                     onClick={() => {
@@ -443,7 +465,7 @@ export default function OrganizationDashboard() {
                       setNewDescription("");
                       setCreateError(null);
                     }}
-                    className="border border-zinc-500 bg-white px-5 py-2.5 text-sm font-medium text-zinc-950 transition hover:bg-white"
+                    className="border border-zinc-500 bg-white px-5 py-2.5 text-sm font-medium text-zinc-950 transition hover:bg-zinc-100"
                   >
                     Cancel
                   </button>
@@ -452,9 +474,10 @@ export default function OrganizationDashboard() {
                     type="button"
                     disabled={!newName.trim() || !newYear || creating}
                     onClick={handleCreateAssessment}
-                    className="inline-flex items-center gap-1.5 border border-emerald-950 bg-emerald-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-950 disabled:cursor-not-allowed disabled:opacity-40"
+                    className="inline-flex items-center justify-center gap-1.5 border border-emerald-950 bg-emerald-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-950 disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     {creating ? "Creating…" : "Create"}
+
                     {!creating && <span aria-hidden="true">→</span>}
                   </button>
                 </div>
