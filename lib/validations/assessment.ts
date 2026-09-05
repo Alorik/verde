@@ -1,4 +1,4 @@
-import { AssessmentStatus } from "@/app/generated/prisma/enums";
+import { AssessmentStatus } from "@prisma/client";
 import { z } from "zod";
 
 export const assessmentSchema = z.object({
