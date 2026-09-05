@@ -138,7 +138,7 @@ export default function ReportPage({
   if (loading) {
     return (
       <main className="min-h-screen bg-zinc-100 px-12">
-        <div className="mx-12 border-x border-emerald-700/30 bg-white px-10 py-16">
+        <div className="border-x border-emerald-700/30 bg-white px-10 py-16">
           <p className="text-xs font-medium text-zinc-600">
             retrieving report…
           </p>
@@ -150,7 +150,7 @@ export default function ReportPage({
   if (!assessment) {
     return (
       <main className="min-h-screen bg-zinc-100 px-12">
-        <div className="mx-12 border-x border-emerald-700/30 bg-white px-10 py-16">
+        <div className="border-x border-emerald-700/30 bg-white px-10 py-16">
           <h1 className="text-2xl font-medium text-zinc-950">
             Report not found
           </h1>
@@ -185,7 +185,7 @@ export default function ReportPage({
 
   return (
     <main className="min-h-screen bg-zinc-100 px-12">
-      <div className="mx-12 min-h-screen border-x border-emerald-700/30 bg-white px-10 py-10">
+      <div className="min-h-screen border-x border-emerald-700/30 bg-white px-10 py-10">
         {/* =========================================================
             HEADER
         ========================================================= */}

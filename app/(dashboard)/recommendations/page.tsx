@@ -78,7 +78,7 @@ export default function RecommendationsPage() {
   if (loading) {
     return (
       <main className="bg-zinc-100 px-12">
-        <div className="mx-12 border-x border-emerald-700/30 bg-white py-10 sm:px-10">
+        <div className="border-x border-emerald-700/30 bg-white py-10 sm:px-10">
           <p className="text-xs font-medium text-zinc-600">retrieving recommendations…</p>
         </div>
       </main>
@@ -87,7 +87,7 @@ export default function RecommendationsPage() {
 
   return (
     <main className="bg-zinc-100 px-12">
-      <div className="mx-12 border-x  bg-white py-10 sm:px-10 border-emerald-800/30 ">
+      <div className=" border-x  bg-white py-10 sm:px-10 border-emerald-800/30 ">
         {/* Header */}
         <div className="border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)] pb-8 -mx-10">
           <div className="flex items-end justify-between gap-8">

@@ -105,8 +105,10 @@ export default function ReportsPage() {
   if (loading) {
     return (
       <main className="bg-zinc-100 px-12">
-        <div className="mx-12 border-x border-emerald-700/30 bg-white py-10 sm:px-10">
-          <p className="text-xs font-medium text-zinc-600">retrieving reports…</p>
+        <div className="border-x border-emerald-700/30 bg-white py-10 sm:px-10">
+          <p className="text-xs font-medium text-zinc-600">
+            retrieving reports…
+          </p>
         </div>
       </main>
     );
@@ -114,21 +116,21 @@ export default function ReportsPage() {
 
   return (
     <main className="bg-zinc-100 px-12">
-      <div className="mx-12 border-x border-emerald-700/30 bg-white py-10 sm:px-10">
+      <div className="border-x border-emerald-700/30 bg-white py-10 sm:px-10">
         <header className="border-b shadow-[0_3px_6px_rgba(6,95,70,0.18)] border-emerald-700/30 -mx-10 pb-8 top-12 sticky z-20 bg-white">
           <div className="mx-10">
             <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
-            ESG performance
-          </p>
-          <h1 className="mt-3 text-4xl font-medium tracking-tight text-zinc-950">
-            Reports
-          </h1>
-          <p className="mt-3 max-w-2xl text-sm font-medium leading-6 text-zinc-700">
-            Review score performance across{" "}
-            {organization?.name ?? "your organization"}&apos;s ESG assessments.
-          </p>          
+              ESG performance
+            </p>
+            <h1 className="mt-3 text-4xl font-medium tracking-tight text-zinc-950">
+              Reports
+            </h1>
+            <p className="mt-3 max-w-2xl text-sm font-medium leading-6 text-zinc-700">
+              Review score performance across{" "}
+              {organization?.name ?? "your organization"}&apos;s ESG
+              assessments.
+            </p>
           </div>
-
         </header>
 
         <section className="mt-10 grid border-l border-t border-emerald-700/30 sm:grid-cols-3">
