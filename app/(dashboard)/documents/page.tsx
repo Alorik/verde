@@ -62,17 +62,19 @@ export default function DocumentsPage() {
 
   if (loading) {
     return (
-      <main className="bg-zinc-100 px-12">
-        <div className="mx-12 border-x border-emerald-700/30 bg-white py-10 sm:px-10">
-          <p className="text-xs font-medium text-zinc-600">retrieving documents…</p>
+      <main className="bg-white-100 px-12">
+        <div className="border-x border-emerald-700/30 bg-white py-10 sm:px-10">
+          <p className="text-xs font-medium text-zinc-600">
+            retrieving documents…
+          </p>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="bg-zinc-100 px-12">
-      <div className="mx-12 border-x border-emerald-800/30  bg-white py-10 sm:px-10">
+    <main className="bg-white px-12">
+      <div className="border-x border-emerald-800/30 bg-white py-10 sm:px-10">
         {/* Header */}
         <div className="flex items-end justify-between -mx-10 border-b  border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)] pb-8 mb-8">
           <div className="mx-10">
@@ -97,7 +99,7 @@ export default function DocumentsPage() {
 
         {/* Empty state */}
         {documents.length === 0 ? (
-          <div className="border border-dashed border-emerald-700/30 bg-zinc-50 py-24 text-center">
+          <div className="border border-dashed border-emerald-700/30 bg-white py-24 text-center">
             <div className="mx-auto flex h-12 w-12 items-center justify-center border border-emerald-700/30 text-xl font-medium text-zinc-600">
               +
             </div>
@@ -128,7 +130,7 @@ export default function DocumentsPage() {
                 {/* File information */}
                 <div className="flex min-w-0 items-center gap-4">
                   {/* PDF icon */}
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-emerald-700/30 bg-zinc-50">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-emerald-700/30 bg-white">
                     <svg
                       className="h-5 w-5 text-zinc-700"
                       viewBox="0 0 24 24"
