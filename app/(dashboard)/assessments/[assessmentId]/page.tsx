@@ -728,7 +728,7 @@ export default function AssessmentDetail({
             >
               {assessment.name}
             </motion.h1>
-
+            <Divider />
             {/* Mobile status/reference */}
             <div className="grid grid-cols-2 gap-3 lg:contents">
               <motion.div
@@ -763,7 +763,7 @@ export default function AssessmentDetail({
                   </span>
                 </motion.span>
               </motion.div>
-
+              <Divider />
               <motion.div
                 initial={
                   prefersReducedMotion
@@ -798,8 +798,7 @@ export default function AssessmentDetail({
             </div>
 
             {/* Desktop dividers */}
-            <Divider />
-            <Divider />
+
           </div>
         </div>
 
@@ -984,6 +983,7 @@ export default function AssessmentDetail({
           )}
 
           {/* Calculate */}
+          {/* Calculate / Report */}
           <div className="mt-6 flex flex-col gap-4 sm:mt-8 sm:flex-row sm:items-center sm:justify-end sm:gap-4">
             {calculateError && (
               <p className="break-words text-[11px] font-medium text-red-700 sm:text-right">
@@ -992,9 +992,18 @@ export default function AssessmentDetail({
             )}
 
             {esgScore !== null && !calculateError && (
-              <p className="text-[11px] font-medium uppercase tracking-widest text-emerald-800">
+              <p className="text-[11px] font-medium uppercase tracking-widest text-emerald-800 py-2 px-4 border border-emerald-700/30">
                 Score: {esgScore}
               </p>
+            )}
+
+            {esgScore !== null && !calculateError && (
+              <Link
+                href={`/reports/${assessment.id}`}
+                className="w-full border border-emerald-700 bg-emerald-700 px-5 py-2.5 text-center text-sm font-medium text-white transition hover:bg-emerald-800 sm:w-auto"
+              >
+                View Report
+              </Link>
             )}
 
             <button
