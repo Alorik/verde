@@ -1,5 +1,5 @@
 import z from "zod";
-import { Industry } from "@/app/generated/prisma/enums";
+import { Industry } from "@prisma/client";
 
 export const organizationRegistrationSchema = z.object({
   name: z
