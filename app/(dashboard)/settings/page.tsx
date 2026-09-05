@@ -144,9 +144,11 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <main className="bg-zinc-100 px-12">
-        <div className="border-x border-emerald-700/30 bg-white py-10 sm:px-10">
-          <p className="text-xs font-medium text-zinc-600">retrieving settings…</p>
+      <main className="bg-white px-4 sm:px-6 md:px-8 lg:px-12">
+        <div className="min-h-screen border-x border-emerald-700/30 bg-white px-4 py-8 sm:px-6 sm:py-10 md:px-8 lg:px-10">
+          <p className="text-xs font-medium text-zinc-600">
+            retrieving settings…
+          </p>
         </div>
       </main>
     );
@@ -154,8 +156,8 @@ export default function SettingsPage() {
 
   if (!organization) {
     return (
-      <main className="bg-zinc-100 px-12">
-        <div className="border-x border-emerald-800/30  bg-white py-10 sm:px-10">
+      <main className="bg-white px-4 sm:px-6 md:px-8 lg:px-12">
+        <div className="min-h-screen border-x border-emerald-800/30 bg-white px-4 py-8 sm:px-6 sm:py-10 md:px-8 lg:px-10">
           <p className="text-sm font-medium text-red-700">
             {error ?? "Organization not found"}
           </p>
@@ -165,34 +167,34 @@ export default function SettingsPage() {
   }
 
   return (
-    <main className="bg-zinc-100 px-12">
-      <div className="border-x border-emerald-800/30  bg-white py-10 sm:px-10">
+    <main className="bg-white px-4 sm:px-6 md:px-8 lg:px-12">
+      <div className="min-h-screen border-x border-emerald-800/30 bg-white px-4 py-8 sm:px-6 sm:py-10 md:px-8 lg:px-10">
         {/* Header */}
-        <div className="border-b border-emerald-800/30 shadow-[0_3px_6px_rgba(6,95,70,0.18)] sticky top-12 z-20 bg-white pb-8 -mx-10">
-          <div className="mx-10">
-          <p className="text-[11px] bg-white font-medium uppercase tracking-[0.2em] text-zinc-600">
-            Account configuration
-          </p>
-          <h1 className="mt-3 text-4xl font-medium tracking-tight text-zinc-950">
-            Settings
-          </h1>
+        <div className="-mx-4 sticky top-16 z-20 border-b border-emerald-800/30 bg-white px-4 pb-6 shadow-[0_3px_6px_rgba(6,95,70,0.18)] sm:-mx-6 sm:px-6 sm:pb-8 md:-mx-8 md:px-8 lg:-mx-10 lg:px-10">
+          <div>
+            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
+              Account configuration
+            </p>
 
-          <p className="mt-3 max-w-2xl text-sm font-medium leading-6 text-zinc-700">
-            Manage your organization&apos;s information and account settings.
-          </p>        
+            <h1 className="mt-3 text-3xl font-medium tracking-tight text-zinc-950 sm:text-4xl">
+              Settings
+            </h1>
+
+            <p className="mt-3 max-w-2xl text-sm font-medium leading-6 text-zinc-700">
+              Manage your organization&apos;s information and account settings.
+            </p>
           </div>
-
         </div>
 
         {/* Organization */}
-        <section className="mt-12">
-          <div className="flex items-end justify-between border-b border-emerald-700/30 pb-5">
-            <div>
+        <section className="mt-10 sm:mt-12">
+          <div className="flex flex-col gap-4 border-b border-emerald-700/30 pb-5 sm:flex-row sm:items-end sm:justify-between">
+            <div className="min-w-0">
               <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
                 Organization
               </p>
 
-              <h2 className="mt-2 text-2xl font-medium tracking-tight text-zinc-950">
+              <h2 className="mt-2 text-xl font-medium tracking-tight text-zinc-950 sm:text-2xl">
                 Organization information
               </h2>
             </div>
@@ -205,7 +207,7 @@ export default function SettingsPage() {
                   setMessage(null);
                   setError(null);
                 }}
-                className="border border-zinc-500 bg-white px-4 py-2 text-xs font-medium text-zinc-800 transition hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
+                className="inline-flex w-full items-center justify-center border border-zinc-500 bg-white px-4 py-2 text-xs font-medium text-zinc-800 transition hover:border-emerald-600 hover:bg-emerald-50 hover:text-emerald-900 sm:w-auto"
               >
                 Edit information
               </button>
@@ -213,7 +215,7 @@ export default function SettingsPage() {
           </div>
 
           {editing ? (
-            <div className="mt-6 border border-emerald-700/30 bg-zinc-50 p-5 space-y-5">
+            <div className="mt-6 space-y-5 border border-emerald-700/30 bg-white p-4 sm:p-5">
               <div>
                 <label className="text-xs font-medium text-zinc-600">
                   Organization name
@@ -222,7 +224,7 @@ export default function SettingsPage() {
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-2 w-full border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
+                  className="mt-2 w-full min-w-0 border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
                 />
               </div>
 
@@ -234,7 +236,7 @@ export default function SettingsPage() {
                 <input
                   value={industry}
                   onChange={(e) => setIndustry(e.target.value)}
-                  className="mt-2 w-full border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
+                  className="mt-2 w-full min-w-0 border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
                 />
               </div>
 
@@ -249,7 +251,7 @@ export default function SettingsPage() {
                     min={1}
                     value={employeeCount}
                     onChange={(e) => setEmployeeCount(e.target.value)}
-                    className="mt-2 w-full border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
+                    className="mt-2 w-full min-w-0 border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
                   />
                 </div>
 
@@ -261,7 +263,7 @@ export default function SettingsPage() {
                   <input
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                    className="mt-2 w-full border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
+                    className="mt-2 w-full min-w-0 border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
                   />
                 </div>
               </div>
@@ -275,7 +277,7 @@ export default function SettingsPage() {
                   <input
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    className="mt-2 w-full border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
+                    className="mt-2 w-full min-w-0 border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
                   />
                 </div>
 
@@ -288,19 +290,19 @@ export default function SettingsPage() {
                     type="date"
                     value={foundedAt}
                     onChange={(e) => setFoundedAt(e.target.value)}
-                    className="mt-2 w-full border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
+                    className="mt-2 w-full min-w-0 border border-zinc-400 px-3 py-2.5 text-sm font-medium text-zinc-950 outline-none transition focus:border-zinc-950"
                   />
                 </div>
               </div>
 
               {error && <p className="text-xs text-red-600">{error}</p>}
 
-              <div className="flex justify-end gap-3 pt-2">
+              <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
                 <button
                   type="button"
                   onClick={cancelEditing}
                   disabled={saving}
-                  className="border border-zinc-500 bg-white px-5 py-2.5 text-sm font-medium text-zinc-950 transition hover:bg-zinc-100 disabled:opacity-50"
+                  className="w-full border border-zinc-500 bg-white px-5 py-2.5 text-sm font-medium text-zinc-950 transition hover:bg-white disabled:opacity-50 sm:w-auto"
                 >
                   Cancel
                 </button>
@@ -315,7 +317,7 @@ export default function SettingsPage() {
                     !employeeCount ||
                     !country.trim()
                   }
-                  className="border border-zinc-950 bg-zinc-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="w-full border border-zinc-950 bg-zinc-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
                 >
                   {saving ? "Saving…" : "Save changes"}
                 </button>
@@ -354,34 +356,36 @@ export default function SettingsPage() {
         </section>
 
         {/* Account */}
-        <section className="mt-16">
+        <section className="mt-14 sm:mt-16">
           <div className="border-b border-emerald-700/30 pb-5">
             <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
               Account
             </p>
 
-            <h2 className="mt-2 text-2xl font-medium tracking-tight text-zinc-950">
+            <h2 className="mt-2 text-xl font-medium tracking-tight text-zinc-950 sm:text-2xl">
               Account & security
             </h2>
           </div>
 
           <div className="border border-emerald-700/30 bg-white">
-            <div className="flex items-center justify-between gap-6 border-b border-emerald-700/30 p-5">
-              <div>
+            <div className="flex flex-col gap-4 border-b border-emerald-700/30 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:p-5">
+              <div className="min-w-0">
                 <p className="text-sm font-medium text-zinc-950">
                   Account email
                 </p>
 
-                <p className="mt-1 text-sm font-medium text-zinc-700">
+                <p className="mt-1 break-words text-sm font-medium text-zinc-700">
                   {organization.email}
                 </p>
               </div>
 
-              <span className="text-xs font-medium text-zinc-600">Primary</span>
+              <span className="w-fit shrink-0 text-xs font-medium text-zinc-600">
+                Primary
+              </span>
             </div>
 
-            <div className="flex items-center justify-between gap-6 p-5">
-              <div>
+            <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:p-5">
+              <div className="min-w-0">
                 <p className="text-sm font-medium text-zinc-950">Password</p>
 
                 <p className="mt-1 text-sm font-medium text-zinc-700">
@@ -391,7 +395,7 @@ export default function SettingsPage() {
 
               <button
                 type="button"
-                className="border border-zinc-500 bg-white px-4 py-2 text-xs font-medium text-zinc-800 transition hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
+                className="w-full shrink-0 border border-zinc-500 bg-white px-4 py-2 text-xs font-medium text-zinc-800 transition hover:border-emerald-600 hover:bg-emerald-50 hover:text-emerald-900 sm:w-auto"
               >
                 Change password
               </button>
@@ -400,49 +404,49 @@ export default function SettingsPage() {
         </section>
 
         {/* Data */}
-        <section className="mt-16">
+        <section className="mt-14 sm:mt-16">
           <div className="border-b border-emerald-700/30 pb-5">
             <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-600">
               Data
             </p>
 
-            <h2 className="mt-2 text-2xl font-medium tracking-tight text-zinc-950">
+            <h2 className="mt-2 text-xl font-medium tracking-tight text-zinc-950 sm:text-2xl">
               Documents & assessments
             </h2>
           </div>
 
           <div className="border border-emerald-700/30 bg-white">
-            <div className="flex items-center justify-between gap-6 border-b border-emerald-700/30 p-5">
-              <div>
+            <div className="flex flex-col gap-4 border-b border-emerald-700/30 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:p-5">
+              <div className="min-w-0">
                 <p className="text-sm font-medium text-zinc-950">
                   Document archive
                 </p>
 
-                <p className="mt-1 text-sm font-medium text-zinc-700">
+                <p className="mt-1 text-sm font-medium leading-5 text-zinc-700">
                   View documents uploaded across your ESG assessments.
                 </p>
               </div>
 
               <Link
                 href="/documents"
-                className="border border-zinc-500 bg-white px-4 py-2 text-xs font-medium text-zinc-800 transition hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
+                className="inline-flex w-full shrink-0 items-center justify-center border border-zinc-500 bg-white px-4 py-2 text-xs font-medium text-zinc-800 transition hover:border-emerald-600 hover:bg-emerald-50 hover:text-emerald-900 sm:w-auto"
               >
                 View documents
               </Link>
             </div>
 
-            <div className="flex items-center justify-between gap-6 p-5">
-              <div>
+            <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:p-5">
+              <div className="min-w-0">
                 <p className="text-sm font-medium text-zinc-950">Assessments</p>
 
-                <p className="mt-1 text-sm font-medium text-zinc-700">
+                <p className="mt-1 text-sm font-medium leading-5 text-zinc-700">
                   Manage your organization&apos;s ESG assessments.
                 </p>
               </div>
 
               <Link
                 href="/assessments"
-                className="border border-zinc-500 bg-white px-4 py-2 text-xs font-medium text-zinc-800 transition hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-900"
+                className="inline-flex w-full shrink-0 items-center justify-center border border-zinc-500 bg-white px-4 py-2 text-xs font-medium text-zinc-800 transition hover:border-emerald-600 hover:bg-emerald-50 hover:text-emerald-900 sm:w-auto"
               >
                 View assessments
               </Link>
@@ -451,29 +455,26 @@ export default function SettingsPage() {
         </section>
 
         {/* Danger Zone */}
-        <section className="mt-16 pb-10">
-          <div className="border-b border-red-300 pb-5 -mx-10">
-            <div className="mx-10">
-                     <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-red-600 px-1">
+        <section className="mt-14 pb-10 sm:mt-16">
+          <div className="border-b border-red-300 pb-5">
+            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-red-600">
               Danger zone
             </p>
 
-            <h2 className="mt-2 text-2xl font-medium tracking-tight text-zinc-950">
+            <h2 className="mt-2 text-xl font-medium tracking-tight text-zinc-950 sm:text-2xl">
               Delete organization
-            </h2>     
-            </div>
-
+            </h2>
           </div>
 
-          <div className="mt-5 border border-red-300 bg-red-50 p-5">
-            <p className="text-sm font-medium text-zinc-800">
+          <div className="mt-5 border border-red-300 bg-red-50 p-4 sm:p-5">
+            <p className="text-sm font-medium leading-6 text-zinc-800">
               Permanently delete your organization and its associated
               assessments, documents, metrics, scores, and recommendations.
             </p>
 
             <button
               type="button"
-              className="mt-4 border border-red-400 bg-white px-4 py-2 text-xs font-medium text-red-700 transition hover:bg-red-100"
+              className="mt-4 w-full border border-red-400 bg-white px-4 py-2 text-xs font-medium text-red-700 transition hover:bg-red-100 sm:w-auto"
             >
               Delete organization
             </button>
@@ -499,10 +500,14 @@ export default function SettingsPage() {
 
 function SettingRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-8 border-b border-emerald-700/30 hover:bg-emerald-50 p-5 last:border-b-0">
-      <span className="text-sm font-medium text-zinc-700">{label}</span>
+    <div className="flex flex-col gap-1 border-b border-emerald-700/30 p-4 transition hover:bg-emerald-50 last:border-b-0 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:p-5">
+      <span className="text-xs font-medium text-zinc-600 sm:text-sm">
+        {label}
+      </span>
 
-      <span className="text-right text-sm font-medium text-zinc-950">{value}</span>
+      <span className="break-words text-left text-sm font-medium text-zinc-950 sm:text-right">
+        {value}
+      </span>
     </div>
   );
 }
