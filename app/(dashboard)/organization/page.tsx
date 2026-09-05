@@ -106,7 +106,7 @@ export default function OrganizationDashboard() {
 
   if (!organization) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-100">
+      <div className="flex min-h-screen items-center justify-center bg-white">
         <motion.div
           animate={
             prefersReducedMotion ? undefined : { opacity: [0.3, 0.7, 0.3] }
@@ -157,8 +157,8 @@ export default function OrganizationDashboard() {
   };
 
   return (
-    <div className=" bg-zinc-100 px-12">
-      <div className="mx-12 border-x border-emerald-800/30  bg-white py-10 sm:px-10 ">
+    <div className="bg-white-100 px-12">
+      <div className="border-x border-emerald-800/30 bg-white py-10 sm:px-10">
         {/* Eyebrow + stamp row */}
         <div className="flex items-start justify-between bg-white">
           <motion.p
@@ -208,7 +208,7 @@ export default function OrganizationDashboard() {
             <motion.div
               key={field.label}
               variants={rowVariants}
-              className="flex min-h-28 flex-col justify-between border-b border-r border-zinc-300 bg-zinc-50 p-5 sm:min-h-32"
+              className="flex min-h-28 flex-col justify-between border-b border-r border-zinc-300 bg-white p-5 sm:min-h-32"
             >
               <dt className="text-[11px] font-medium uppercase tracking-widest text-zinc-600">
                 {field.label}
@@ -305,7 +305,7 @@ export default function OrganizationDashboard() {
                           ? "border-amber-500 bg-amber-50 text-amber-800"
                           : assessment.status === "COMPLETED"
                             ? "border-emerald-600 bg-emerald-50 text-emerald-800"
-                            : "border-zinc-400 bg-zinc-100 text-zinc-800"
+                            : "border-zinc-400 bg-white text-zinc-800"
                       }`}
                     >
                       {assessment.status}
@@ -443,7 +443,7 @@ export default function OrganizationDashboard() {
                       setNewDescription("");
                       setCreateError(null);
                     }}
-                    className="border border-zinc-500 bg-white px-5 py-2.5 text-sm font-medium text-zinc-950 transition hover:bg-zinc-100"
+                    className="border border-zinc-500 bg-white px-5 py-2.5 text-sm font-medium text-zinc-950 transition hover:bg-white"
                   >
                     Cancel
                   </button>
