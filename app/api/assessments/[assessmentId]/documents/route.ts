@@ -329,6 +329,19 @@ export async function POST(
 
         const extractedCSR = await extractCSRData(file);
 
+        if (
+          extractedCSR.boardIndependence === null ||
+          extractedCSR.ethicsPolicy === null ||
+          extractedCSR.antiCorruptionPolicy === null ||
+          extractedCSR.whistleblowerPolicy === null ||
+          extractedCSR.riskManagement === null ||
+          extractedCSR.regulatoryCompliance === null ||
+          extractedCSR.governanceTraining === null ||
+          extractedCSR.complianceIncidents === null
+        ) {
+          throw new Error("Required CSR data could not be extracted");
+        }
+
         await prisma.cSRReport.create({
           data: {
             documentId: document.id,
