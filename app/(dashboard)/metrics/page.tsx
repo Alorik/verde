@@ -75,7 +75,7 @@ const metrics = [
 export default function MetricsPage() {
   return (
     <main className="bg-white px-4 sm:px-6 md:px-8 lg:px-12">
-      <div className="min-h-screen border-x border-emerald-800/30 bg-white px-4 py-8 sm:px-6 sm:py-10 md:px-8 lg:px-10">
+      <div className="min-h-screen border-x border-emerald-800/30 bg-white px-4 py-18 sm:px-6 sm:py-10 md:px-8 lg:px-10">
         {/* Header */}
         <div className="-mx-4 border-b border-emerald-800/30 bg-white px-4 pb-6 shadow-[0_3px_6px_rgba(6,95,70,0.18)] sm:-mx-6 sm:px-6 sm:pb-8 md:-mx-8 md:px-8 lg:-mx-10 lg:px-10">
           <div>

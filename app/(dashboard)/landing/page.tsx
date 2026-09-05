@@ -1,6 +1,5 @@
 import HeroSection from "@/components/dashboard/Hero";
 import BubblePage from "../../../components/buble/bublePage";
-import FooterSection from "@/components/dashboard/Footer";
 import HowWeWorkSection from "@/components/dashboard/HowWorkSection";
 import WhyUsSection from "@/components/dashboard/WhyUs";
 import FAQSection from "@/components/dashboard/FAQSection";
@@ -19,9 +18,6 @@ export default function Dashboard() {
       <HowWeWorkSection />
       <WhyUsSection />
       <FAQSection />
-
-      {/* Footer */}
-      <FooterSection />
     </div>
   );
 }

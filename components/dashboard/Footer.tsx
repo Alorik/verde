@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function FooterSection() {
   return (
-    <footer className="bg-emerald-950 text-white">
+    <footer className="bg-emerald-950 text-white mx-12">
       <div className="mx-auto max-w-[1720px] px-4 pt-12 sm:px-6 sm:pt-14 md:px-8 md:pt-16 lg:px-12">
         {/* Top */}
         <div className="flex flex-col justify-between gap-12 sm:gap-16 md:flex-row">
