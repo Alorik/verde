@@ -22,7 +22,7 @@ const montserrat = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "ESG",
+  title: "Verde",
   description: "ESG Reporting Platform",
 };
 

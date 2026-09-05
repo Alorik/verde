@@ -121,7 +121,7 @@ export default function Navbar() {
               aria-label={menuOpen ? "Close navigation" : "Open navigation"}
               aria-expanded={menuOpen}
               onClick={() => setMenuOpen((open) => !open)}
-              className="flex h-10 w-10 items-center justify-center border border-zinc-950 bg-white text-zinc-900 transition-colors hover:border-emerald-700 hover:bg-emerald-50 lg:hidden"
+              className="flex h-10 w-10 items-center justify-center border border-emerald-800/40 bg-white text-zinc-900 transition-colors hover:border-emerald-700 hover:bg-emerald-50 lg:hidden"
             >
               <AnimatePresence mode="wait" initial={false}>
                 {menuOpen ? (
@@ -246,7 +246,7 @@ export default function Navbar() {
                     type="button"
                     aria-label="Close navigation"
                     onClick={() => setMenuOpen(false)}
-                    className="flex h-9 w-9 items-center justify-center border border-zinc-300 text-zinc-700 transition hover:border-emerald-700 hover:bg-emerald-50"
+                    className="flex h-9 w-9 items-center justify-center border border-emerald-800/40 text-zinc-700 transition hover:border-emerald-700/30 hover:bg-emerald-50"
                   >
                     <X className="h-5 w-5" strokeWidth={1.75} />
                   </button>
