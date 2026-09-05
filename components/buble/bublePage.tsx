@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 
 const SPACING = 17;
+const MOBILE_SPACING = 20;
 
 const BASE_RADIUS = 1.25;
 const SKIP_CHANCE = 0.12;
@@ -108,36 +109,39 @@ export default function BubblePage() {
     let width = 0;
     let height = 0;
 
-    function buildGrid() {
-      const dots: Dot[] = [];
+function buildGrid() {
+  const dots: Dot[] = [];
 
-      const cols = Math.ceil(width / SPACING) + 1;
-      const rows = Math.ceil(height / SPACING) + 1;
+  const isMobile = window.innerWidth < 640;
+  const spacing = isMobile ? MOBILE_SPACING : SPACING;
 
-      for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-          if (Math.random() < SKIP_CHANCE) {
-            continue;
-          }
+  const cols = Math.ceil(width / spacing) + 1;
+  const rows = Math.ceil(height / spacing) + 1;
 
-          dots.push({
-            x: col * SPACING,
-            y: row * SPACING,
-
-            size: BASE_RADIUS + Math.random() * 0.2,
-
-            flair: 0.7 + Math.random() * 0.8,
-
-            offsetX: 0,
-            offsetY: 0,
-
-            lit: 0,
-          });
-        }
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      if (Math.random() < SKIP_CHANCE) {
+        continue;
       }
 
-      dotsRef.current = dots;
+      dots.push({
+        x: col * spacing,
+        y: row * spacing,
+
+        size: BASE_RADIUS + Math.random() * 0.2,
+
+        flair: 0.7 + Math.random() * 0.8,
+
+        offsetX: 0,
+        offsetY: 0,
+
+        lit: 0,
+      });
     }
+  }
+
+  dotsRef.current = dots;
+}
 
     function resize() {
       const dpr = window.devicePixelRatio || 1;
