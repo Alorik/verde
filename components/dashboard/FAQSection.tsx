@@ -41,41 +41,41 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className=" border-x border-emerald-700/30 bg-white">
+    <section className="border-x border-emerald-700/30 bg-white">
       {/* Sticky Section Label */}
-      <p className="sticky top-16 z-10 border-b border-emerald-700/30 bg-white px-8 py-3 text-xs uppercase tracking-[0.2em] text-zinc-900 font-medium">
+      <p className="sticky top-16 z-10 border-b border-emerald-700/30 bg-white px-4 py-3 text-xs font-medium uppercase tracking-[0.2em] text-zinc-900 sm:px-6 md:px-8">
         FAQ
       </p>
 
-      <div className="max-w-2xl px-8 pt-12">
-        <h2 className="text-6xl font-medium tracking-tight text-zinc-900">
+      {/* Heading */}
+      <div className="max-w-2xl px-4 pt-10 sm:px-6 sm:pt-12 md:px-8">
+        <h2 className="text-4xl font-medium tracking-tight text-zinc-900 sm:text-5xl md:text-6xl">
           Questions,
           <br />
           answered clearly.
         </h2>
       </div>
-      <div className="mx-auto flex flex-col items-center px-8 py-2 pb-12">
-        {/* Header — centered */}
 
-        {/* FAQ — centered as a block */}
-        <div className="mt-24 w-full max-w-3xl border  border-emerald-700/30">
+      {/* FAQ */}
+      <div className="mx-auto flex flex-col items-center px-4 pb-12 sm:px-6 md:px-8 md:pb-16">
+        <div className="mt-14 w-full max-w-3xl border border-emerald-700/30 sm:mt-20 md:mt-24">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
 
             return (
               <div
                 key={faq.question}
-                className="border-b  border-emerald-700/30 last:border-b-0"
+                className="border-b border-emerald-700/30 last:border-b-0"
               >
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className={`flex w-full cursor-pointer items-center justify-between gap-8 rounded-md px-4 py-6 text-left transition-colors duration-300 ease-out ${
+                  className={`flex w-full cursor-pointer items-center justify-between gap-4 px-4 py-5 text-left transition-colors duration-300 ease-out sm:gap-8 sm:px-5 sm:py-6 ${
                     isOpen ? "bg-emerald-50" : "hover:bg-zinc-50"
                   }`}
                 >
                   <span
-                    className={`text-base font-medium tracking-tight transition-colors duration-300 ${
+                    className={`text-sm font-medium tracking-tight transition-colors duration-300 sm:text-base ${
                       isOpen ? "text-emerald-700" : "text-zinc-900"
                     }`}
                   >
@@ -84,7 +84,11 @@ export default function FAQSection() {
 
                   <motion.span
                     animate={{ rotate: isOpen ? 45 : 0 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 22,
+                    }}
                     className={`shrink-0 ${
                       isOpen ? "text-emerald-600" : "text-zinc-400"
                     }`}
@@ -101,12 +105,18 @@ export default function FAQSection() {
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{
-                        height: { type: "spring", stiffness: 280, damping: 32 },
-                        opacity: { duration: 0.2 },
+                        height: {
+                          type: "spring",
+                          stiffness: 280,
+                          damping: 32,
+                        },
+                        opacity: {
+                          duration: 0.2,
+                        },
                       }}
                       className="overflow-hidden bg-emerald-50"
                     >
-                      <p className="px-4 pb-6 pr-12 text-sm leading-6 text-zinc-600">
+                      <p className="px-4 pb-5 pr-10 text-sm leading-6 text-zinc-600 sm:px-5 sm:pb-6 sm:pr-14">
                         {faq.answer}
                       </p>
                     </motion.div>
