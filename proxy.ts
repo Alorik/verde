@@ -13,23 +13,23 @@ export const proxy = auth((req: AuthenticatedRequest) => {
 
   const isLoginPage = pathname === "/login";
   const isRegisterPage = pathname === "/register";
-  const isDashboardPage = pathname === "/dashboard";
+  const isLandingPage = pathname === "/landing";
   const isAuthPage = isLoginPage || isRegisterPage;
   const isRootPage = pathname === "/";
 
-  // Always send "/" → "/dashboard"
+  // Always send "/" → "/landing"
   if (isRootPage) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+    return NextResponse.redirect(new URL("/landing", req.url));
   }
 
-  // Dashboard is public — logged in or not
-  if (isDashboardPage) {
+  // landing is public — logged in or not
+  if (isLandingPage) {
     return NextResponse.next();
   }
 
   // Logged-in users shouldn't access login/register
   if (isLoggedIn && isAuthPage) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+    return NextResponse.redirect(new URL("/landing", req.url));
   }
 
   // Unauthenticated users can't access protected pages
