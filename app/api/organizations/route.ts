@@ -156,3 +156,42 @@ export async function GET() {
     );
   }
 }
+
+export async function PATCH(request: Request) {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.email) {
+      return Response.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json();
+
+    const { name, industry, employeeCount, country, city, foundedAt } = body;
+
+    const organization = await prisma.organization.update({
+      where: {
+        email: session.user.email,
+      },
+      data: {
+        name,
+        industry,
+        employeeCount: Number(employeeCount),
+        country,
+        city: city || null,
+        foundedAt: foundedAt ? new Date(foundedAt) : null,
+      },
+    });
+
+    return Response.json({
+      organization,
+    });
+  } catch (error) {
+    console.error("Failed to update organization:", error);
+
+    return Response.json(
+      { message: "Failed to update organization" },
+      { status: 500 },
+    );
+  }
+}
