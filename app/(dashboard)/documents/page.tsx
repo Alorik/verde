@@ -24,6 +24,8 @@ const [loading, setLoading] = useState(true);
 
 const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
 
+const [documentLoading, setDocumentLoading] = useState(false);
+
 
   useEffect(() => {
     async function loadDocuments() {
@@ -184,7 +186,10 @@ const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
                   {document.fileUrl && (
                     <button
                       type="button"
-                      onClick={() => setSelectedDocument(document)}
+                      onClick={() => {
+                        setDocumentLoading(true);
+                        setSelectedDocument(document);
+                      }}
                       className="flex flex-1 items-center justify-center gap-3 border border-zinc-500 px-4 py-2.5 text-xs font-medium text-zinc-800 transition-colors hover:border-emerald-600 hover:bg-emerald-50 hover:text-emerald-900 sm:flex-none"
                     >
                       <span>View document</span>
@@ -201,7 +206,10 @@ const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
       {selectedDocument && (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/70 p-3 sm:p-6"
-          onClick={() => setSelectedDocument(null)}
+          onClick={() => {
+            setDocumentLoading(false);
+            setSelectedDocument(null);
+          }}
         >
           <div
             className="flex h-[95vh] w-full max-w-6xl flex-col border border-emerald-700/40 bg-white shadow-2xl sm:h-[90vh]"
@@ -221,7 +229,10 @@ const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
 
               <button
                 type="button"
-                onClick={() => setSelectedDocument(null)}
+                onClick={() => {
+                  setDocumentLoading(false);
+                  setSelectedDocument(null);
+                }}
                 className="flex h-9 w-9 shrink-0 items-center justify-center border border-zinc-400 bg-white text-lg text-zinc-700 transition hover:border-emerald-600 hover:bg-emerald-50 hover:text-emerald-900"
                 aria-label="Close document preview"
               >
@@ -230,10 +241,21 @@ const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
             </div>
 
             {/* PDF */}
-            <div className="min-h-0 flex-1 bg-zinc-100">
+            <div className="relative min-h-0 flex-1 bg-zinc-100">
+              {documentLoading && (
+                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white">
+                  <div className="h-8 w-8 animate-spin border-2 border-zinc-300 border-t-emerald-700" />
+
+                  <p className="mt-4 text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-600">
+                    Loading document
+                  </p>
+                </div>
+              )}
+
               <iframe
                 src={`/api/documents/${selectedDocument.id}/view`}
                 title={selectedDocument.fileName}
+                onLoad={() => setDocumentLoading(false)}
                 className="h-full w-full border-0"
               />
             </div>

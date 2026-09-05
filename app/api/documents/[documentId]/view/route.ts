@@ -58,30 +58,31 @@ export async function GET(
     }
 
     // Get original PDF from S3
-    const command = new GetObjectCommand({
-      Bucket: process.env.AWS_S3_BUCKET_NAME,
-      Key: document.fileUrl,
-    });
+const command = new GetObjectCommand({
+  Bucket: process.env.AWS_S3_BUCKET_NAME,
+  Key: document.fileUrl,
+});
 
-    const response = await s3.send(command);
+const response = await s3.send(command);
 
-    if (!response.Body) {
-      return NextResponse.json(
-        { message: "Document file could not be retrieved" },
-        { status: 404 },
-      );
-    }
+if (!response.Body) {
+  return NextResponse.json(
+    { message: "Document file could not be retrieved" },
+    { status: 404 },
+  );
+}
 
-    const body = await response.Body.transformToByteArray();
+const body = await response.Body.transformToByteArray();
 
-    return new NextResponse(Buffer.from(body) as unknown as BodyInit, {
-      status: 200,
-      headers: {
-        "Content-Type": document.mimeType || "application/pdf",
-        "Content-Disposition": `inline; filename="${document.fileName}"`,
-        "Cache-Control": "private, no-store",
-      },
-    });
+return new Response(Buffer.from(body), {
+  status: 200,
+  headers: {
+    "Content-Type": document.mimeType || "application/pdf",
+    "Content-Disposition": `inline; filename="${document.fileName}"`,
+    "Cache-Control": "private, no-store",
+  },
+});
+    
   } catch (error) {
     console.error("Failed to view document:", error);
 
