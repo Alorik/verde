@@ -48,7 +48,7 @@ export default function HowWeWorkSection() {
         How we work
       </p>
 
-      <div className="mx-auto px-8 py-16">
+      <div className="mx-auto px-4 py-12 sm:px-6 sm:py-14 md:px-8 md:py-16">
         {/* ========================================================= */}
         {/* INTRO + FLOW GRAPH */}
         {/* ========================================================= */}
@@ -67,7 +67,7 @@ export default function HowWeWorkSection() {
               }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="text-5xl font-medium tracking-tight text-zinc-900"
+              className="text-4xl font-medium tracking-tight text-zinc-900 sm:text-5xl"
             >
               From raw data
               <br />
@@ -75,7 +75,7 @@ export default function HowWeWorkSection() {
             </motion.h2>
           </div>
 
-          <div className="relative border border-emerald-700/40 bg-zinc-50 p-6 sm:p-8">
+          <div className="relative border border-emerald-700/40 bg-zinc-50 p-4 sm:p-6 md:p-8">
             {/* subtle background grid */}
             <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:linear-gradient(to_right,rgba(6,78,59,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(6,78,59,0.06)_1px,transparent_1px)] [background-size:32px_32px]" />
 
@@ -103,11 +103,11 @@ export default function HowWeWorkSection() {
                 </span>
               </div>
 
-              <div className="flex items-start">
+              <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-0">
                 {steps.map((step, index) => (
                   <div
                     key={step.number}
-                    className="flex min-w-0 flex-1 items-start"
+                    className="flex min-w-0 flex-1 flex-col items-center sm:flex-row sm:items-start"
                   >
                     {/* 3D Node */}
                     <motion.div
@@ -173,9 +173,9 @@ export default function HowWeWorkSection() {
 
                     {/* Animated connector */}
                     {index < steps.length - 1 && (
-                      <div className="relative mx-2 mt-7 flex flex-1 items-center sm:mx-5">
+                      <div className="relative mx-auto flex h-8 w-px shrink-0 items-center sm:mx-2 sm:mt-7 sm:h-auto sm:w-auto sm:flex-1">
                         {/* base line */}
-                        <div className="h-px w-full bg-emerald-800/20" />
+                        <div className="h-full w-px bg-emerald-800/20 sm:h-px sm:w-full" />
 
                         {/* animated line */}
                         <motion.div
@@ -197,7 +197,7 @@ export default function HowWeWorkSection() {
                           style={{
                             transformOrigin: "left",
                           }}
-                          className="absolute inset-y-0 left-0 h-px w-full bg-emerald-700"
+                          className="absolute left-0 top-0 h-full w-px bg-emerald-700 sm:inset-y-0 sm:h-px sm:w-full"
                         />
 
                         {/* moving signal */}
@@ -233,9 +233,10 @@ export default function HowWeWorkSection() {
                             ease: "easeInOut",
                             delay: index * 0.25,
                           }}
-                          className="ml-1.5 bg-zinc-50 pl-1 text-base font-medium text-emerald-700"
+                          className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-zinc-50 px-1 text-base font-medium text-emerald-700 sm:static sm:ml-1.5 sm:translate-x-0 sm:bg-zinc-50 sm:pl-1"
                         >
-                          →
+                          <span className="sm:hidden">↓</span>
+                          <span className="hidden sm:inline">→</span>
                         </motion.span>
                       </div>
                     )}
