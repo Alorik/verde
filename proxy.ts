@@ -9,24 +9,27 @@ type AuthenticatedRequest = NextRequest & {
 
 export const proxy = auth((req: AuthenticatedRequest) => {
   const isLoggedIn = !!req.auth;
-
   const pathname = req.nextUrl.pathname;
 
   const isLoginPage = pathname === "/login";
   const isRegisterPage = pathname === "/register";
+  const isDashboardPage = pathname === "/dashboard";
   const isAuthPage = isLoginPage || isRegisterPage;
   const isRootPage = pathname === "/";
 
-  // Root → organization if logged in, otherwise login
+  // Always send "/" → "/dashboard"
   if (isRootPage) {
-    return NextResponse.redirect(
-      new URL(isLoggedIn ? "/organization" : "/login", req.url),
-    );
+    return NextResponse.redirect(new URL("/dashboard", req.url));
+  }
+
+  // Dashboard is public — logged in or not
+  if (isDashboardPage) {
+    return NextResponse.next();
   }
 
   // Logged-in users shouldn't access login/register
   if (isLoggedIn && isAuthPage) {
-    return NextResponse.redirect(new URL("/organization", req.url));
+    return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
   // Unauthenticated users can't access protected pages
