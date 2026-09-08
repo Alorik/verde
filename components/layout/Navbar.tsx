@@ -66,7 +66,7 @@ export default function Navbar() {
         <div className="mx-auto flex h-full max-w-full items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12">
           {/* Left */}
           <Link
-            href="/dashboard"
+            href="/landing"
             className="flex flex-none items-center"
             onClick={() => setMenuOpen(false)}
           >
